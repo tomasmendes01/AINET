@@ -34,26 +34,31 @@
                 </ul>
                 <br>
 
-                <div class="dropdown show">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Categories
-                    </a>
+                <div class="dropdown-show" style="display:flex;width:100%;">
 
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{{ url('shop') }}">All Categories</a>
-                        @foreach($categorias as $categoria)
-                        <a class="dropdown-item" href="{{ url('shop',$categoria->id) }}">{{ $categoria->nome }}</a>
-                        @endforeach
+                    <div style="margin:auto;margin-right:-40%;">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuCategory" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Categories
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuCategory">
+                            <a class="dropdown-item" href="{{ url('shop') }}">All Categories</a>
+                            @foreach($categorias as $categoria)
+                            <a class="dropdown-item" href="{{ url('shop',$categoria->id) }}">{{ $categoria->nome }}</a>
+                            @endforeach
+                        </div>
                     </div>
 
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Color
-                    </a>
+                    <div style="margin:auto;">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuColor" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Color
+                        </a>
 
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        @foreach($cores as $cor)
-                        <a class="dropdown-item" href="{{ url('shop',$categoria->id) }}">{{ $cor->nome }}</a>
-                        @endforeach
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuColor">
+                            @foreach($cores as $cor)
+                            <a class="dropdown-item" href="#">{{ $cor->nome }}</a>
+                            @endforeach
+                        </div>
                     </div>
 
                 </div>
