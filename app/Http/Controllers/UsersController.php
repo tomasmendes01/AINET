@@ -21,7 +21,7 @@ class UsersController extends Controller
             return '<script>window.location = "/";</script>';
         }
 
-        $users = DB::table('users')->paginate(12);
+        $users = User::paginate(12);
         //dd($users);
         return view('pages.users')->with('users', $users); //envia todos os users para a view users.blade.php como 'users'
     }

@@ -60,10 +60,10 @@ class User extends Authenticatable
 
     public function encomendas()
     {
-        return $this->hasMany('App\Models\Encomenda');
+        return $this->hasMany(Encomenda::class);
     }
 
-    public function isAdministrator(){
-        return $this->attributes['tipo'] == 'A' ? true : false; 
+    public function admin(){
+        return $this->attributes['tipo'] == 'A'; 
     }
 }

@@ -29,7 +29,7 @@
                     </a>
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-subheading text-muted">{{ $encomenda->id }}</div>
-                        <div class="portfolio-caption-heading">{{ $encomenda->name }}</div>
+                        <div class="portfolio-caption-heading">{{ $encomenda->user->name }}</div>
                         <div class="portfolio-caption-subheading text-muted">{{ $encomenda->preco_total }}€</div>
                         <div class="portfolio-caption-subheading text-muted">{{ $encomenda->notas }}</div>
                     </div>

@@ -73,8 +73,6 @@ class RegisterController extends Controller
             $user->save();
 
             return redirect('login')->withSuccess('User registered successfully!');
-            //return view('login')->with('message', 'User registered successfully!');
-            //return view('shop')->with('user', $user);
 
         } else {
             return back()->with('error', 'Invalid email format!');
