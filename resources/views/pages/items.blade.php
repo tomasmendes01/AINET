@@ -34,10 +34,10 @@
                 </ul>
                 <br>
 
-                <div class="dropdown-show" style="display:flex;width:100%;">
+                <div class="dropdown-show" id="dropdown-show" style="display:flex;width:100%;">
 
-                    <div style="margin:auto;margin-right:-40%;">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuCategory" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div id="left" style="float:right;width:50%;margin:auto;">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Categories
                         </a>
 
@@ -49,8 +49,8 @@
                         </div>
                     </div>
 
-                    <div style="margin:auto;">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuColor" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div id="middle" style="float:right;width:50%;margin:auto;">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Color
                         </a>
 
@@ -60,7 +60,13 @@
                             @endforeach
                         </div>
                     </div>
-
+                    @if(Auth::user() && Auth::user()->tipo == 'A')
+                    <div id="right" style="float:right;width:50%;margin:auto;">
+                        <a class="btn btn-secondary" href="#" role="button" id="right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Add Product
+                        </a>
+                    </div>
+                    @endif
                 </div>
                 <!-- --------------------------------------------- -->
             </div>
@@ -85,7 +91,7 @@
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-heading">{{ $estampa->nome }}</div>
                         @if($estampa->categoria)
-                        <div class="portfolio-caption-heading">[ {{ $estampa->categoria }} ]</div>
+                        <div class="portfolio-caption-heading">[ {{ $estampa->categoria->nome }} ]</div>
                         @endif
                         <div class="portfolio-caption-subheading text-muted">{{ $estampa->descricao }}</div>
                     </div>

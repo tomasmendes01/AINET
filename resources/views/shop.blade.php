@@ -29,9 +29,32 @@
 </head>
 
 <body id="page-top">
+
+
+
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
+            @if(Auth::user() && Auth::user()->tipo == 'A')
+            <div id="mySidenav" class="sidenav" style="z-index:auto;">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">Manage Products</a>
+                <a href="#">Manage Users</a>
+                <a href="#">Manage Deliveries</a>
+            </div>
+
+            <span style="font-size:30px;cursor:pointer;color:white;" onclick="openNav()">&#9776;⠀</span>
+
+            <script>
+                function openNav() {
+                    document.getElementById("mySidenav").style.width = "250px";
+                }
+
+                function closeNav() {
+                    document.getElementById("mySidenav").style.width = "0";
+                }
+            </script>
+            @endif
             <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="img/navbar-logo.png" alt="" /></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
@@ -40,7 +63,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
 
-                    
+
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="{{ url('/shop') }}"><i class="fa fa-heart"></i> Products
                         </a>
@@ -91,9 +114,9 @@
             <br>
             <br>
             <br>
-            
+
             @yield('yellowbutton')
-            
+
         </div>
     </header>
 

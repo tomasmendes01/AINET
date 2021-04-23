@@ -11,6 +11,8 @@ class Estampa extends Model
 
     public function categoria()
     {
-        return $this->hasMany('App\Models\Categoria');
+        return $this->belongsTo(Categoria::class);
     }
+
+    
 }

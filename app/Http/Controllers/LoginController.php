@@ -22,7 +22,8 @@ class LoginController extends Controller
 
         $this->validate($request, [
             'email'      => 'required',
-            'password'   => 'required|alphaNum|min:3'
+            'password'   => 'required|alphaNum|min:3',
+            'bloqueado'  => '0'
         ]);
 
         $user_data = array(
