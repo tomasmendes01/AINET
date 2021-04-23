@@ -16,7 +16,7 @@ class RegisterController extends Controller
 
     function index()
     {
-        return view('pages.signup');
+        return view('auth.signup');
     }
 
     function checkregister(Request $request)
@@ -77,11 +77,6 @@ class RegisterController extends Controller
         } else {
             return back()->with('error', 'Invalid email format!');
         }
-    }
-
-    function successRegister()
-    {
-        return view('pages.shop');
     }
 
     public function setRememberToken($token)

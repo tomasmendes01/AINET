@@ -16,7 +16,7 @@ class UserController extends Controller
     public function edit(User $user)
     {   
         $user = Auth::user();
-        return view('pages.users.edit', compact('user'));
+        return view('management.users.edit', compact('user'));
     }
 
     public function update(User $user)

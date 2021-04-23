@@ -23,7 +23,7 @@ class UsersController extends Controller
 
         $users = User::paginate(12);
         //dd($users);
-        return view('pages.users')->with('users', $users); //envia todos os users para a view users.blade.php como 'users'
+        return view('management.users')->with('users', $users); //envia todos os users para a view users.blade.php como 'users'
     }
 
     public function __construct()

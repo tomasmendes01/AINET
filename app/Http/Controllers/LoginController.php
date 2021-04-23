@@ -46,11 +46,6 @@ class LoginController extends Controller
         }
     }
 
-    function successLogin()
-    {
-        return view('pages.shop');
-    }
-
     function logout()
     {
         Auth::logout();

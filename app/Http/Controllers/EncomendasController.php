@@ -24,6 +24,6 @@ class EncomendasController extends Controller
 
         $encomendas = Encomenda::with('user')->paginate(12);
 
-        return view('pages.encomendas')->with(['encomendas' => $encomendas]);
+        return view('management.encomendas')->with(['encomendas' => $encomendas]);
     }
 }

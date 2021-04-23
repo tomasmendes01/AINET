@@ -22,7 +22,7 @@ class ShopController extends Controller
         $categorias = Categoria::whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
-        return view('pages.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
+        return view('shop.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
     }
 
     function filter_by_category($id)
@@ -35,7 +35,7 @@ class ShopController extends Controller
         $categorias = Categoria::whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
-        return view('pages.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
+        return view('shop.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
     }
 
     function filter_by_color($codigo)
@@ -51,7 +51,7 @@ class ShopController extends Controller
         $categorias = DB::table('categorias')->whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
-        return view('pages.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
+        return view('shop.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
     }
 
     function filter_by_category_and_color($id)
@@ -67,6 +67,6 @@ class ShopController extends Controller
         $categorias = DB::table('categorias')->whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
-        return view('pages.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
+        return view('shop.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
     }
 }
