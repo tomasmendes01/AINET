@@ -44,7 +44,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuCategory">
                             <a class="dropdown-item" href="{{ url('shop') }}">All Categories</a>
                             @foreach($categorias as $categoria)
-                            <a class="dropdown-item" href="{{ url('shop',$categoria->id) }}">{{ $categoria->nome }}</a>
+                            <a class="dropdown-item" href="{{ route('shop.index', ['categoria' => $categoria->nome]) }}">{{ $categoria->nome }}</a>
                             @endforeach
                         </div>
                     </div>

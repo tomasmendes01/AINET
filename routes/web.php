@@ -49,7 +49,7 @@ Route::post('/store', [RegisterController::class, 'store']);
 
 Route::get('/users', [UsersController::class, 'index']);
 
-Route::get('/shop',      [ShopController::class, 'index']);
+Route::get('/shop',      [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{id}', [ShopController::class, 'filter_by_category']);
 
 Route::get('/cart', [CartController::class, 'index']);
