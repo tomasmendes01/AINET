@@ -13,6 +13,4 @@ class Estampa extends Model
     {
         return $this->belongsTo(Categoria::class);
     }
-
-    
 }

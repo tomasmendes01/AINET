@@ -14,7 +14,7 @@ class LoginController extends Controller
 
     function index()
     {
-        return view('pages.login');
+        return view('auth.login');
     }
 
     function checklogin(Request $request)

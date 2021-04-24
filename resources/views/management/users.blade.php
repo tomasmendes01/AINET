@@ -5,7 +5,8 @@
 <!-- Portfolio Grid-->
 <section class="page-section" id="services" style="margin-top:-6%;">
     <div class="container">
-        <div class="text-center">
+        <div class="text-center" style="margin-top:10%;margin-bottom:-7%;">
+            <h2 class="section-heading text-uppercase">List of Users</h2>
             <!-- --------------------------------------------- -->
             <ul class="pagination" style="display: inline-block;">
                 {{ $users->appends(request()->query())->links("pagination::bootstrap-4") }}

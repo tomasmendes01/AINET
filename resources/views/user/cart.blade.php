@@ -3,12 +3,12 @@
 @section('cart')
 
 <!-- Portfolio Grid-->
-<section class="page-section bg-light" id="portfolio">
+<section class="page-section" id="services" style="margin-bottom:-5%;">
     <div class="container">
         <div class="row">
             <!-- --------------------------------------------- -->
             @if($counter == 0)
-            <h1 style="margin:auto;">Looks like your cart is empty.</h1>
+            <h1 style="margin:auto;margin-top:20%;">Looks like your cart is empty.</h1>
             @else
             @foreach($encomendas as $encomenda)
             <div class="col-lg-3 col-sm-6 mb-4">

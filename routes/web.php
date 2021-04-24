@@ -48,9 +48,10 @@ Route::get('/signup', [RegisterController::class, 'index']);
 Route::post('/store', [RegisterController::class, 'store']);
 
 Route::get('/users', [UsersController::class, 'index']);
+Route::get('/users/{id}', [UsersController::class, 'profile'])->name('user.profile');
+//Route::get('/profile',[UsersController::class,'profile'])->name('user.profile');
 
 Route::get('/shop',      [ShopController::class, 'index'])->name('shop.index');
-Route::get('/shop/{id}', [ShopController::class, 'filter_by_category']);
 
 Route::get('/cart', [CartController::class, 'index']);
 /*
@@ -61,3 +62,5 @@ Route::get('/add-to-cart/{id}', [
 */
 
 Route::get('/encomendas', [EncomendasController::class, 'index']);
+
+

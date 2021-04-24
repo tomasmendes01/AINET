@@ -86,7 +86,7 @@
                     @endif
 
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#contact"><i class="fas fa-user"></i> Profile</a>
+                        <a class="nav-link js-scroll-trigger" href="{{ route('user.profile',['id' => Auth::user()->id]) }}"><i class="fas fa-user"></i> Profile</a>
                     </li>
 
                     <li class="nav-item">
@@ -105,27 +105,13 @@
             </div>
         </div>
     </nav>
-    <!-- Masthead-->
-    <header class="masthead">
-        <div class="container">
-            @if(isset(Auth::user()->email))
-            <div class="masthead-subheading">Welcome {{ Auth::user()->name }}!</div>
-            @else
-            <div class="masthead-subheading">Welcome!</div>
-            @endif
-            <a class="masthead-heading text-uppercase" href="{{ url('/shop') }}">MagicShirts</a>
-            <!--<div class="masthead-heading text-uppercase">MagicShirts</div>-->
-            <br>
-            <br>
-            <br>
 
-            @yield('yellowbutton')
+    <div style="width:100%;height:100%;">
+        @yield('welcome')
+    </div>
+    
 
-        </div>
-    </header>
-
-
-    <div class="container">
+    <div style="width:100%;height:100%;">
         @yield('content')
     </div>
 

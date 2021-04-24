@@ -48,4 +48,15 @@ class UsersController extends Controller
 
         return back();
     }
+
+    public function profile($id){
+        
+        // Se tentar aceder ao perfil de outra pessoa
+        if(Auth::user()->id != $id){
+            abort(404);
+        };
+
+        $user = User::findOrFail($id);
+        return view('user.profile')->with(['users',$user]);
+    }
 }
