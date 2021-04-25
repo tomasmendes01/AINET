@@ -53,7 +53,7 @@ class UsersController extends Controller
         
         // Se tentar aceder ao perfil de outra pessoa
         if(Auth::user()->id != $id){
-            abort(404);
+            return view('error.pagenotfound');
         };
 
         $user = User::findOrFail($id);

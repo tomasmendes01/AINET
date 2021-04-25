@@ -10,12 +10,10 @@ use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
-use League\CommonMark\Inline\Element\Image;
 use SebastianBergmann\Environment\Console;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,31 +25,25 @@ use Illuminate\Support\Facades\Request;
 |
 */
 
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
-
 Route::get('/', function () {
     return redirect('shop');
 });
 
 
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/checklogin', [LoginController::class, 'checklogin']);
+Route::get('/login',        [LoginController::class, 'index'])->name('login');
+Route::post('/checklogin',  [LoginController::class, 'checklogin']);
 
-Route::get('/logout', [LoginController::class, 'logout']);
-Route::get('/forgotpassword', [LoginController::class, 'sendPasswordResetNotification']);
+Route::get('/logout',           [LoginController::class, 'logout'])->name('logout');
+Route::get('/forgotpassword',   [LoginController::class, 'sendPasswordResetNotification']);
 
 Route::get('/signup', [RegisterController::class, 'index']);
 Route::post('/store', [RegisterController::class, 'store']);
 
-Route::get('/users', [UsersController::class, 'index']);
-Route::get('/users/{id}', [UsersController::class, 'profile'])->name('user.profile');
-//Route::get('/profile',[UsersController::class,'profile'])->name('user.profile');
+Route::get('/users',        [UsersController::class, 'index']);
+Route::get('/users/{id}',   [UsersController::class, 'profile'])->name('user.profile');
 
-Route::get('/shop',      [ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop',                          [ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop/{categoria}/{nome}/{id}',  [ShopController::class, 'product'])->name('shop.estampa');
 
 Route::get('/cart', [CartController::class, 'index']);
 /*
@@ -62,5 +54,3 @@ Route::get('/add-to-cart/{id}', [
 */
 
 Route::get('/encomendas', [EncomendasController::class, 'index']);
-
-

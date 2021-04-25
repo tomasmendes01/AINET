@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/css/shop.css" rel="stylesheet" />
+    @yield('css')
 
     <style type="text/css">
         .box {
@@ -29,9 +30,6 @@
 </head>
 
 <body id="page-top">
-
-
-
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
@@ -96,11 +94,32 @@
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="{{ url('/logout') }}"><i class="fa fa-bars"></i> Logout</a>
                     </li>
-                    @else
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url('/login') }}"><i class="fa fa-bars"></i> Login</a>
-                    </li>
-                    @endif
+                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" arialabelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">Select "Logout" below if you are ready to end your
+                                    current session.</div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" datadismiss="modal">Cancel</button>
+                                    <a class="btn btn-primary" href="{{route('logout')}}" onclick="event.preventDefault();
+ document.getElementById('logout-form').submit();">Logout</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="{{ url('/login') }}"><i class="fa fa-bars"></i> Login</a>
+                        </li>
+                        @endif
                 </ul>
             </div>
         </div>
@@ -109,7 +128,7 @@
     <div style="width:100%;height:100%;">
         @yield('welcome')
     </div>
-    
+
 
     <div style="width:100%;height:100%;">
         @yield('content')
@@ -119,7 +138,17 @@
         @yield('cart')
     </div>
 
-
 </body>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Third party plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+<!-- Contact form JS-->
+<script src="mail/jqBootstrapValidation.js"></script>
+<script src="mail/contact_me.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
 
 </html>
