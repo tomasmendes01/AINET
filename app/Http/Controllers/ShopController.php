@@ -50,30 +50,20 @@ class ShopController extends Controller
             ->get();
         //dd($product);
 
-        $img = public_path('/storage/estampas/' . $product[0]->imagem_url);
-
-        $height = Image::make($img)->height();
-        $width = Image::make($img)->width();
-        //dd($height, $width);
-        if ($height > 700 && $width > 700) {
-            if ($height > 2000 && $width > 2000) {
-                $logo = Image::make($img)->resize($width / 13, $height / 13);
-            } else {
-                $logo = Image::make($img)->resize($width / 3, $height / 3);
-            }
+        if (file_exists(public_path('/storage/estampas/' . $product[0]->imagem_url))) {
+            $img = public_path('/storage/estampas/' . $product[0]->imagem_url);
         } else {
-            if ($height > 700 || $width > 700) {
-                $logo = Image::make($img)->resize($width / 4.3, $height / 4.3);
-            } else {
-                $logo = Image::make($img)->resize($width / 3, $height / 3);
-            }
+            $img = storage_path('app/estampas_privadas/' . $product[0]->imagem_url);
         }
 
-        $preview = Image::make('img\navbar-logo.png')->insert($logo, 'center');
-        $preview->encode('jpg');
-        $type = 'jpg';
+        $logo = Image::make($img)->fit(190, 285);
+        //storage\tshirt_base\plain_white.png
+        //img\navbar-logo.png
+        $preview = Image::make('storage/tshirt_base/plain_white.png')->insert($logo, 'bottom-right', 89, 35);
+        $preview->encode('png');
+        $type = 'png';
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($preview);
 
-        return view('shop.product', ['product' => $product,'image' => $base64]);
+        return view('shop.product', ['product' => $product, 'image' => $base64]);
     }
 }

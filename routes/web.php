@@ -43,7 +43,7 @@ Route::get('/users',        [UsersController::class, 'index']);
 Route::get('/users/{id}',   [UsersController::class, 'profile'])->name('user.profile');
 
 Route::get('/shop',                          [ShopController::class, 'index'])->name('shop.index');
-Route::get('/shop/{categoria}/{nome}/{id}',  [ShopController::class, 'product'])->name('shop.estampa');
+Route::get('/shop/{nome}/{id}',  [ShopController::class, 'product'])->name('shop.estampa');
 
 Route::get('/cart', [CartController::class, 'index']);
 /*
@@ -54,3 +54,26 @@ Route::get('/add-to-cart/{id}', [
 */
 
 Route::get('/encomendas', [EncomendasController::class, 'index']);
+
+Route::get('/estampas_privadas/{file}', [function ($file) {
+
+    $path = storage_path('app/estampas_privadas/' . $file);
+
+    if (file_exists($path)) {
+        return response()->file($path, array('Content-Type' => 'image/png'));
+    }
+
+    $path = storage_path('img\navbar-logo.png');
+    return response()->file($path, array('Content-Type' => 'image/png'));
+}]);
+
+Route::get('/storage/estampas/{file}', [function ($file) {
+
+    $path = storage_path('/storage/estampas/' . $file);
+
+    if (file_exists($path)) {
+        return response()->file($path, array('Content-Type' => 'image/png'));
+    }
+    $path = storage_path('img\navbar-logo.png');
+    return response()->file($path, array('Content-Type' => 'image/png'));
+}]);

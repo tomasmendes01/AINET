@@ -40,6 +40,8 @@
 
 
 
+
+
 <!-- Products -->
 <section class="page-section" id="services" style="margin-bottom:-5%;">
     <div class="container">
@@ -47,47 +49,22 @@
             <h2 class="section-heading text-uppercase">Products</h2>
             <h3 class="section-subheading text-muted" style="margin-bottom:2%;">New stamps every week!</h3>
             <div class="text-center">
-                <!-- --------------------------------------------- -->
+
                 <ul class="pagination" style="display: inline-block;">
                     {{ $estampas->appends(request()->query())->links("pagination::bootstrap-4") }}
                 </ul>
                 <br>
-
-                <div class="dropdown-show" id="dropdown-show" style="display:flex;width:100%;">
-
-                    <div id="left" style="float:right;width:50%;margin:auto;">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Categories
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuCategory">
-                            <a class="dropdown-item" href="{{ url('shop') }}">All Categories</a>
-                            @foreach($categorias as $categoria)
-                            <a class="dropdown-item" href="{{ route('shop.index', ['categoria' => $categoria->nome]) }}">{{ $categoria->nome }}</a>
-                            @endforeach
-                        </div>
+                
+                <div class="dropdown">
+                    <button class="dropbtn">Categories</button>
+                    <div class="dropdown-content">
+                        <a href="{{ url('/shop') }}">All Categories</a>
+                        @foreach($categorias as $categoria)
+                        <a href="{{ route('shop.index',['categoria' => $categoria->nome]) }}">{{ $categoria->nome }}</a>
+                        @endforeach
                     </div>
-
-                    <div id="middle" style="float:right;width:50%;margin:auto;">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Color
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuColor">
-                            @foreach($cores as $cor)
-                            <a class="dropdown-item" href="#">{{ $cor->nome }}</a>
-                            @endforeach
-                        </div>
-                    </div>
-                    @if(Auth::user() && Auth::user()->tipo == 'A')
-                    <div id="right" style="float:right;width:50%;margin:auto;">
-                        <a class="btn btn-secondary" href="#" role="button" id="right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Add Product
-                        </a>
-                    </div>
-                    @endif
                 </div>
-                <!-- --------------------------------------------- -->
+
             </div>
         </div>
     </div>
@@ -101,8 +78,8 @@
             @foreach($estampas as $estampa)
             <div class="col-lg-3 col-sm-6 mb-4">
                 <div class="portfolio-item">
-                    <a href="{{ route('shop.estampa',['categoria' => $estampa->categoria ,'nome' => $estampa->nome, 'id' => $estampa->id]) }}">
-                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='img/navbar-logo.png'" alt="" />
+                    <a href="{{ route('shop.estampa',['nome' => $estampa->nome, 'id' => $estampa->id]) }}">
+                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='/estampas_privadas/{{$estampa->imagem_url}}'" alt="" />
                     </a>
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-heading">{{ $estampa->nome }}</div>
