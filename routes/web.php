@@ -42,8 +42,8 @@ Route::post('/store', [RegisterController::class, 'store']);
 Route::get('/users',        [UsersController::class, 'index']);
 Route::get('/users/{id}',   [UsersController::class, 'profile'])->name('user.profile');
 
-Route::get('/shop',                          [ShopController::class, 'index'])->name('shop.index');
-Route::get('/shop/{nome}/{id}',  [ShopController::class, 'product'])->name('shop.estampa');
+Route::get('/shop',                 [ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop/{nome}/{id}',     [ShopController::class, 'product'])->name('shop.estampa');
 
 Route::get('/cart', [CartController::class, 'index']);
 /*
@@ -53,7 +53,7 @@ Route::get('/add-to-cart/{id}', [
 ]);
 */
 
-Route::get('/encomendas', [EncomendasController::class, 'index']);
+Route::get('/encomendas', [EncomendasController::class, 'index'])->name('encomendas');
 
 Route::get('/estampas_privadas/{file}', [function ($file) {
 

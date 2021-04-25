@@ -48,7 +48,12 @@ class ShopController extends Controller
         $product = Estampa::where('nome', request()->nome)
             ->where('id', request()->id)
             ->get();
-        //dd($product);
+
+        if (request()->cor != null) {
+            $cor = DB::table('cores')->where('nome', request()->cor)->get();
+        } else {
+            $cor = DB::table('cores')->where('nome', 'Preto')->get();
+        }
 
         if (file_exists(public_path('/storage/estampas/' . $product[0]->imagem_url))) {
             $img = public_path('/storage/estampas/' . $product[0]->imagem_url);
@@ -56,14 +61,15 @@ class ShopController extends Controller
             $img = storage_path('app/estampas_privadas/' . $product[0]->imagem_url);
         }
 
-        $logo = Image::make($img)->fit(190, 285);
-        //storage\tshirt_base\plain_white.png
-        //img\navbar-logo.png
-        $preview = Image::make('storage/tshirt_base/plain_white.png')->insert($logo, 'bottom-right', 89, 35);
+        $logo = Image::make($img)->fit(250, 450);
+        $base = Image::make(public_path('/storage/tshirt_base/' . $cor[0]->codigo . '.jpg'));
+        $preview = Image::make($base)->insert($logo, 'bottom-right', 135, 35);
         $preview->encode('png');
         $type = 'png';
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($preview);
 
-        return view('shop.product', ['product' => $product, 'image' => $base64]);
+        $cores = DB::table('cores')->whereNull('deleted_at')->get();
+
+        return view('shop.product', ['product' => $product, 'image' => $base64, 'cores' => $cores]);
     }
 }

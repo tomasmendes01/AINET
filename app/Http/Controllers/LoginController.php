@@ -31,7 +31,7 @@ class LoginController extends Controller
         );
 
         // Se der problemas no blocked, limpar a cache:
-        // php artisan optimize:clear
+        // php artisan optimize:clear - limpa tudo memo
         // php artisan cache:clear
         // php artisan view:clear
         $blocked = User::where('email', $request->input('email'))->value('bloqueado');

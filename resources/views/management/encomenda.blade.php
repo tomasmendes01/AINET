@@ -18,35 +18,17 @@
 @stop
 
 @section('content')
-<?php
-$prod = $product[0];
-//{{ route('shop.index',['categoria' => $categoria->nome]) }}
-//
-?>
-
-
 
 
 <!-- Portfolio Grid-->
 <section class="page-section" id="services" style="display:flex;margin-bottom:-5%;margin-left:10%;margin-top:5%;">
-
-    <div class="dropdown">
-        <button class="dropbtn">⠀⠀⠀Color⠀⠀⠀</button>
-        <div class="dropdown-content">
-            @foreach($cores as $cor)
-            <a href="{{ route('shop.estampa',['id' => $prod->id ,'nome' => $prod->nome ,'cor' => $cor->nome]) }}">{{ $cor->nome }}</a>
+    <div class="container">
+        <div class="row">
+            @foreach($encomendas as $encomenda)
+            <h1 style="margin-left:20%;">{{$encomenda->id}}</h1>
             @endforeach
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-
-            <img style="max-width: 380px;max-height: 380px;" src="{{ $image }}">
-            <h1 style="margin-left:20%;">{{$prod->nome}}</h1>
-
-        </div>
-    </div>
-
 </section>
 
 
@@ -56,7 +38,7 @@ $prod = $product[0];
 </a>
 
 <footer class="footer py-4">
-    <div class="container" style="bottom: 0; left: 0; right: 0;">
+    <div class="container" style="position:absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
             <div class="col-lg-4 my-3 my-lg-0">

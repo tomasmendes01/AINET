@@ -43,7 +43,7 @@
 
 
 <!-- Products -->
-<section class="page-section" id="services" style="margin-bottom:-5%;">
+<section class="page-section" id="services" style="margin-bottom:-5%;margin-top: -3%;">
     <div class="container">
         <div class="text-center">
             <h2 class="section-heading text-uppercase">Products</h2>
@@ -54,15 +54,19 @@
                     {{ $estampas->appends(request()->query())->links("pagination::bootstrap-4") }}
                 </ul>
                 <br>
-                
-                <div class="dropdown">
-                    <button class="dropbtn">Categories</button>
+
+                <div class="dropdown" style="margin-bottom:-17%;">
+                    <button class="dropbtn">⠀⠀⠀Categories⠀⠀⠀</button>
                     <div class="dropdown-content">
                         <a href="{{ url('/shop') }}">All Categories</a>
                         @foreach($categorias as $categoria)
                         <a href="{{ route('shop.index',['categoria' => $categoria->nome]) }}">{{ $categoria->nome }}</a>
                         @endforeach
                     </div>
+                </div>
+
+                <div class="dropdown" style="margin-bottom:-17%;">
+                    <button class="dropbtn">Make your own t-shirt!</button>
                 </div>
 
             </div>

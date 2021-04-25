@@ -5,7 +5,8 @@
 <!-- Portfolio Grid-->
 <section class="page-section" id="services" style="margin-top:-6%;">
     <div class="container">
-        <div class="text-center">
+        <div class="text-center" style="margin-top:10%;margin-bottom:-7%;">
+        <h2 class="section-heading text-uppercase">List of Deliveries</h2>
             <!-- --------------------------------------------- -->
             <ul class="pagination" style="display: inline-block;">
                 {{ $encomendas->appends(request()->query())->links("pagination::bootstrap-4") }}
@@ -21,10 +22,7 @@
             @foreach($encomendas as $encomenda)
             <div class="col-lg-3 col-sm-6 mb-4">
                 <div class="portfolio-item">
-                    <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                        </div>
+                    <a href="{{ route('encomendas',['id' => $encomenda->id ,'client_id' => $encomenda->cliente_id]) }}">
                         <img class="img-fluid" src="" onerror="src='img/navbar-logo.png'" alt="" />
                     </a>
                     <div class="portfolio-caption">
@@ -53,7 +51,7 @@
 </section>
 
 <footer class="footer py-4">
-    <div class="container" style="position: absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%">
+    <div class="container" style=" bottom: 0; left: 0; right: 0; margin-bottom:1%">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
             <div class="col-lg-4 my-3 my-lg-0">
