@@ -6,7 +6,7 @@
 <meta name="description" content="" />
 <meta name="author" content="" />
 <title>MagicShirts</title>
-<link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/x-icon" href="/img/favicon.ico"/>
 <!-- Font Awesome icons (free version)-->
 <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
 <!-- Google fonts-->
@@ -19,23 +19,69 @@
 
 @section('content')
 
+<style>
+    /*encomenda*/
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 15px;
+    }
+</style>
+
+<?php
+$encomenda = $encomendas[0];
+?>
 
 <!-- Portfolio Grid-->
-<section class="page-section" id="services" style="display:flex;margin-bottom:-5%;margin-left:10%;margin-top:5%;">
+<section class="page-section" id="services" style="margin-top:-6%;">
     <div class="container">
-        <div class="row">
-            @foreach($encomendas as $encomenda)
-            <h1 style="margin-left:20%;">{{$encomenda->id}}</h1>
-            @endforeach
+        <div class="text-center" style="margin-top:10%;margin-bottom:-15%;">
+            <h2 class="section-heading text-uppercase">Encomenda - {{ $encomenda->id }}</h2>
         </div>
     </div>
 </section>
 
+<table style="width:100%;margin-top:12%;">
+    <tr>
+        <th>Cliente</th>
+        <th>Data</th>
+        <th>Preço</th>
+        <th>Notas</th>
+        <th>NIF</th>
+        <th>Endereço</th>
+        <th>Tipo Pagamento</th>
+        <th>Ref Pagamento</th>
+        <th>Opções</th>
+    </tr>
+    <tr>
+        <td>{{$encomenda->user->name}}</td>
+        <td>{{$encomenda->data}}</td>
+        <td>{{$encomenda->preco_total}}€</td>
+        <td>{{$encomenda->notas}}</td>
+        <td>{{$encomenda->nif}}</td>
+        <td>{{$encomenda->endereco}}</td>
+        <td>{{$encomenda->tipo_pagamento}}</td>
+        <td>{{$encomenda->ref_pagamento}}</td>
+        <td>
+            <button type="button" class="btn btn-light">Deliver</button>
+            <button type="button" class="btn btn-dark">Cancel</button>
+        </td>
+    </tr>
+</table>
 
-
-<a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin:auto;margin-left:58%;" href="#services">
-    Add to cart
-</a>
+<section class="page-section" id="services" style="display:flex;margin-bottom:-5%;margin-left:10%;margin-top:5%;">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</section>
 
 <footer class="footer py-4">
     <div class="container" style="position:absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%">

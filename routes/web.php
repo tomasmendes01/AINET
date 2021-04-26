@@ -5,6 +5,7 @@ use App\Http\Controllers\EncomendasController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PageNotFound;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,8 @@ Route::get('/shop',                 [ShopController::class, 'index'])->name('sho
 Route::get('/shop/{nome}/{id}',     [ShopController::class, 'product'])->name('shop.estampa');
 
 Route::get('/cart', [CartController::class, 'index']);
+
+Route::get('/pagenotfound', [PageNotFound::class, 'error'])->name('pagenotfound');
 /*
 Route::get('/add-to-cart/{id}', [
     'uses' => CartController::class, 'add',

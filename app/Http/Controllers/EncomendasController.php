@@ -24,14 +24,21 @@ class EncomendasController extends Controller
 
         //dd(request()->id);
         if (request()->id != null) {
-            $encomendas = Encomenda::where('cliente_id', request()->client_id)
+
+            $encomendas = Encomenda::with('user')
+                ->where('cliente_id', request()->client_id)
                 ->where('id', request()->id)
                 ->get();
+
+            if (count($encomendas) == 0) {
+                return redirect('pagenotfound');
+            };
+
             return view('management.encomenda', ['encomendas' => $encomendas]);
         }
 
         $encomendas = Encomenda::with('user')->paginate(12);
-
+        
         return view('management.encomendas')->with(['encomendas' => $encomendas]);
     }
 }
