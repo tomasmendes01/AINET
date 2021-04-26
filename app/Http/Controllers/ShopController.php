@@ -37,6 +37,7 @@ class ShopController extends Controller
             $estampas = Estampa::with('categoria')->paginate(12);
         }
 
+        
         $categorias = Categoria::whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
@@ -45,22 +46,27 @@ class ShopController extends Controller
 
     public function product()
     {
+
+        // vai buscar o produto com o nome que vem no request
         $product = Estampa::where('nome', request()->nome)
             ->where('id', request()->id)
             ->get();
 
+        // se no request não for pedida nenhuma cor, a $cor fica definida como 'Preto'
         if (request()->cor != null) {
             $cor = DB::table('cores')->where('nome', request()->cor)->get();
         } else {
             $cor = DB::table('cores')->where('nome', 'Preto')->get();
         }
 
+        // procura pela estampa na pasta /storage/estampas e se nao existir, vai à pasta app/estampas_privadas
         if (file_exists(public_path('/storage/estampas/' . $product[0]->imagem_url))) {
             $img = public_path('/storage/estampas/' . $product[0]->imagem_url);
         } else {
             $img = storage_path('app/estampas_privadas/' . $product[0]->imagem_url);
         }
 
+        // código pra processar a estampa e juntar com a t-shirt base
         $logo = Image::make($img)->fit(250, 450);
         $base = Image::make(public_path('/storage/tshirt_base/' . $cor[0]->codigo . '.jpg'));
         $preview = Image::make($base)->insert($logo, 'bottom-right', 135, 35);
@@ -68,6 +74,7 @@ class ShopController extends Controller
         $type = 'png';
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($preview);
 
+        // query pra ter todas as cores pro dropdown
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
         return view('shop.product', ['product' => $product, 'image' => $base64, 'cores' => $cores]);
