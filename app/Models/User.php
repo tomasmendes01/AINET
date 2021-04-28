@@ -66,4 +66,8 @@ class User extends Authenticatable
     public function admin(){
         return $this->attributes['tipo'] == 'A'; 
     }
+
+    public function cliente(){
+        return $this->hasOne(Cliente::class,'id','id');
+    }
 }

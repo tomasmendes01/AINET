@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>MagicShirts</title>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -35,8 +34,8 @@
             @if(Auth::user() && Auth::user()->tipo == 'A')
             <div id="mySidenav" class="sidenav" style="z-index:auto;">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="{{ url('/users') }}"><i class="far fa-address-book"></i> Manage Users</a>
                 <a href="#">Manage Products</a>
-                <a href="#">Manage Users</a>
                 <a href="#">Manage Deliveries</a>
             </div>
 
@@ -59,8 +58,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
-
-
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="{{ url('/shop') }}"><i class="fa fa-heart"></i> Products
                         </a>
@@ -69,12 +66,6 @@
                         <a class="nav-link js-scroll-trigger" href="{{ url('/cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a>
                     </li>
                     @if(isset(Auth::user()->email))
-
-                    @if(Auth::user()->tipo == 'A')
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url('/users') }}"><i class="far fa-address-book"></i> Users</a>
-                    </li>
-                    @endif
 
                     @if(Auth::user()->tipo == 'F')
                     <li class="nav-item">
@@ -121,9 +112,9 @@
                         @endif
                 </ul>
             </div>
+
         </div>
     </nav>
-
     <div style="width:100%;height:100%;">
         @yield('welcome')
     </div>

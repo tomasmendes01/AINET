@@ -7,24 +7,39 @@
     <div class="container">
         <div class="text-center" style="margin-top:10%;margin-bottom:-7%;">
             <h2 class="section-heading text-uppercase">List of Users</h2>
-            <!-- --------------------------------------------- -->
+
             <ul class="pagination" style="display: inline-block;">
                 {{ $users->appends(request()->query())->links("pagination::bootstrap-4") }}
             </ul>
-            <!-- --------------------------------------------- -->
+            <br>
+
+            <div class="dropdown" style="margin-bottom:-17%;">
+                <form class="form-inline my-2 my-lg-0" method="GET" action="{{ route('users.search') }}" style="margin:auto;">
+                    <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search users">
+                    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+
+            <br>
         </div>
     </div>
 </section>
-<section class="page-section bg-light" id="portfolio">
+<section class="page-section bg-light" id="portfolio" style="margin-top:-2%;">
     <div class="container">
         <div class="row">
             <!-- --------------------------------------------- -->
             @foreach($users as $user)
             <div class="col-lg-3 col-sm-6 mb-4">
                 <div class="portfolio-item">
-                    <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
-                        <img class="img-fluid" src="/storage/fotos/{{$user->foto_url}}" onerror="src='img/navbar-logo.png'" alt="" />
+                    @if($user->foto_url)
+                    <a href="{{ route('user.profile',['id' => $user->id]) }}">
+                        <img class="img-fluid" src="/storage/fotos/{{$user->foto_url}}" style="width:100%;heigth:100%;" alt="" />
                     </a>
+                    @else
+                    <a href="{{ route('user.profile',['id' => $user->id]) }}">
+                        <img class="img-fluid" src="/img/default-pfp.png" alt="" />
+                    </a>
+                    @endif
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-heading">{{ $user->name }}</div>
                         <div class="portfolio-caption-subheading text-muted">{{ $user->email }}</div>

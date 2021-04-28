@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use DateTime;
 use Illuminate\Support\Str;
-use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\User;
+use App\Models\Cliente;
+
+use DateTime;
 
 class RegisterController extends Controller
 {
@@ -41,7 +45,6 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
-        $user = new User();
         $input['email'] = $request->input('email');
 
         // Must not already exist in the `email` column of `users` table
@@ -56,24 +59,50 @@ class RegisterController extends Controller
         $resultEmail = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL);
         if ($resultEmail == true) {
 
-            $user->email = $request->input('email');
-            $user->name = $request->input('name');
-            $user->email_verified_at = new DateTime();
-            $user->password = $request->input('password');
-            $user->remember_token = null;
-            $user->created_at = new DateTime();
-            $user->updated_at = new DateTime();
-            $user->tipo = "C";
-            $user->bloqueado = 0;
-            $user->foto_url = null;
-            $user->deleted_at = null;
+            try {
+                DB::beginTransaction();
 
-            $this->setRememberToken($user);
+                /* User */
+                $user = new User();
 
-            $user->save();
+                $user->email = $request->input('email');
+                $user->name = $request->input('name');
+                $user->email_verified_at = new DateTime();
+                $user->password = $request->input('password');
+                $user->remember_token = null;
+                $user->created_at = new DateTime();
+                $user->updated_at = new DateTime();
+                $user->tipo = "C";
+                $user->bloqueado = 0;
+                $user->foto_url = null;
+                $user->deleted_at = null;
 
-            return redirect('login')->withSuccess('User registered successfully!');
+                $this->setRememberToken($user);
 
+                $user->save();
+
+                /* Cliente */
+
+                $cliente = new Cliente();
+                
+                $cliente->id = $user->id;
+                $cliente->nif = null;
+                $cliente->endereco = null;
+                $cliente->tipo_pagamento = null;
+                $cliente->ref_pagamento = null;
+                $cliente->created_at = new DateTime();
+                $cliente->updated_at = new DateTime();
+                $cliente->deleted_at = null;
+                
+                $cliente->save();
+
+                DB::commit();
+
+                return redirect('login')->withSuccess('User registered successfully!');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return back()->with('error', $e->getMessage());
+            }
         } else {
             return back()->with('error', 'Invalid email format!');
         }

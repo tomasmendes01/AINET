@@ -1,59 +1,39 @@
 @extends('shop')
-
 @section('css')
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<title>MagicShirts</title>
-<link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
-<!-- Font Awesome icons (free version)-->
-<script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
-<!-- Google fonts-->
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-<link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-<!-- Core theme CSS (includes Bootstrap)-->
-<link href="/css/shop.css" rel="stylesheet" />
+<link href="/css/product.css" rel="stylesheet" />
 @stop
 
 @section('content')
 <?php
 $prod = $product[0];
-//{{ route('shop.index',['categoria' => $categoria->nome]) }}
-//
 ?>
 
+@section('content')
 
-
-
-<!-- Portfolio Grid-->
-<section class="page-section" id="services" style="display:flex;margin-bottom:-5%;margin-left:10%;margin-top:5%;">
-
-    <div class="dropdown">
-        <button class="dropbtn">⠀⠀⠀Color⠀⠀⠀</button>
-        <div class="dropdown-content">
-            @foreach($cores as $cor)
-            <a href="{{ route('shop.estampa',['id' => $prod->id ,'nome' => $prod->nome ,'cor' => $cor->nome]) }}">{{ $cor->nome }}</a>
-            @endforeach
+<div class="row" style="margin-top:-6%;padding:50px;">
+    <div class="column" style="width: auto;">
+        <div class="dropdown">
+            <button class="dropbtn">⠀⠀⠀Color⠀⠀⠀</button>
+            <div class="dropdown-content">
+                @foreach($cores as $cor)
+                <a href="{{ route('shop.estampa',['id' => $prod->id ,'nome' => $prod->nome ,'cor' => $cor->nome]) }}">{{ $cor->nome }}</a>
+                @endforeach
+            </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-
-            <img style="max-width: 380px;max-height: 380px;" src="{{ $image }}">
-            <h1 style="margin-left:20%;">{{$prod->nome}}</h1>
-
-        </div>
+    <div class="column">
+        <img src="{{ $image }}" alt="tshirt" style="height: 100%; width: 100%; object-fit: contain">
     </div>
+    <div class="column">
+        <h2>{{$prod->nome}}</h2>
+        <ul>
+            <li><strong>Description: </strong>{{ $prod->descricao }}</li>
 
-</section>
+        </ul>
+        <button class="dropbtn">Add to cart</button>
+    </div>
+</div>
 
-
-
-<a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" style="margin:auto;margin-left:58%;" href="#services">
-    Add to cart
-</a>
 
 <footer class="footer py-4">
     <div class="container" style="bottom: 0; left: 0; right: 0;">

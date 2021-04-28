@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\DB;
 class UsersController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     function index()
     {
 
@@ -26,37 +31,28 @@ class UsersController extends Controller
         return view('management.users')->with('users', $users); //envia todos os users para a view users.blade.php como 'users'
     }
 
-    public function __construct()
+    public function profile($id)
     {
-        $this->middleware('auth');
-    }
-
-    
-    public function update(User $user)
-    {
-        $this->validate(request(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed'
-        ]);
-
-        $user->name = request('name');
-        $user->email = request('email');
-        $user->password = bcrypt(request('password'));
-
-        $user->save();
-
-        return back();
-    }
-
-    public function profile($id){
-        
         // Se tentar aceder ao perfil de outra pessoa
-        if(Auth::user()->id != $id){
+        if (Auth::user()->id != $id && Auth::user()->tipo != 'A') {
             return view('error.pagenotfound');
         };
 
-        $user = User::findOrFail($id);
-        return view('user.profile')->with(['users',$user]);
+        try {
+            $user = User::findOrFail($id); // Se não encontrar o perfil da pessoa, vai para o pagenotfound
+        } catch (\Exception $th) {
+            return view('error.pagenotfound');
+        }
+
+        return view('user.profile')->with('user', $user);
+    }
+
+    public function search()
+    {
+        $search_text = $_GET['query'];
+        //dd($search_text);
+        $users = User::where('name', 'LIKE', '%' . $search_text . '%')->paginate(12);
+
+        return view('management.users')->with('users', $users);
     }
 }

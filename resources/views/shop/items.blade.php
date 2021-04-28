@@ -21,27 +21,22 @@
 <!-- Masthead-->
 <header class="masthead">
     <div class="container">
+
         @if(isset(Auth::user()->email))
         <div class="masthead-subheading">Welcome {{ Auth::user()->name }}!</div>
         @else
         <div class="masthead-subheading">Welcome!</div>
         @endif
         <a class="masthead-heading text-uppercase" href="{{ url('/shop') }}">MagicShirts</a>
-        <!--<div class="masthead-heading text-uppercase">MagicShirts</div>-->
         <br>
         <br>
         <br>
-        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">View products</a>
+        <a class="btn btn-light btn-xl text-uppercase js-scroll-trigger" href="#services">View products</a>
     </div>
 </header>
 @stop
 
 @section('content')
-
-
-
-
-
 <!-- Products -->
 <section class="page-section" id="services" style="margin-bottom:-5%;margin-top: -3%;">
     <div class="container">
@@ -56,7 +51,16 @@
                 <br>
 
                 <div class="dropdown" style="margin-bottom:-17%;">
-                    <button class="dropbtn">⠀⠀⠀Categories⠀⠀⠀</button>
+                    <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url('/shop/search') }}" style="margin:auto;">
+                        <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search products">
+                        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+                <br>
+
+
+                <div class="dropdown" style="margin-bottom:-17%;">
+                    <button class="btn btn-dark dropbtn">⠀⠀⠀Categories⠀⠀⠀</button>
                     <div class="dropdown-content">
                         <a href="{{ url('/shop') }}">All Categories</a>
                         @foreach($categorias as $categoria)
@@ -80,10 +84,10 @@
         <div class="row">
             <!-- --------------------------------------------- -->
             @foreach($estampas as $estampa)
-            <div class="col-lg-3 col-sm-6 mb-4">
+            <div class="col-lg-3">
                 <div class="portfolio-item">
                     <a href="{{ route('shop.estampa',['nome' => $estampa->nome, 'id' => $estampa->id]) }}">
-                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='/estampas_privadas/{{$estampa->imagem_url}}'" alt="" />
+                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='/estampas_privadas/{{$estampa->imagem_url}}'" alt="{{ $estampa->nome }}"/>
                     </a>
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-heading">{{ $estampa->nome }}</div>
