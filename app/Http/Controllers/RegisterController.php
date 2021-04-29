@@ -78,13 +78,13 @@ class RegisterController extends Controller
                 $user->deleted_at = null;
 
                 $this->setRememberToken($user);
-
+                
                 $user->save();
 
                 /* Cliente */
 
                 $cliente = new Cliente();
-                
+
                 $cliente->id = $user->id;
                 $cliente->nif = null;
                 $cliente->endereco = null;
@@ -93,7 +93,7 @@ class RegisterController extends Controller
                 $cliente->created_at = new DateTime();
                 $cliente->updated_at = new DateTime();
                 $cliente->deleted_at = null;
-                
+
                 $cliente->save();
 
                 DB::commit();

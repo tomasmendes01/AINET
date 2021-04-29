@@ -34,7 +34,12 @@ Route::get('/', function () {
 Route::get('/login',            [LoginController::class, 'index'])->name('login');
 Route::post('/checklogin',      [LoginController::class, 'checklogin']);
 Route::get('/logout',           [LoginController::class, 'logout'])->name('logout');
-Route::get('/forgotpassword',   [LoginController::class, 'sendPasswordResetNotification']);
+
+Route::get('/forgot_password',  [LoginController::class, 'forgotPassword']);
+Route::post('/forgot_password', [LoginController::class, 'sendPasswordResetEmail']);
+
+Route::get('/reset_password',   [LoginController::class, 'resetPassword'])->name('reset_password');
+Route::post('/reset_password/{email}',  [LoginController::class, 'saveNewPassword']);
 
 Route::get('/signup',           [RegisterController::class, 'index']);
 Route::post('/store',           [RegisterController::class, 'store']);

@@ -139,6 +139,7 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
+		Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
 		Intervention\Image\ImageServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
@@ -190,7 +191,10 @@ return [
     */
 
     'aliases' => [
-		
+	
+		'Activation' => Cartalyst\Sentinel\Laravel\Facades\Activation::class,
+		'Reminder'   => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
+		'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,	
 		'Image' => Intervention\Image\Facades\Image::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,

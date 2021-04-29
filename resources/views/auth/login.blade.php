@@ -87,12 +87,14 @@
                     </div>
 
                 </div>
+                <div class="center">
+                    <a href="{{ url('/forgot_password') }}" id="forgot-pass" style="color:white;margin:auto;right:0;left:0;">Forgot password?</a>
+                </div>
         </form>
         <div class="hr"></div>
         <div class="center">
             <button type="button" class="btn btn-secondary btn-lg" onclick="goToShop()" style="background:black;">Login Anonymously</button>
         </div>
-        <a href="{{ url('/forgotpassword') }}" id="forget-pass">Forget Password?</a>
     </div>
 
 
@@ -112,7 +114,7 @@
         }
     }
 
-    function goToShop(){
+    function goToShop() {
         window.location = "/shop";
     }
 </script>
