@@ -69,14 +69,10 @@ class LoginController extends Controller
 
     public function sendPasswordResetEmail(Request $request)
     {
-
-        //dd($request->email);
         $user = User::where('email', $request->email)->first();
-        //dd($user);
         if ($user == null) {
             return back()->with('error', 'User does not exists!');
         }
-        //$activate = Activation::create($user);
 
         Mail::send('email.forgot', ['user' => $user], function ($m) use ($user) {
             $m->from('hello@app.com', 'MagicShirts');
