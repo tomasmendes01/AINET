@@ -39,22 +39,22 @@ Route::get('/forgot_password',  [LoginController::class, 'forgotPassword']);
 Route::post('/forgot_password', [LoginController::class, 'sendPasswordResetEmail']);
 
 Route::get('/reset_password',   [LoginController::class, 'resetPassword'])->name('reset_password');
-Route::post('/reset_password/{email}',  [LoginController::class, 'saveNewPassword']);
+Route::post('/reset_password/{email}',[LoginController::class, 'saveNewPassword']);
 
 Route::get('/signup',           [RegisterController::class, 'index']);
 Route::post('/store',           [RegisterController::class, 'store']);
 
-Route::get('/users',            [UsersController::class, 'index']);
-Route::get('/users/profile/{id}',       [UsersController::class, 'profile'])->name('user.profile');
+Route::get('/users',            [UsersController::class, 'index'])->name('users.list');
+Route::get('/users/profile/{id}',[UsersController::class, 'profile'])->name('user.profile');
 Route::get('/users/search',     [UsersController::class, 'search'])->name('users.search');
 Route::get('/users/{id}/edit',  [UserController::class, 'edit'])->name('user.edit.profile');
 Route::post('/users/{id}/edit', [UserController::class, 'update'])->name('user.update');
+Route::post('/users/{id}/delete',[UserController::class, 'delete'])->name('user.delete');
 //Route::post('/users/{id}/blockunblock', [UserController::class, 'blockunblock'])->name('user.blockunblock');
 
 Route::get('/shop',             [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{nome}/{id}', [ShopController::class, 'product'])->name('shop.estampa');
 Route::get('/shop/search',      [ShopController::class, 'search'])->name('shop.search');
-
 
 Route::get('/cart',             [CartController::class, 'index']);
 

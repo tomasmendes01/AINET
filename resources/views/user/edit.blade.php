@@ -82,6 +82,13 @@
 @if(Auth::user()->tipo == 'A')
 <div class="row" style="margin-top:-30%;">
     <div class="column">
+
+        <div class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
+            <div class="btn-holder">
+                <input class="btn btn-danger" name="block" type="submit" style="width:69%;margin:auto;margin-bottom:1%;margin-top:4%" value="Delete User">
+            </div>
+        </div>
+
         <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
             @csrf
 
@@ -100,6 +107,31 @@
     </div>
 </div>
 @endif
+
+<!-- Delete confirmation -->
+<div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-11">
+                        <div class="modal-body">
+                            <h2>CONFIRMATION</h2>
+                            <p class="item">Are you sure you want to delete the user <strong>{{ $user->name }}</strong>?</p>
+                            <form method="POST" action="{{ route('user.delete' , ['id' => $user->id]) }}">
+                                @csrf
+                                <input class="btn btn-danger" name="block" type="submit" style="width:69%;margin:auto;" value="Delete">
+                            </form>
+                            <button class="btn btn-primary" data-dismiss="modal" type="button" style="width:69%;margin:auto;">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer class="footer py-4">
     <div class="container" style="bottom: 0; left: 0; right: 0; margin-bottom:1%">

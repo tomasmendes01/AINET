@@ -26,6 +26,14 @@
 </section>
 <section class="page-section bg-light" id="portfolio" style="margin-top:-2%;">
     <div class="container">
+
+        @if(Session::get('success'))
+        <div class="alert alert-success" style="text-align:center;margin-top:-7%;">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>{{ session::get('success') }}</strong>
+        </div>
+        @endif
+
         <div class="row">
             <!-- --------------------------------------------- -->
             @foreach($users as $user)
@@ -33,7 +41,7 @@
                 <div class="portfolio-item">
                     @if($user->foto_url)
                     <a href="{{ route('user.profile',['id' => $user->id]) }}">
-                        <img class="img-fluid" src="/storage/fotos/{{$user->foto_url}}" style="width:100%;heigth:100%;" alt="" />
+                        <img class="img-fluid" src="/storage/fotos/{{$user->foto_url}}" style="width:100%;height:100%;" alt="" />
                     </a>
                     @else
                     <a href="{{ route('user.profile',['id' => $user->id]) }}">

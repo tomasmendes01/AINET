@@ -87,10 +87,34 @@ class UserController extends Controller
             return back()->with('success', 'User updated succesfully!');
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
+            //dd($e->getMessage());
             return back()->with('error', 'Error updating user!');
         }
 
         return back();
+    }
+
+    public function delete($id)
+    {
+        try {
+            DB::beginTransaction();
+            $user = User::findOrFail($id);
+
+            // verificar se o user não é Administrador, pq os Admins não têm "cliente"
+            if ($user->tipo != 'A') {
+                Cliente::destroy($id);
+            }
+            User::destroy($id);
+
+            DB::commit();
+
+            $users = User::paginate(12);
+            return redirect('/users')->with(['success' => 'User '.$user->name.' deleted successfully!', 'users' => $users]);
+        } catch (\Exception $e) {
+            //throw $th;
+            DB::rollBack();
+            //dd($e->getMessage());
+            return redirect()->back()->with('error', 'Error deleting user!');
+        }
     }
 }
