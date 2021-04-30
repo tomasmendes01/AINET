@@ -9,7 +9,7 @@
 <div class="row" style="margin-top:-4%">
     <div class="column">
         @if($user->foto_url)
-        <img src="/storage/fotos/{{ $user->foto_url }}" alt="profile_picture" style="height: 100%; width: 100%; object-fit: contain">
+        <img src="/storage/fotos/{{ $user->foto_url }}" onerror="src='/img/default-pfp.png'" alt="profile_picture" style="height: 100%; width: 100%; object-fit: contain">
         @else
         <img src="/img/default-pfp.png" alt="profile_picture" style="height: 100%; width: 100%; object-fit: contain">
         @endif

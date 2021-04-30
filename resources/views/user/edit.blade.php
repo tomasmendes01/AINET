@@ -41,7 +41,7 @@
         </div>
         @endif
 
-        <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
+        <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data" style="text-align:center;">
             @csrf
 
             <label for="name">Nome:</label>
@@ -71,6 +71,8 @@
             <input type="password" id="repeat_password" name="password_confirmation" size="50%" required><br><br>
             @endif
 
+            <label for="image">Profile picture:</label>
+            <input type="file" name="profile_picture" size="50%"><br><br>
 
             <div class="btn-holder">
                 <input class="btn btn-dark" type="submit" value="Apply">

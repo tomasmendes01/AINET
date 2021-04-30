@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use App\Models\User;
 use App\Models\Cliente;
@@ -36,6 +38,15 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        if (request('profile_picture')) {
+            //dd($request->file('profile_picture')->getClientOriginalName());
+            $bigPath = $request->profile_picture->store('fotos','public');
+            $path = substr($bigPath, 6);
+            //dd($path);
+            $user = User::find($request->id);
+            $user->foto_url = $path;
+            $user->save();
+        }
         if ($request->block == null) {
             if (Auth::user()->tipo != 'A') {
                 //dd($request->id);
@@ -109,11 +120,10 @@ class UserController extends Controller
             DB::commit();
 
             $users = User::paginate(12);
-            return redirect('/users')->with(['success' => 'User '.$user->name.' deleted successfully!', 'users' => $users]);
+
+            return redirect('/users')->with(['success' => 'User ' . $user->name . ' deleted successfully!', 'users' => $users]);
         } catch (\Exception $e) {
-            //throw $th;
             DB::rollBack();
-            //dd($e->getMessage());
             return redirect()->back()->with('error', 'Error deleting user!');
         }
     }
