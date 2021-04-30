@@ -23,7 +23,7 @@ class UsersController extends Controller
     {
 
         if (Auth::user()->tipo != 'A') {
-            return '<script>window.location = "/";</script>';
+            return redirect('/');
         }
 
         $users = User::paginate(12);
