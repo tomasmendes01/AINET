@@ -51,7 +51,7 @@
                 }
             </script>
             @endif
-            <a class="navbar-brand js-scroll-trigger" href="{{url('/shop')}}"><img src="img/navbar-logo.png" alt="" /></a>
+            <a class="navbar-brand js-scroll-trigger" href="{{url('/shop')}}"><img src="{{ asset('img/navbar-logo.png') }}" alt="" /></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ml-1"></i>

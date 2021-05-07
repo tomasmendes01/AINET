@@ -41,7 +41,7 @@
                 <div class="portfolio-item">
                     @if($user->foto_url)
                     <a href="{{ route('user.profile',['id' => $user->id]) }}">
-                        <img class="img-fluid" src="/storage/fotos/{{$user->foto_url}}" style="width:100%;height:100%;" alt="" />
+                        <img class="img-fluid" src="/storage/fotos/{{$user->foto_url}}" style="width:100%;height:100%;border-radius:50%;" alt="" />
                     </a>
                     @else
                     <a href="{{ route('user.profile',['id' => $user->id]) }}">

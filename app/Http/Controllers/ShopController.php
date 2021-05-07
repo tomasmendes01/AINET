@@ -69,11 +69,11 @@ class ShopController extends Controller
         $logo = Image::make($img)->fit(250, 450);
         $base = Image::make(public_path('/storage/tshirt_base/' . $cor[0]->codigo . '.jpg'));
         $preview = Image::make($base)->insert($logo, 'bottom-right', 135, 35);
-        
+
         $preview->encode('png');
         $type = 'png';
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($preview);
-        
+
         // query pra ter todas as cores pro dropdown
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
@@ -82,13 +82,28 @@ class ShopController extends Controller
 
     public function search()
     {
-        $search_text = $_GET['query'];
-        //dd($search_text);
-        $estampas = Estampa::where('nome', 'LIKE', '%' . $search_text . '%')->paginate(12);
+        $estampas = Estampa::where(function ($query) {
+            $query->where('nome', 'LIKE', '%' . $_GET['query'] . '%')
+                ->orWhere('descricao', 'LIKE', '%' . $_GET['query'] . '%');
+        })->paginate(12);
 
         $categorias = Categoria::whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
         return view('shop.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
+    }
+
+    public function indexCustomStamp()
+    {
+        /*
+        if (request()->cor != null) {
+            $cor = DB::table('cores')->where('nome', request()->cor)->get();
+        } else {
+            $cor = DB::table('cores')->where('nome', 'Preto')->get();
+        }
+        */
+        $cores = DB::table('cores')->whereNull('deleted_at')->get();
+
+        return view('shop.custom', ['cores' => $cores]);
     }
 }

@@ -44,7 +44,11 @@ class LoginController extends Controller
         // php artisan optimize:clear - limpa tudo memo
         // php artisan cache:clear
         // php artisan view:clear
+        $deleted = User::where('email', $request->input('email'))->value('deleted_at');
         $blocked = User::where('email', $request->input('email'))->value('bloqueado');
+        if ($deleted != null) {
+            return back()->with('error', "Your account has been disabled!");
+        }
         if ($blocked == 1) {
             return back()->with('error', "Your account has been blocked! Contact an administrator if you think it's an error.");
         }

@@ -26,7 +26,7 @@ class UsersController extends Controller
             return redirect('/');
         }
 
-        $users = User::paginate(12);
+        $users = User::whereNull('deleted_at')->paginate(12);
         //dd($users);
         return view('management.users')->with('users', $users); //envia todos os users para a view users.blade.php como 'users'
     }

@@ -1,27 +1,11 @@
-<!DOCTYPE html>
-<html>
+@extends('shop')
 
-<head>
-    <title>Reset Password</title>
-    <link rel="icon" href="https://i.imgur.com/EAHBQru.png">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link href="{{ URL::asset('/css/login.css') }}" rel="stylesheet">
-    <style type="text/css">
-        .box {
-            width: 600px;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-        }
-    </style>
-</head>
+@section('css')
+<link href="/css/login.css" rel="stylesheet" />
+@stop
 
-<body>
-    <br />
-    <div class="container box">
+@section('content')
+    <div class="container box" style="margin-top:30%;">
         <h3 style="text-align:center;">Create a new password</h3><br />
 
         @if (Session::has('error'))
@@ -44,12 +28,12 @@
         <form method="post" action="{{ url('/reset_password',['email' => $email]) }}">
             {{ csrf_field() }}
 
-            <p>Password</p>
+            <p style="margin-bottom:0;">Password</p>
             <input type="text" name="password" id="password" style="background-color:white;color:black;">
-            <p>Repeat Password</p>
+            <p style="margin-bottom:0;margin-top:1%;">Repeat Password</p>
             <input type="password" name="password_confirmation" id="confirm_password" style="background-color:white;color:black;">
 
-            <button type="submit" style="margin:auto;right:0;left:0;position:absolute;transform:translateY(50px)">Submit</button>
+            <button type="submit" style="margin:auto;right:0;left:0;position:absolute;transform:translateY(60px)">Submit</button>
         </form>
     </div>
 </body>
@@ -70,3 +54,4 @@
         window.location = "/shop";
     }
 </script>
+@stop

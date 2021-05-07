@@ -58,7 +58,6 @@
                 </div>
                 <br>
 
-
                 <div class="dropdown" style="margin-bottom:-17%;">
                     <button class="btn btn-dark dropbtn">⠀⠀⠀Categories⠀⠀⠀</button>
                     <div class="dropdown-content">
@@ -68,11 +67,13 @@
                         @endforeach
                     </div>
                 </div>
-
+                @if(isset(Auth::user()->email))
                 <div class="dropdown" style="margin-bottom:-17%;">
-                    <button class="dropbtn">Make your own t-shirt!</button>
+                    <button class="btn btn-dark dropbtn">
+                        <a href="{{ route('shop.customstamp') }}" style="color:white; text-decoration:none;">Make your own t-shirt!</a>
+                    </button>
                 </div>
-
+                @endif
             </div>
         </div>
     </div>
@@ -87,7 +88,7 @@
             <div class="col-lg-3">
                 <div class="portfolio-item">
                     <a href="{{ route('shop.estampa',['nome' => $estampa->nome, 'id' => $estampa->id]) }}">
-                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='/estampas_privadas/{{$estampa->imagem_url}}'" alt="{{ $estampa->nome }}"/>
+                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='/estampas_privadas/{{$estampa->imagem_url}}'" alt="{{ $estampa->nome }}" style="margin:auto;max-width:300px;max-height:300px;" />
                     </a>
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-heading">{{ $estampa->nome }}</div>

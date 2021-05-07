@@ -38,15 +38,11 @@
             @endif
 
         </ul>
-
-
-
     </div>
-
 </div>
 
 <footer class="footer py-4">
-    <div class="container" style="position: absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%">
+    <div class="container" style="position:absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%;">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
             <div class="col-lg-4 my-3 my-lg-0">

@@ -9757,3 +9757,23 @@ section#contact form#contactForm :-ms-input-placeholder {
 .dropdown:hover .dropbtn {
   background-color: #ffbb00;
 }
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+i {
+  background: white;
+  border-radius: 20px;
+  font-size: 25px;
+  text-align: center;
+  margin-right: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  padding: 10px;
+}
+
+img {
+  display: block;
+}

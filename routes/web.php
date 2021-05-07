@@ -49,12 +49,14 @@ Route::get('/users/profile/{id}',[UsersController::class, 'profile'])->name('use
 Route::get('/users/search',     [UsersController::class, 'search'])->name('users.search');
 Route::get('/users/{id}/edit',  [UserController::class, 'edit'])->name('user.edit.profile');
 Route::post('/users/{id}/edit', [UserController::class, 'update'])->name('user.update');
+Route::post('/users/{id}/edit/checkUpdate', [UserController::class, 'checkUpdate'])->name('user.checkUpdate');
 Route::post('/users/{id}/delete',[UserController::class, 'delete'])->name('user.delete');
 //Route::post('/users/{id}/blockunblock', [UserController::class, 'blockunblock'])->name('user.blockunblock');
 
 Route::get('/shop',             [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{nome}/{id}', [ShopController::class, 'product'])->name('shop.estampa');
 Route::get('/shop/search',      [ShopController::class, 'search'])->name('shop.search');
+Route::get('/shop/custom',      [ShopController::class, 'indexCustomStamp'])->name('shop.customstamp');
 
 Route::get('/cart',             [CartController::class, 'index']);
 

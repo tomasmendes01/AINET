@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use App\Models\User;
 use App\Models\Cliente;
+use DateTime;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -38,9 +40,17 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        if (request('profile_picture')) {
+        if (request('delete_pfp')) {
+            $user = User::find($request->id);
+            $user->foto_url = null;
+            $user->save();
+            return back()->with('success', 'Profile picture deleted succesfully!');
+        } elseif (request('profile_picture')) {
+            $this->validate($request, [
+                'profile_picture' => 'nullable|image|max:1024'
+            ]);
             //dd($request->file('profile_picture')->getClientOriginalName());
-            $bigPath = $request->profile_picture->store('fotos','public');
+            $bigPath = $request->profile_picture->store('fotos', 'public');
             $path = substr($bigPath, 6);
             //dd($path);
             $user = User::find($request->id);
@@ -50,10 +60,16 @@ class UserController extends Controller
         if ($request->block == null) {
             if (Auth::user()->tipo != 'A') {
                 //dd($request->id);
-                $this->validate(request(), [
-                    'email' => 'required|email|unique:users,email,' . $request->id,
-                    'password'  => 'required|alphaNum|min:3|confirmed'
-                ]);
+                if ($request->email != null) {
+                    $this->validate(request(), [
+                        'email' => 'required|email|unique:users,email,' . $request->id
+                    ]);
+                }
+                if ($request->password != null) {
+                    $this->validate(request(), [
+                        'password'  => 'alphaNum|min:3|confirmed'
+                    ]);
+                }
             } else {
                 $this->validate(request(), [
                     'email' => 'email|unique:users,email,' . $request->id,
@@ -66,20 +82,45 @@ class UserController extends Controller
         }
 
         try {
+
             DB::beginTransaction();
 
             /* User */
-            $user = User::find($request->id);
+            $user = User::where('email', $request->email)->first();
             if ($request->block == null) {
-                $user->name = request('name');
-                $user->email = request('email');
-                $user->password = request('password');
+
+                if ($request->name != null) {
+                    $user->name = request('name');
+                }
+                if ($request->email != null) {
+                    $user->email = request('email');
+                }
+                if ($request->password != null) {
+                    $user->password = Hash::make(request('password'));
+                }
+
+                if ($request->tipo_user != null) {
+                    $user->tipo = request('tipo_user');
+                }
 
                 if ($user->tipo == 'C') {
                     /* Cliente */
                     $cliente = Cliente::find($request->id);
-
-                    $cliente->endereco = request('endereco');
+                    if ($request->endereco != null) {
+                        $cliente->endereco = request('endereco');
+                    }
+                    if ($request->nif != null) {
+                        $this->validate(request(), [
+                            'nif' => 'integer|digits:9'
+                        ]);
+                        $cliente->nif = request('nif');
+                    }
+                    if ($request->tipo_pagamento != null) {
+                        $cliente->tipo_pagamento = request('tipo_pagamento');
+                    }
+                    if ($request->ref_pagamento != null) {
+                        $cliente->ref_pagamento = request('ref_pagamento');
+                    }
 
                     $cliente->save();
                 }
@@ -99,7 +140,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             //dd($e->getMessage());
-            return back()->with('error', 'Error updating user!');
+            return back()->with('error', 'Error updating user! ' . $e->getMessage());
         }
 
         return back();
@@ -109,22 +150,40 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
+
             $user = User::findOrFail($id);
+            $user->deleted_at = new DateTime();
+            $user->save();
 
             // verificar se o user não é Administrador, pq os Admins não têm "cliente"
             if ($user->tipo != 'A') {
-                Cliente::destroy($id);
+                $cliente = Cliente::findOrFail($user->id);
+                $cliente->deleted_at = new DateTime();
+                $cliente->save();
             }
-            User::destroy($id);
-
             DB::commit();
-
             $users = User::paginate(12);
 
             return redirect('/users')->with(['success' => 'User ' . $user->name . ' deleted successfully!', 'users' => $users]);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Error deleting user!');
+        }
+    }
+
+    public function checkUpdate(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        try {
+            if (Hash::check($request->check_password, $user->password)) {
+                $this->update($request);
+                return redirect()->back()->with('success', 'User updated succesfully!');
+            } else {
+                return redirect()->back()->with('error', 'Wrong password or missing confirmation!');
+            }
+        } catch (\Exception $e) {
+            //dd($e);
+            return redirect()->back()->with('error', 'Error, missing confirmation!');
         }
     }
 }

@@ -1,10 +1,10 @@
 @extends('shop')
+
 @section('css')
-<link href="/css/product.css" rel="stylesheet" />
+<link href="/css/custom_stamp.css" rel="stylesheet" />
 @stop
 
 <?php
-$prod = $product[0];
 ?>
 
 @section('content')
@@ -15,27 +15,23 @@ $prod = $product[0];
             <button class="dropbtn">⠀⠀⠀Color⠀⠀⠀</button>
             <div class="dropdown-content">
                 @foreach($cores as $cor)
-                <a href="{{ route('shop.estampa',['id' => $prod->id ,'nome' => $prod->nome ,'cor' => $cor->nome]) }}">{{ $cor->nome }}</a>
                 @endforeach
             </div>
         </div>
     </div>
     <div class="column">
-        <img src="{{ $image }}" alt="tshirt" style="height: 100%; width: 100%; object-fit: contain">
     </div>
     <div class="column">
-        <h2>{{$prod->nome}}</h2>
+        <h2>Custom T-Shirt</h2>
         <ul>
-            <li><strong>Description: </strong>{{ $prod->descricao }}</li>
-
+            <li>Upload an image to create your own stamp!</li>
         </ul>
         <button class="dropbtn">Add to cart</button>
     </div>
 </div>
 
-
 <footer class="footer py-4">
-    <div class="container" style="bottom: 0; left: 0; right: 0;">
+    <div class="container" style="position:absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%;">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
             <div class="col-lg-4 my-3 my-lg-0">

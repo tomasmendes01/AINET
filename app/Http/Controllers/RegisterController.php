@@ -56,6 +56,11 @@ class RegisterController extends Controller
             return back()->with('error', 'User already exists!');
         }
 
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'password' => 'regex:/^\S*$/u|min:3|confirmed',
+        ]);
+
         $resultEmail = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL);
         if ($resultEmail == true) {
 
@@ -78,7 +83,7 @@ class RegisterController extends Controller
                 $user->deleted_at = null;
 
                 $this->setRememberToken($user);
-                
+
                 $user->save();
 
                 /* Cliente */
