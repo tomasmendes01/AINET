@@ -13,4 +13,23 @@ class Estampa extends Model
     {
         return $this->belongsTo(Categoria::class);
     }
+
+    public function tshirt()
+    {
+        return $this->hasMany(TShirt::class);
+    }
+
+    public function high_low_tshirt()
+    {
+        return $this->hasMany(TShirt::class)
+            ->where('tamanho', 'M')
+            ->orderBy('preco_un', 'DESC');
+    }
+
+    public function low_high_tshirt()
+    {
+        return $this->hasMany(TShirt::class)
+            ->where('tamanho', 'M')
+            ->orderBy('preco_un', 'ASC');
+    }
 }

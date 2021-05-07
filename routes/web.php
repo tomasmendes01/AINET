@@ -31,45 +31,39 @@ Route::get('/', function () {
 });
 
 
-Route::get('/login',            [LoginController::class, 'index'])->name('login');
-Route::post('/checklogin',      [LoginController::class, 'checklogin']);
-Route::get('/logout',           [LoginController::class, 'logout'])->name('logout');
+Route::get('/login',                        [LoginController::class, 'index'])->name('login');
+Route::post('/checklogin',                  [LoginController::class, 'checklogin']);
+Route::get('/logout',                       [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/forgot_password',  [LoginController::class, 'forgotPassword']);
-Route::post('/forgot_password', [LoginController::class, 'sendPasswordResetEmail']);
+Route::get('/forgot_password',              [LoginController::class, 'forgotPassword']);
+Route::post('/forgot_password',             [LoginController::class, 'sendPasswordResetEmail']);
 
-Route::get('/reset_password',   [LoginController::class, 'resetPassword'])->name('reset_password');
-Route::post('/reset_password/{email}',[LoginController::class, 'saveNewPassword']);
+Route::get('/reset_password',               [LoginController::class, 'resetPassword'])->name('reset_password');
+Route::post('/reset_password/{email}',      [LoginController::class, 'saveNewPassword']);
 
-Route::get('/signup',           [RegisterController::class, 'index']);
-Route::post('/store',           [RegisterController::class, 'store']);
+Route::get('/signup',                       [RegisterController::class, 'index']);
+Route::post('/store',                       [RegisterController::class, 'store']);
 
-Route::get('/users',            [UsersController::class, 'index'])->name('users.list');
-Route::get('/users/profile/{id}',[UsersController::class, 'profile'])->name('user.profile');
-Route::get('/users/search',     [UsersController::class, 'search'])->name('users.search');
-Route::get('/users/{id}/edit',  [UserController::class, 'edit'])->name('user.edit.profile');
-Route::post('/users/{id}/edit', [UserController::class, 'update'])->name('user.update');
+Route::get('/users',                        [UsersController::class, 'index'])->name('users.list');
+Route::get('/users/profile/{id}',           [UsersController::class, 'profile'])->name('user.profile');
+Route::get('/users/search',                 [UsersController::class, 'search'])->name('users.search');
+Route::get('/users/{id}/edit',              [UserController::class, 'edit'])->name('user.edit.profile');
+Route::post('/users/{id}/edit',             [UserController::class, 'update'])->name('user.update');
 Route::post('/users/{id}/edit/checkUpdate', [UserController::class, 'checkUpdate'])->name('user.checkUpdate');
-Route::post('/users/{id}/delete',[UserController::class, 'delete'])->name('user.delete');
+Route::post('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
 //Route::post('/users/{id}/blockunblock', [UserController::class, 'blockunblock'])->name('user.blockunblock');
 
-Route::get('/shop',             [ShopController::class, 'index'])->name('shop.index');
-Route::get('/shop/{nome}/{id}', [ShopController::class, 'product'])->name('shop.estampa');
-Route::get('/shop/search',      [ShopController::class, 'search'])->name('shop.search');
-Route::get('/shop/custom',      [ShopController::class, 'indexCustomStamp'])->name('shop.customstamp');
+Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
+Route::get('/shop/{nome}/{id}',             [ShopController::class, 'product'])->name('shop.estampa');
+Route::get('/shop/search',                  [ShopController::class, 'search'])->name('shop.search');
+Route::get('/shop/custom',                  [ShopController::class, 'indexCustomStamp'])->name('shop.customstamp');
 
-Route::get('/cart',             [CartController::class, 'index']);
+Route::get('/cart',                         [CartController::class, 'index']);
+Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
 
-Route::get('/pagenotfound',     [PageNotFound::class, 'error'])->name('pagenotfound');
+Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
 
-Route::get('/encomendas',       [EncomendasController::class, 'index'])->name('encomendas');
-
-/*
-Route::get('/add-to-cart/{id}', [
-    'uses' => CartController::class, 'add',
-    'as'   => 'product.addToCart'
-]);
-*/
+Route::get('/encomendas',                   [EncomendasController::class, 'index'])->name('encomendas');
 
 Route::get('/estampas_privadas/{file}', [function ($file) {
 

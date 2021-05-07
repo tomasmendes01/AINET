@@ -7,27 +7,25 @@
     <div class="container">
         <div class="row">
             <!-- --------------------------------------------- -->
-            @if($counter == 0)
+            @if($cart == null)
             <h1 style="margin:auto;margin-top:20%;">Looks like your cart is empty.</h1>
             @else
-            @foreach($encomendas as $encomenda)
-            <div class="col-lg-3 col-sm-6 mb-4">
-                <div class="portfolio-item">
-                    <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                        </div>
-                        <img class="img-fluid" src="" onerror="src='img/navbar-logo.png'" alt="" />
-                    </a>
-                    <div class="portfolio-caption">
-                        <div class="portfolio-caption-subheading text-muted">{{ $encomenda->id }}</div>
-                        <div class="portfolio-caption-heading">{{ $encomenda->name }}</div>
-                        <div class="portfolio-caption-subheading text-muted">{{ $encomenda->preco_total }}€</div>
-                        <div class="portfolio-caption-subheading text-muted">{{ $encomenda->notas }}</div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
+
+            <table style="width:100%;margin:auto;margin-top:50px;">
+                <tr>
+                    <th></th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                </tr>
+                @foreach($cart->items as $product)
+                <tr>
+                    <td> <img class="img-fluid" src="/storage/estampas/{{ $product['item']->imagem_url }}" onerror="src='/estampas_privadas/{{ $product['item']->imagem_url }}' " alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
+                    <td>{{ $product['item']->nome }}</td>
+                    <td>{{ $product['quantity'] }}</td>
+                </tr>
+                <h1 style="margin:auto;margin-top:20%;color:greenyellow"></h1>
+                @endforeach
+            </table>
             @endif
             <!-- --------------------------------------------- -->
         </div>
@@ -35,7 +33,7 @@
 </section>
 
 <footer class="footer py-4">
-    <div class="container" style="position: absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%">
+    <div class="container" style="bottom: 0; left: 0; right: 0; margin-bottom:1%">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
             <div class="col-lg-4 my-3 my-lg-0">

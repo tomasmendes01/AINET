@@ -13,6 +13,7 @@ use App\Models\Estampa;
 use Illuminate\Pagination\Paginator;
 use App\Models\Categoria;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Session;
 
 class ShopController extends Controller
 {
@@ -26,17 +27,30 @@ class ShopController extends Controller
 
     function index()
     {
-        if (request()->categoria) {
-            $estampas = Estampa::with('categoria')
+        if (request()->filter_by_price) {
+            if (request()->filter_by_price == 'high_low') {
+                $estampas = Estampa::with('categoria', 'high_low_tshirt')
+                    ->whereNull('estampas.deleted_at')
+                    ->paginate(12);
+            } else {
+                $estampas = Estampa::with('categoria', 'low_high_tshirt')
+                    ->whereNull('estampas.deleted_at')
+                    ->paginate(12);
+                //dd($estampas);
+            }
+        } elseif (request()->categoria) {
+            $estampas = Estampa::with('categoria', 'tshirt')
                 ->whereHas('categoria', function ($query) {
                     $query->where('nome', request()->categoria);
                 })
                 ->whereNull('estampas.deleted_at')
                 ->paginate(12);
         } else {
-            $estampas = Estampa::with('categoria')->paginate(12);
+            $estampas = Estampa::with('categoria', 'tshirt')
+                ->whereNull('estampas.deleted_at')
+                ->paginate(12);
         }
-
+        //dd($estampas[0]);
         $categorias = Categoria::whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
@@ -105,5 +119,23 @@ class ShopController extends Controller
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
         return view('shop.custom', ['cores' => $cores]);
+    }
+
+    public function addToCart(Request $request, $id)
+    {
+        $product = Estampa::findOrFail($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+
+        if ($oldCart) {
+            $oldCart->add($product, $product->id);
+            $request->session()->put('cart', $oldCart);
+        } else {
+            $cart = new CartController($oldCart);
+            $cart->add($product, $product->id);
+            $request->session()->put('cart', $cart);
+        }
+
+        //dd($request->session()->get('cart'));
+        return redirect()->back()->with('success', 'Product added to cart!');
     }
 }

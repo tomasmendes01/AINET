@@ -45,7 +45,7 @@
             <h3 class="section-subheading text-muted" style="margin-bottom:2%;">New stamps every week!</h3>
             <div class="text-center">
 
-                <ul class="pagination" style="display: inline-block;">
+                <ul class="pagination" style="display: inline-block;margin-bottom:2%">
                     {{ $estampas->appends(request()->query())->links("pagination::bootstrap-4") }}
                 </ul>
                 <br>
@@ -65,6 +65,14 @@
                         @foreach($categorias as $categoria)
                         <a href="{{ route('shop.index',['categoria' => $categoria->nome]) }}">{{ $categoria->nome }}</a>
                         @endforeach
+                    </div>
+                </div>
+
+                <div class="dropdown" style="margin-bottom:-17%;">
+                    <button class="btn btn-dark dropbtn">Filter by Price</button>
+                    <div class="dropdown-content">
+                        <a href="{{ route('shop.index',['filter_by_price' => 'low_high']) }}">Low - High</a>
+                        <a href="{{ route('shop.index',['filter_by_price' => 'high_low']) }}">High - Low</a>
                     </div>
                 </div>
                 @if(isset(Auth::user()->email))
@@ -87,10 +95,12 @@
             @foreach($estampas as $estampa)
             <div class="col-lg-3">
                 <div class="portfolio-item">
+                    <div class="portfolio-caption-subheading" style="color:gold;transform:translateX(220px) scale(1.25);position:absolute;background-color:black;width:auto;z-index:0;">⠀{{ $estampa->tshirt[0]->preco_un }}€⠀</div>
                     <a href="{{ route('shop.estampa',['nome' => $estampa->nome, 'id' => $estampa->id]) }}">
                         <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='/estampas_privadas/{{$estampa->imagem_url}}'" alt="{{ $estampa->nome }}" style="margin:auto;max-width:300px;max-height:300px;" />
                     </a>
                     <div class="portfolio-caption">
+
                         <div class="portfolio-caption-heading">{{ $estampa->nome }}</div>
                         @if($estampa->categoria)
                         <div class="portfolio-caption-heading">[ {{ $estampa->categoria->nome }} ]</div>

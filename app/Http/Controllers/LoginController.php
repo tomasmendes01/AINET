@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -29,6 +30,7 @@ class LoginController extends Controller
 
     function checklogin(Request $request)
     {
+        Session::flush();
 
         $this->validate($request, [
             'email'      => 'required',
@@ -63,6 +65,7 @@ class LoginController extends Controller
     function logout()
     {
         Auth::logout();
+        Session::flush();
         return back();
     }
 

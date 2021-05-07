@@ -9,8 +9,12 @@ $prod = $product[0];
 
 @section('content')
 
+
+
 <div class="row" style="margin-top:-6%;padding:50px;">
+
     <div class="column" style="width: auto;">
+
         <div class="dropdown">
             <button class="dropbtn">⠀⠀⠀Color⠀⠀⠀</button>
             <div class="dropdown-content">
@@ -23,13 +27,45 @@ $prod = $product[0];
     <div class="column">
         <img src="{{ $image }}" alt="tshirt" style="height: 100%; width: 100%; object-fit: contain">
     </div>
+
     <div class="column">
+        <div style="transform:translateY(-100px);margin-bottom:-100px;">
+            @if ($message = Session::get('error'))
+            <div class="alert alert-danger alert-block" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{ $message }}</strong>
+            </div>
+            @endif
+
+            @if (count($errors) > 0)
+            <div class="alert alert-danger" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            @if(Session::get('success'))
+            <div class="alert alert-success" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{session::get('success')}}</strong>
+            </div>
+            @endif
+        </div>
+
+        <br>
+
+
         <h2>{{$prod->nome}}</h2>
         <ul>
             <li><strong>Description: </strong>{{ $prod->descricao }}</li>
 
         </ul>
-        <button class="dropbtn">Add to cart</button>
+        <form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
+            <button class="dropbtn">Add to cart</button>
+        </form>
     </div>
 </div>
 
