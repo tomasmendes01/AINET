@@ -170,6 +170,7 @@
                     </div>
                 </div>
             </div>
+
         </form>
     </div>
 </div>
@@ -178,9 +179,9 @@
 <div class="row" style="margin-top:-30%;">
     <div class="column">
 
-        <div class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
+        <div data-toggle="modal" href="#portfolioModal1">
             <div class="btn-holder">
-                <input class="btn btn-danger" name="block" type="submit" style="width:69%;margin:auto;margin-bottom:1%;margin-top:4%" value="Delete User">
+                <input class="btn btn-danger" name="block" type="submit" style="width:69%;margin:auto;margin-bottom:1%;margin-top:15%" value="Delete User">
             </div>
         </div>
 

@@ -19,7 +19,7 @@
                 </tr>
                 @foreach($cart->items as $product)
                 <tr>
-                    <td> <img class="img-fluid" src="/storage/estampas/{{ $product['item']->imagem_url }}" onerror="src='/estampas_privadas/{{ $product['item']->imagem_url }}' " alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
+                    <td> <img class="img-fluid" src="/storage/estampas/{{ $product['item']->imagem_url }}" onerror="src=`/estampas_privadas/{{ $product['item']->imagem_url }}` " alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
                     <td>{{ $product['item']->nome }}</td>
                     <td>{{ $product['quantity'] }}</td>
                 </tr>

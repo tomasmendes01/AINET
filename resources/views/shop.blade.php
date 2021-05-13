@@ -86,34 +86,18 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url('/logout') }}"><i class="fa fa-bars"></i> Logout</a>
-                    </li>
-                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" arialabelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">Select "Logout" below if you are ready to end your
-                                    current session.</div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button" datadismiss="modal">Cancel</button>
-                                    <a class="btn btn-primary" href="{{route('logout')}}" onclick="event.preventDefault();
- document.getElementById('logout-form').submit();">Logout</a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </div>
+                        <div data-toggle="modal" href="#logoutModal">
+                            <button type="submit" style="background:none;color:white;border:none;">
+                                <a class="nav-link js-scroll-trigger"><i class="fas fa-bars"></i> LOGOUT</a>
+                            </button>
                         </div>
-                        @else
-                        <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="{{ url('/login') }}"><i class="fa fa-bars"></i> Login</a>
-                        </li>
-                        @endif
+                    </li>
+
+                    @else
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ url('/login') }}"><i class="fa fa-bars"></i> Login</a>
+                    </li>
+                    @endif
                 </ul>
             </div>
 
@@ -132,7 +116,35 @@
         @yield('cart')
     </div>
 
+    <!-- Logout Modal-->
+    <div class="portfolio-modal modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-11">
+                            <div class="modal-body">
+                                <h2>Ready to Leave?</h2>
+                                <p>Select "Logout" below if you are ready to end your current session.</p>
+                                <a class="btn btn-primary" href="{{ route('logout')}}" onclick="event.preventDefault();
+ document.getElementById('logout-form').submit();">Logout</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                                <button class="btn btn-light" data-dismiss="modal" type="button">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
+
+
 
 <!-- Bootstrap core JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

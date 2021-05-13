@@ -86,7 +86,7 @@ class UserController extends Controller
             DB::beginTransaction();
 
             /* User */
-            $user = User::where('email', $request->email)->first();
+            $user = User::findOrFail($request->id);
             if ($request->block == null) {
 
                 if ($request->name != null) {

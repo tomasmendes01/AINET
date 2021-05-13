@@ -51,7 +51,9 @@ class UsersController extends Controller
     {
         $search_text = $_GET['query'];
         //dd($search_text);
-        $users = User::where('name', 'LIKE', '%' . $search_text . '%')->paginate(12);
+        $users = User::where('name', 'LIKE', '%' . $search_text . '%')
+            ->whereNull('deleted_at')
+            ->paginate(12);
 
         return view('management.users')->with('users', $users);
     }

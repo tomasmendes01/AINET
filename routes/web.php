@@ -33,7 +33,7 @@ Route::get('/', function () {
 
 Route::get('/login',                        [LoginController::class, 'index'])->name('login');
 Route::post('/checklogin',                  [LoginController::class, 'checklogin']);
-Route::get('/logout',                       [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout',                       [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/forgot_password',              [LoginController::class, 'forgotPassword']);
 Route::post('/forgot_password',             [LoginController::class, 'sendPasswordResetEmail']);
@@ -44,7 +44,7 @@ Route::post('/reset_password/{email}',      [LoginController::class, 'saveNewPas
 Route::get('/signup',                       [RegisterController::class, 'index']);
 Route::post('/store',                       [RegisterController::class, 'store']);
 
-Route::get('/users',                        [UsersController::class, 'index'])->name('users.list');
+Route::get('/users',                        [UsersController::class, 'index'])->name('users.list')->middleware('auth');
 Route::get('/users/profile/{id}',           [UsersController::class, 'profile'])->name('user.profile');
 Route::get('/users/search',                 [UsersController::class, 'search'])->name('users.search');
 Route::get('/users/{id}/edit',              [UserController::class, 'edit'])->name('user.edit.profile');
