@@ -31,7 +31,7 @@ class ShopController extends Controller
     function index()
     {
         if (request()->categoria) {
-            $estampas = Estampa::with('categoria')
+            $estampas = Estampa::with('categoria', 'autor')
                 ->whereHas('categoria', function ($query) {
                     $query->where('nome', request()->categoria);
                 })
@@ -43,13 +43,14 @@ class ShopController extends Controller
                 ->paginate(12);
         }
 
+        $preco_un_catalogo = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+        $preco_un_proprio = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+
         foreach ($estampas as $estampa) {
             if ($estampa->cliente_id == null) {
-                $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
-                $estampa->setAttribute('preco', $preco);
+                $estampa->setAttribute('preco', $preco_un_catalogo);
             } else {
-                $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
-                $estampa->setAttribute('preco', $preco);
+                $estampa->setAttribute('preco', $preco_un_proprio);
             }
         }
 
@@ -90,14 +91,14 @@ class ShopController extends Controller
         $type = 'png';
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($preview);
 
-        foreach ($products as $product) {
-            //dd($estampa->cliente_id);
-            if ($product->cliente_id == null) {
-                $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
-                $product->setAttribute('preco', $preco);
+        $preco_un_catalogo = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+        $preco_un_proprio = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+
+        foreach ($products as $estampa) {
+            if ($estampa->cliente_id == null) {
+                $estampa->setAttribute('preco', $preco_un_catalogo);
             } else {
-                $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
-                $product->setAttribute('preco', $preco);
+                $estampa->setAttribute('preco', $preco_un_proprio);
             }
         }
 
@@ -116,6 +117,17 @@ class ShopController extends Controller
 
         $categorias = Categoria::whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
+
+        $preco_un_catalogo = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+        $preco_un_proprio = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+
+        foreach ($estampas as $estampa) {
+            if ($estampa->cliente_id == null) {
+                $estampa->setAttribute('preco', $preco_un_catalogo);
+            } else {
+                $estampa->setAttribute('preco', $preco_un_proprio);
+            }
+        }
 
         return view('shop.items', ['estampas' => $estampas, 'categorias' => $categorias, 'cores' => $cores]);
     }
