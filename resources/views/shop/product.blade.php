@@ -4,7 +4,7 @@
 @stop
 
 <?php
-$prod = $product[0];
+$prod = $products[0];
 ?>
 
 @section('content')
@@ -61,7 +61,10 @@ $prod = $product[0];
         <h2>{{$prod->nome}}</h2>
         <ul>
             <li><strong>Description: </strong>{{ $prod->descricao }}</li>
-
+            @if($prod->categoria)
+            <li><strong>Category: </strong>{{ $prod->categoria->nome }}</li>
+            @endif
+            <li><strong>Price: </strong>{{ $prod->preco }}€</li>
         </ul>
         <form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
             <button class="dropbtn">Add to cart</button>

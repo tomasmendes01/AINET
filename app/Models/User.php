@@ -70,4 +70,8 @@ class User extends Authenticatable
     public function cliente(){
         return $this->hasOne(Cliente::class,'id','id');
     }
+
+    public function estampas(){
+        return $this->hasMany(Estampa::class,'cliente_id','id');
+    }
 }

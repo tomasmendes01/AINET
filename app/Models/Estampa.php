@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use App\Models\Preco;
 
 class Estampa extends Model
 {
@@ -14,22 +16,8 @@ class Estampa extends Model
         return $this->belongsTo(Categoria::class);
     }
 
-    public function tshirt()
+    public function autor()
     {
-        return $this->hasMany(TShirt::class);
-    }
-
-    public function high_low_tshirt()
-    {
-        return $this->hasMany(TShirt::class)
-            ->where('tamanho', 'M')
-            ->orderBy('preco_un', 'DESC');
-    }
-
-    public function low_high_tshirt()
-    {
-        return $this->hasMany(TShirt::class)
-            ->where('tamanho', 'M')
-            ->orderBy('preco_un', 'ASC');
+        return $this->belongsTo(User::class,'cliente_id','id');
     }
 }

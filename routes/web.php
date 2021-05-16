@@ -60,6 +60,7 @@ Route::get('/shop/custom',                  [ShopController::class, 'indexCustom
 
 Route::get('/cart',                         [CartController::class, 'index']);
 Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart/remove/{id}',             [ShopController::class, 'removeFromCart'])->name('cart.remove');
 
 Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
 

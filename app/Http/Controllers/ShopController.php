@@ -14,9 +14,12 @@ use Illuminate\Pagination\Paginator;
 use App\Models\Categoria;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Session;
+use App\Models\Preco;
 
 class ShopController extends Controller
 {
+
+    protected $appends = ['preco'];
 
     public $nome;
 
@@ -27,30 +30,29 @@ class ShopController extends Controller
 
     function index()
     {
-        if (request()->filter_by_price) {
-            if (request()->filter_by_price == 'high_low') {
-                $estampas = Estampa::with('categoria', 'high_low_tshirt')
-                    ->whereNull('estampas.deleted_at')
-                    ->paginate(12);
-            } else {
-                $estampas = Estampa::with('categoria', 'low_high_tshirt')
-                    ->whereNull('estampas.deleted_at')
-                    ->paginate(12);
-                //dd($estampas);
-            }
-        } elseif (request()->categoria) {
-            $estampas = Estampa::with('categoria', 'tshirt')
+        if (request()->categoria) {
+            $estampas = Estampa::with('categoria')
                 ->whereHas('categoria', function ($query) {
                     $query->where('nome', request()->categoria);
                 })
                 ->whereNull('estampas.deleted_at')
                 ->paginate(12);
         } else {
-            $estampas = Estampa::with('categoria', 'tshirt')
+            $estampas = Estampa::with('categoria', 'autor')
                 ->whereNull('estampas.deleted_at')
                 ->paginate(12);
         }
-        //dd($estampas[0]);
+
+        foreach ($estampas as $estampa) {
+            if ($estampa->cliente_id == null) {
+                $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+                $estampa->setAttribute('preco', $preco);
+            } else {
+                $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+                $estampa->setAttribute('preco', $preco);
+            }
+        }
+
         $categorias = Categoria::whereNull('deleted_at')->get();
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
@@ -61,7 +63,7 @@ class ShopController extends Controller
     {
 
         // vai buscar o produto com o nome que vem no request
-        $product = Estampa::where('nome', request()->nome)
+        $products = Estampa::where('nome', request()->nome)
             ->where('id', request()->id)
             ->get();
 
@@ -73,10 +75,10 @@ class ShopController extends Controller
         }
 
         // procura pela estampa na pasta /storage/estampas e se nao existir, vai à pasta app/estampas_privadas
-        if (file_exists(public_path('/storage/estampas/' . $product[0]->imagem_url))) {
-            $img = public_path('/storage/estampas/' . $product[0]->imagem_url);
+        if (file_exists(public_path('/storage/estampas/' . $products[0]->imagem_url))) {
+            $img = public_path('/storage/estampas/' . $products[0]->imagem_url);
         } else {
-            $img = storage_path('app/estampas_privadas/' . $product[0]->imagem_url);
+            $img = storage_path('app/estampas_privadas/' . $products[0]->imagem_url);
         }
 
         // código pra processar a estampa e juntar com a t-shirt base
@@ -88,10 +90,21 @@ class ShopController extends Controller
         $type = 'png';
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($preview);
 
+        foreach ($products as $product) {
+            //dd($estampa->cliente_id);
+            if ($product->cliente_id == null) {
+                $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+                $product->setAttribute('preco', $preco);
+            } else {
+                $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+                $product->setAttribute('preco', $preco);
+            }
+        }
+
         // query pra ter todas as cores pro dropdown
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
-        return view('shop.product', ['product' => $product, 'image' => $base64, 'cores' => $cores]);
+        return view('shop.product', ['products' => $products, 'image' => $base64, 'cores' => $cores]);
     }
 
     public function search()
@@ -124,6 +137,14 @@ class ShopController extends Controller
     public function addToCart(Request $request, $id)
     {
         $product = Estampa::findOrFail($id);
+        if ($product->cliente_id == null) {
+            $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+            $product->setAttribute('preco', $preco);
+        } else {
+            $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+            $product->setAttribute('preco', $preco);
+        }
+
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
 
         if ($oldCart) {
@@ -137,5 +158,31 @@ class ShopController extends Controller
 
         //dd($request->session()->get('cart'));
         return redirect()->back()->with('success', 'Product added to cart!');
+    }
+
+    public function removeFromCart(Request $request, $id)
+    {
+        $product = Estampa::findOrFail($id);
+        if ($product->cliente_id == null) {
+            $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+            $product->setAttribute('preco', $preco);
+        } else {
+            $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+            $product->setAttribute('preco', $preco);
+        }
+
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+
+        if ($oldCart) {
+            $oldCart->remove($product, $product->id);
+            $request->session()->put('cart', $oldCart);
+        } else {
+            $cart = new CartController($oldCart);
+            $cart->remove($product, $product->id);
+            $request->session()->put('cart', $cart);
+        }
+
+        //dd($request->session()->get('cart'));
+        return redirect()->back()->with('success', 'Product removed from cart!');
     }
 }
