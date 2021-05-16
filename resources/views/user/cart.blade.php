@@ -16,7 +16,7 @@
                     <th></th>
                     <th>Product</th>
                     <th>Quantity</th>
-                    <th>Remove</th>
+                    <th>Actions</th>
                     <th>Price</th>
                 </tr>
                 @foreach($cart->items as $product)
