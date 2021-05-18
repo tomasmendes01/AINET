@@ -30,7 +30,7 @@ class LoginController extends Controller
 
     function checklogin(Request $request)
     {
-        Session::flush();
+        //Session::flush();
 
         $this->validate($request, [
             'email'      => 'required',
@@ -64,9 +64,9 @@ class LoginController extends Controller
 
     function logout()
     {
-        Auth::logout();
         Session::flush();
-        return back();
+        Auth::logout();
+        return redirect('/shop');
     }
 
     public function forgotPassword()

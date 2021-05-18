@@ -21,13 +21,6 @@ class ShopController extends Controller
 
     protected $appends = ['preco'];
 
-    public $nome;
-
-    public function mount($nome)
-    {
-        $this->nome = $nome;
-    }
-
     function index()
     {
         if (request()->categoria) {
@@ -170,45 +163,5 @@ class ShopController extends Controller
 
         //dd($request->session()->get('cart'));
         return redirect()->back()->with('success', 'Product added to cart!');
-    }
-
-    public function removeFromCart(Request $request, $id)
-    {
-        $product = Estampa::findOrFail($id);
-        if ($product->cliente_id == null) {
-            $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
-            $product->setAttribute('preco', $preco);
-        } else {
-            $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
-            $product->setAttribute('preco', $preco);
-        }
-
-        $oldCart = Session::has('cart') ? Session::get('cart') : null;
-
-        if ($oldCart) {
-            $oldCart->remove($product, $product->id);
-            $request->session()->put('cart', $oldCart);
-        } else {
-            $cart = new CartController($oldCart);
-            $cart->remove($product, $product->id);
-            $request->session()->put('cart', $cart);
-        }
-
-        //dd($request->session()->get('cart'));
-        return redirect()->back()->with('success', 'Product removed from cart!');
-    }
-
-    public function clearCart()
-    {
-        $cart = Session::has('cart') ? Session::get('cart') : null;
-        if ($cart == null) {
-            return redirect()->back()->with('error', 'Error fetching cart!');
-        }
-        while ($cart->totalQty > 0) {
-            foreach ($cart->items as $item) {
-                $this->removeFromCart(request(), $item['item']->id);
-            }
-        }
-        return redirect()->back()->with('success', 'Cart cleared!');
     }
 }

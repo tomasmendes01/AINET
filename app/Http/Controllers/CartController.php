@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+use App\Models\Estampa;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 class CartController extends Controller
 {
 
@@ -9,21 +14,13 @@ class CartController extends Controller
     public $totalQty = 0;
     public $totalPrice = 0;
 
-    /* não usar esta merda
-    public function __construct($oldCart)
-    {
-        
-        if ($oldCart) {
-            $this->items = $oldCart->items;
-            $this->totalQty = $oldCart->totalQty;
-            $this->totalPrice = $oldCart->totalPrice;
-        }
-        
-    }
-    */
-
     public function index()
     {
+        //dd(request()->session()->get('cart'));
+        if (request()->session()->get('cart') == null) {
+            $cart = new CartController();
+            request()->session()->put('cart', $cart);
+        }
         return view('user.cart')->with(['cart' => request()->session()->get('cart')]);
     }
 
@@ -70,5 +67,45 @@ class CartController extends Controller
 
         request()->session()->put('totalQuantity', $this->totalQty);
         return view('user.cart');
+    }
+
+    public function removeFromCart(Request $request, $id)
+    {
+        $product = Estampa::findOrFail($id);
+        if ($product->cliente_id == null) {
+            $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+            $product->setAttribute('preco', $preco);
+        } else {
+            $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+            $product->setAttribute('preco', $preco);
+        }
+
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+
+        if ($oldCart) {
+            $oldCart->remove($product, $product->id);
+            $request->session()->put('cart', $oldCart);
+        } else {
+            $cart = new CartController($oldCart);
+            $cart->remove($product, $product->id);
+            $request->session()->put('cart', $cart);
+        }
+
+        //dd($request->session()->get('cart'));
+        return redirect()->back()->with('success', 'Product removed from cart!');
+    }
+
+    public function clearCart()
+    {
+        $cart = Session::has('cart') ? Session::get('cart') : null;
+        if ($cart == null) {
+            return redirect()->back()->with('error', 'Error fetching cart!');
+        }
+        while ($cart->totalQty > 0) {
+            foreach ($cart->items as $item) {
+                $this->removeFromCart(request(), $item['item']->id);
+            }
+        }
+        return redirect()->back()->with('success', 'Cart cleared!');
     }
 }

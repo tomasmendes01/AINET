@@ -2,14 +2,21 @@
 
 @section('cart')
 
-<!-- Portfolio Grid-->
 <section class="page-section" id="services" style="margin-bottom:-5%;">
     <div class="container">
         <div class="row">
-            <!-- --------------------------------------------- -->
-            @if($cart->totalPrice == 0)
+            @if($cart->totalPrice == 0 || $cart->items == null )
             <h1 style="margin:auto;margin-top:20%;">Looks like your cart is empty.</h1>
             @else
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Grid-->
+<section class="page-section" id="services" style="margin-bottom:-5%;margin-top:-17%;">
+    <div class="container">
+        <div class="row">
+            <!-- --------------------------------------------- -->
 
             <table style="width:100%;margin:auto;margin-top:50px;text-align:center">
                 <tr>
@@ -34,7 +41,6 @@
                     </td>
                     <td>{{ $product['price'] }}€</td>
                 </tr>
-                <h1 style="margin:auto;margin-top:20%;color:greenyellow"></h1>
                 @endforeach
             </table>
 
@@ -51,25 +57,8 @@
         <button type="submit" class="btn btn-light" style="float:right">Clear Cart</button>
     </form>
 
-    @endif
-</section>
 
-<footer class="footer py-4">
-    <div class="container" style="bottom: 0; left: 0; right: 0; margin-bottom:1%">
-        <div class="row align-items-center">
-            <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
-            <div class="col-lg-4 my-3 my-lg-0">
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <div class="col-lg-4 text-lg-right">
-                <a class="mr-3" href="#!">Privacy Policy</a>
-                <a href="#!">Terms of Use</a>
-            </div>
-        </div>
-    </div>
-</footer>
+</section>
 
 <!-- Confirm Checkout Modal-->
 <div class="portfolio-modal modal fade" id="confirmCheckoutModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -96,7 +85,7 @@
                             </table>
                             <br>
                             <a class="btn btn-primary" href="#">Confirm</a>
-                            <form id="logout-form" action="#" method="POST" style="display: none;">
+                            <form id="confirm-order-form" action="#" method="POST" style="display: none;">
                                 @csrf
                             </form>
                             <button class="btn btn-light" data-dismiss="modal" type="button">
@@ -109,6 +98,27 @@
         </div>
     </div>
 </div>
+
+@endif
+
+<footer class="footer py-4" style="position:fixed; margin:auto; width: 100%;bottom: 0; left: 0; right: 0; margin-bottom:1%;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
+            <div class="col-lg-4 my-3 my-lg-0">
+                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <div class="col-lg-4 text-lg-right">
+                <a class="mr-3" href="#!">Privacy Policy</a>
+                <a href="#!">Terms of Use</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
 
 <!-- Bootstrap core JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
