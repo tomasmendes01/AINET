@@ -30,10 +30,9 @@ Route::get('/', function () {
     return redirect('shop');
 });
 
-
 Route::get('/login',                        [LoginController::class, 'index'])->name('login');
 Route::post('/checklogin',                  [LoginController::class, 'checklogin']);
-Route::post('/logout',                       [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout',                      [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/forgot_password',              [LoginController::class, 'forgotPassword']);
 Route::post('/forgot_password',             [LoginController::class, 'sendPasswordResetEmail']);
@@ -51,7 +50,6 @@ Route::get('/users/{id}/edit',              [UserController::class, 'edit'])->na
 Route::post('/users/{id}/edit',             [UserController::class, 'update'])->name('user.update');
 Route::post('/users/{id}/edit/checkUpdate', [UserController::class, 'checkUpdate'])->name('user.checkUpdate');
 Route::post('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
-//Route::post('/users/{id}/blockunblock', [UserController::class, 'blockunblock'])->name('user.blockunblock');
 
 Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{nome}/{id}',             [ShopController::class, 'product'])->name('shop.estampa');
@@ -61,6 +59,7 @@ Route::get('/shop/custom',                  [ShopController::class, 'indexCustom
 Route::get('/cart',                         [CartController::class, 'index']);
 Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart/remove/{id}',             [ShopController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/clear',                   [ShopController::class, 'clearCart'])->name('cart.clear');
 
 Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
 

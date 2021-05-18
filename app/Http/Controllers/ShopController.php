@@ -197,4 +197,18 @@ class ShopController extends Controller
         //dd($request->session()->get('cart'));
         return redirect()->back()->with('success', 'Product removed from cart!');
     }
+
+    public function clearCart()
+    {
+        $cart = Session::has('cart') ? Session::get('cart') : null;
+        if ($cart == null) {
+            return redirect()->back()->with('error', 'Error fetching cart!');
+        }
+        while ($cart->totalQty > 0) {
+            foreach ($cart->items as $item) {
+                $this->removeFromCart(request(), $item['item']->id);
+            }
+        }
+        return redirect()->back()->with('success', 'Cart cleared!');
+    }
 }

@@ -42,7 +42,15 @@
         </div>
     </div>
     <h1 style="text-align:right">Total price: {{ $cart->totalPrice }}€</h1>
-    <a class="btn btn-dark" style="float:right">CHECKOUT</a>
+
+    <div data-toggle="modal" href="#confirmCheckoutModal">
+        <button type="submit" class="btn btn-dark" style="float:right">Checkout
+    </div>
+
+    <form action="{{ route('cart.clear') }}" method="get" enctype="multipart/form-data" class="product-form">
+        <button type="submit" class="btn btn-light" style="float:right">Clear Cart</button>
+    </form>
+
     @endif
 </section>
 
@@ -62,6 +70,45 @@
         </div>
     </div>
 </footer>
+
+<!-- Confirm Checkout Modal-->
+<div class="portfolio-modal modal fade" id="confirmCheckoutModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-11">
+                        <div class="modal-body">
+                            <h2>Confirm order</h2>
+                            <table style="width:100%">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                </tr>
+                                @foreach($cart->items as $product)
+                                <tr>
+                                    <td>{{ $product['item']->nome }}</td>
+                                    <td>{{ $product['price'] }}€</td>
+                                    <td>{{ $product['quantity'] }}</td>
+                                </tr>
+                                @endforeach
+                            </table>
+                            <br>
+                            <a class="btn btn-primary" href="#">Confirm</a>
+                            <form id="logout-form" action="#" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <button class="btn btn-light" data-dismiss="modal" type="button">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap core JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
