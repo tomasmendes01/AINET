@@ -53,9 +53,9 @@
         <button type="submit" class="btn btn-dark" style="float:right">Checkout
     </div>
 
-    <form action="{{ route('cart.clear') }}" method="get" enctype="multipart/form-data" class="product-form">
-        <button type="submit" class="btn btn-light" style="float:right">Clear Cart</button>
-    </form>
+    <div data-toggle="modal" href="#confirmClearCartModal">
+        <button type="submit" class="btn btn-light" style="float:right">Clear Cart
+    </div>
 
 
 </section>
@@ -85,6 +85,33 @@
                             </table>
                             <br>
                             <a class="btn btn-primary" href="#">Confirm</a>
+                            <form id="confirm-order-form" action="#" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <button class="btn btn-light" data-dismiss="modal" type="button">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Clear Cart Modal-->
+<div class="portfolio-modal modal fade" id="confirmClearCartModal" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container" >
+                <div class="row justify-content-center">
+                    <div class="col-lg-15">
+                        <div class="modal-body" >
+                            <h2>Are you sure you want to clear your cart?</h2>
+                            <p>This action will remove every item you have in your cart.</p>
+                            <form action="{{ route('cart.clear') }}" method="get" enctype="multipart/form-data" class="product-form">
+                                <button type="submit" class="btn btn-primary">Clear Cart</button>
+                            </form>
                             <form id="confirm-order-form" action="#" method="POST" style="display: none;">
                                 @csrf
                             </form>
