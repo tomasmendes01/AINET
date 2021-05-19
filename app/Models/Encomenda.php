@@ -9,8 +9,10 @@ class Encomenda extends Model
 {
     use HasFactory;
 
+    protected $table = 'encomendas';
+
     public function user()
     {
-        return $this->hasOne(User::class,'id','cliente_id');
+        return $this->hasOne(User::class, 'id', 'cliente_id');
     }
 }

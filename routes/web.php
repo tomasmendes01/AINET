@@ -60,6 +60,7 @@ Route::get('/cart',                         [CartController::class, 'index']);
 Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart/remove/{id}',             [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/clear',                   [CartController::class, 'clearCart'])->name('cart.clear');
+Route::get('/cart/checkout/{customerID}',   [CartController::class, 'checkout'])->name('cart.checkout');
 
 Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
 

@@ -2,6 +2,30 @@
 
 @section('cart')
 
+@if ($message = Session::get('error'))
+<div class="alert alert-danger alert-block" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>{{ $message }}</strong>
+</div>
+@endif
+
+@if (count($errors) > 0)
+<div class="alert alert-danger" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+    <ul>
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if(Session::get('success'))
+<div class="alert alert-success" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>{{session::get('success')}}</strong>
+</div>
+@endif
+
 <section class="page-section" id="services" style="margin-bottom:-5%;">
     <div class="container">
         <div class="row">
@@ -83,14 +107,28 @@
                                 </tr>
                                 @endforeach
                             </table>
+
                             <br>
-                            <a class="btn btn-primary" href="#">Confirm</a>
-                            <form id="confirm-order-form" action="#" method="POST" style="display: none;">
+                            <p>Final price: <strong>{{ $cart->totalPrice }}€</strong></p>
+
+                            @if(Auth::user() != null)
+                            <form action="{{ route('cart.checkout',['customerID' => Auth::user()->id]) }}" method="GET" enctype="multipart/form-data" id="notesForm">
+                                <textarea rows="4" cols="40" name="notes" form="notesForm" style="display:flex;justify-content:center" placeholder="Feel free to add some notes here to help us with your order! :)"></textarea>
                                 @csrf
+                                <br>
+                                <button type="submit" class="btn btn-primary" style="float:none">Confirm</button>
                             </form>
+                            @else
+
+                            <a class="btn btn-primary" href="{{ route('login') }}" enctype="multipart/form-data">
+                                Login
+                            </a>
+                            @endif
+
                             <button class="btn btn-light" data-dismiss="modal" type="button">
                                 Cancel
                             </button>
+
                         </div>
                     </div>
                 </div>
@@ -100,13 +138,13 @@
 </div>
 
 <!-- Confirm Clear Cart Modal-->
-<div class="portfolio-modal modal fade" id="confirmClearCartModal" tabindex="-1" role="dialog" aria-hidden="true" >
+<div class="portfolio-modal modal fade" id="confirmClearCartModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="container" >
+            <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-15">
-                        <div class="modal-body" >
+                        <div class="modal-body">
                             <h2>Are you sure you want to clear your cart?</h2>
                             <p>This action will remove every item you have in your cart.</p>
                             <form action="{{ route('cart.clear') }}" method="get" enctype="multipart/form-data" class="product-form">
