@@ -37,8 +37,11 @@ class EncomendasController extends Controller
             return view('management.encomenda', ['encomendas' => $encomendas]);
         }
 
-        $encomendas = Encomenda::with('user')->paginate(12);
-        
+        $encomendas = Encomenda::with('user')
+            ->where('estado', '=', 'pendente')
+            ->orWhere('estado', '=', 'paga')
+            ->paginate(12);
+
         return view('management.encomendas')->with(['encomendas' => $encomendas]);
     }
 }
