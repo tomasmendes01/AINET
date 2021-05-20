@@ -10,25 +10,27 @@
     {{ csrf_field() }}
     <div class="row" style="margin-top:-6%;padding:50px;">
         <div class="column" style="margin:auto;margin-top:10%">
+
             <h2>Custom T-Shirt</h2>
 
             <label for="image">Stamp Name:</label>
             <input type="text" name="stamp_name" size="50%">
 
             <label for="image">Stamp Description:</label>
-            <input type="text" name="stamp_description" size="50%">
+            <textarea type="text" name="stamp_description" size="50%"></textarea>
 
             <label for="stamp_category">Category:</label>
             <select id="stamp_category" name="stamp_category" size="1" data-dropup-auto="false">
                 <datalist id="stamp_category">
                     @foreach($categorias as $categoria)
-                    <option value="{{ $categoria->id }}">{{ $categoria->id }}</option>
+                    <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                     @endforeach
                 </datalist>
             </select>
 
             <label for="image">Upload your stamp here:</label>
             <input type="file" name="stamp" size="50%">
+
             <button class="dropbtn">Submit</button>
         </div>
     </div>

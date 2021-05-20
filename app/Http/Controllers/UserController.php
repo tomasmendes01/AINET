@@ -96,7 +96,7 @@ class UserController extends Controller
                     $user->email = request('email');
                 }
                 if ($request->password != null) {
-                    $user->password = Hash::make(request('password'));
+                    $user->password = request('password');
                 }
 
                 if ($request->tipo_user != null) {
@@ -173,9 +173,9 @@ class UserController extends Controller
 
     public function checkUpdate(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        //$user = User::where('email', $request->email)->first();
         try {
-            if (Hash::check($request->check_password, $user->password)) {
+            if (Hash::check($request->check_password, Auth::user()->password)) {
                 $this->update($request);
                 return redirect()->back()->with('success', 'User updated succesfully!');
             } else {
