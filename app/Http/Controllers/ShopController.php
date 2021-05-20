@@ -127,16 +127,14 @@ class ShopController extends Controller
 
     public function indexCustomStamp()
     {
-        /*
-        if (request()->cor != null) {
-            $cor = DB::table('cores')->where('nome', request()->cor)->get();
-        } else {
-            $cor = DB::table('cores')->where('nome', 'Preto')->get();
-        }
-        */
-        $cores = DB::table('cores')->whereNull('deleted_at')->get();
+        $categorias = Categoria::all();
+        return view('shop.custom', ['categorias' => $categorias]);
+    }
 
-        return view('shop.custom', ['cores' => $cores]);
+    public function createStamp()
+    {
+        dd(request());
+        return view('shop.custom');
     }
 
     public function addToCart(Request $request, $id)

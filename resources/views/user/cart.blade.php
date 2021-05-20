@@ -166,7 +166,7 @@
 
 @endif
 
-<footer class="footer py-4" style="position:fixed; margin:auto; width: 100%;bottom: 0; left: 0; right: 0; margin-bottom:1%;">
+<footer class="footer py-4" style="width: 100%; margin-bottom:2%; height:2.5rem; bottom:0; left: 0; right: 0">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>

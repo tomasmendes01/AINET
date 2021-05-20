@@ -4,34 +4,38 @@
 <link href="/css/custom_stamp.css" rel="stylesheet" />
 @stop
 
-<?php
-?>
-
 @section('content')
 
-<div class="row" style="margin-top:-6%;padding:50px;">
-    <div class="column" style="width: auto;">
-        <div class="dropdown">
-            <button class="dropbtn">⠀⠀⠀Color⠀⠀⠀</button>
-            <div class="dropdown-content">
-                @foreach($cores as $cor)
-                @endforeach
-            </div>
+<form method="POST" action="{{ route('shop.createStamp') }}" enctype="multipart/form-data">
+    {{ csrf_field() }}
+    <div class="row" style="margin-top:-6%;padding:50px;">
+        <div class="column" style="margin:auto;margin-top:10%">
+            <h2>Custom T-Shirt</h2>
+
+            <label for="image">Stamp Name:</label>
+            <input type="text" name="stamp_name" size="50%">
+
+            <label for="image">Stamp Description:</label>
+            <input type="text" name="stamp_description" size="50%">
+
+            <label for="stamp_category">Category:</label>
+            <select id="stamp_category" name="stamp_category" size="1" data-dropup-auto="false">
+                <datalist id="stamp_category">
+                    @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id }}">{{ $categoria->id }}</option>
+                    @endforeach
+                </datalist>
+            </select>
+
+            <label for="image">Upload your stamp here:</label>
+            <input type="file" name="stamp" size="50%">
+            <button class="dropbtn">Submit</button>
         </div>
     </div>
-    <div class="column">
-    </div>
-    <div class="column">
-        <h2>Custom T-Shirt</h2>
-        <ul>
-            <li>Upload an image to create your own stamp!</li>
-        </ul>
-        <button class="dropbtn">Add to cart</button>
-    </div>
-</div>
+</form>
 
 <footer class="footer py-4">
-    <div class="container" style="position:absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%;">
+    <div class="container" style="width: 100%; margin-bottom:2%; height:2.5rem; bottom:0; left: 0; right: 0">
         <div class="row align-items-center">
             <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
             <div class="col-lg-4 my-3 my-lg-0">

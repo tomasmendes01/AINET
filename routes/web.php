@@ -55,6 +55,7 @@ Route::get('/shop',                         [ShopController::class, 'index'])->n
 Route::get('/shop/{nome}/{id}',             [ShopController::class, 'product'])->name('shop.estampa');
 Route::get('/shop/search',                  [ShopController::class, 'search'])->name('shop.search');
 Route::get('/shop/custom',                  [ShopController::class, 'indexCustomStamp'])->name('shop.customstamp');
+Route::post('/shop/custom/new',              [ShopController::class, 'createStamp'])->name('shop.createStamp');
 
 Route::get('/cart',                         [CartController::class, 'index']);
 Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
