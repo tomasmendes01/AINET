@@ -33,7 +33,7 @@
     </div>
     @endif
 
-    <form method="post" action="{{ url('/forgot_password') }}">
+    <form method="post" action="{{ url('/forgot-password') }}">
         {{ csrf_field() }}
 
         <input type="email" name="email" id="email" style="background-color:white;color:black;" placeholder="Input your email here">

@@ -160,6 +160,10 @@ class ShopController extends Controller
         }
 
         //dd($request->session()->get('cart'));
-        return redirect()->back()->with('success', 'Product added to cart!');
+        if ($request->ajax()) {
+            return back()->renderSections()['content'];
+        }
+
+        return back()->with('success', 'Product added to cart!');
     }
 }

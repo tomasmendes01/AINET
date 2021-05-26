@@ -2,5 +2,5 @@
 <p>
     Click the following link to reset your password.
     <br>
-    <a href="{{ route('reset_password',['email' => $user->email]) }}">Reset password</a>
+    <a href="{{ url('/reset-password',['token' => $token]) }}">Reset password</a>
 </p>

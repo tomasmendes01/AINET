@@ -64,9 +64,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="{{ url('/cart') }}"><i class="fas fa-shopping-cart"></i> Cart
-                            @if(request()->session()->get('totalQuantity') > 0)
-                            ({{ request()->session()->get('totalQuantity') }})
-                            @endif
+
                         </a>
                     </li>
                     @if(isset(Auth::user()->email))

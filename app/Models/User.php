@@ -2,14 +2,40 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\ResetPasswordNotification;
+use Illuminate\Support\Facades\Mail;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, CanResetPassword;
+
+    /**
+     * Send a password reset notification to the user.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $url = 'https://example.com/reset-password?token=' . $token;
+        //dd(request()->email);
+        $user = User::where('email', request()->email)->first();
+        if ($user == null) {
+            return back()->with('error', 'User does not exists!');
+        }
+
+        Mail::send('email.forgot', ['user' => $user, 'token' => $token], function ($m) use ($user) {
+            $m->from('hello@app.com', 'MagicShirts');
+
+            $m->to($user->email, $user->name)->subject('Reset Password');
+        });
+        return back()->with('success', 'An email has been sent to you!');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -54,7 +80,8 @@ class User extends Authenticatable
         return $this->attributes['bloqueado'];
     }
 
-    public function getRole(){
+    public function getRole()
+    {
         return $this->attributes['tipo'];
     }
 
@@ -63,15 +90,18 @@ class User extends Authenticatable
         return $this->hasMany(Encomenda::class);
     }
 
-    public function admin(){
-        return $this->attributes['tipo'] == 'A'; 
+    public function admin()
+    {
+        return $this->attributes['tipo'] == 'A';
     }
 
-    public function cliente(){
-        return $this->hasOne(Cliente::class,'id','id');
+    public function cliente()
+    {
+        return $this->hasOne(Cliente::class, 'id', 'id');
     }
 
-    public function estampas(){
-        return $this->hasMany(Estampa::class,'cliente_id','id');
+    public function estampas()
+    {
+        return $this->hasMany(Estampa::class, 'cliente_id', 'id');
     }
 }

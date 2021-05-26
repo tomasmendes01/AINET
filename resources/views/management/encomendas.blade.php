@@ -6,12 +6,38 @@
 <section class="page-section" id="services" style="margin-top:-6%;">
     <div class="container">
         <div class="text-center" style="margin-top:10%;margin-bottom:-7%;">
-        <h2 class="section-heading text-uppercase">List of Deliveries</h2>
+            <h2 class="section-heading text-uppercase">List of Deliveries</h2>
+            @if ($message = Session::get('error'))
+            <div class="alert alert-danger alert-block" style="text-align:center">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{ $message }}</strong>
+            </div>
+            @endif
+
+            @if (count($errors) > 0)
+            <div class="alert alert-danger" style="text-align:center">
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            @if(Session::get('success'))
+            <div class="alert alert-success" style="text-align:center">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{session::get('success')}}</strong>
+            </div>
+            @endif
             <!-- --------------------------------------------- -->
             <ul class="pagination" style="display: inline-block;">
                 {{ $encomendas->appends(request()->query())->links("pagination::bootstrap-4") }}
             </ul>
             <!-- --------------------------------------------- -->
+
+
+
         </div>
     </div>
 </section>

@@ -37,6 +37,7 @@
 @stop
 
 @section('content')
+
 <!-- Products -->
 <section class="page-section" id="services" style="margin-bottom:-5%;margin-top: -3%;">
     <div class="container">

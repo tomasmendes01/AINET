@@ -14,7 +14,16 @@ use App\Http\Controllers\UserController;
 use SebastianBergmann\Environment\Console;
 
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
+
+/* TESTE RESET PASSWORD */
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -55,7 +64,7 @@ Route::get('/shop',                         [ShopController::class, 'index'])->n
 Route::get('/shop/{nome}/{id}',             [ShopController::class, 'product'])->name('shop.estampa');
 Route::get('/shop/search',                  [ShopController::class, 'search'])->name('shop.search');
 Route::get('/shop/custom',                  [ShopController::class, 'indexCustomStamp'])->name('shop.customstamp');
-Route::post('/shop/custom/new',              [ShopController::class, 'createStamp'])->name('shop.createStamp');
+Route::post('/shop/custom/new',             [ShopController::class, 'createStamp'])->name('shop.createStamp');
 
 Route::get('/cart',                         [CartController::class, 'index']);
 Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
@@ -66,6 +75,8 @@ Route::get('/cart/checkout/{customerID}',   [CartController::class, 'checkout'])
 Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
 
 Route::get('/encomendas',                   [EncomendasController::class, 'index'])->name('encomendas');
+Route::post('/encomendas/prepare/{orderID}', [EncomendasController::class, 'prepareOrder'])->name('encomenda.prepare');
+Route::post('/encomendas/cancel/{orderID}', [EncomendasController::class, 'cancelOrder'])->name('encomenda.cancel');
 
 Route::get('/estampas_privadas/{file}', [function ($file) {
 
@@ -89,3 +100,52 @@ Route::get('/storage/estampas/{file}', [function ($file) {
     $path = storage_path('img\navbar-logo.png');
     return response()->file($path, array('Content-Type' => 'image/png'));
 }]);
+
+
+/* TESTE RESET PASSWORD */
+
+Route::get('/forgot-password', function () {
+    return view('auth.forgot');
+})->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    return $status === Password::RESET_LINK_SENT
+        ? back()->with(['status' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')->name('password.email');
+
+
+Route::get('/reset-password/{token}', function ($email, $token) {
+    return view('auth.new_password', ['email' => $email, 'token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:3|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) use ($request) {
+            $user = User::where('email', $request->email)->first();
+            $user->password = $request->password;
+            $user->remember_token = Str::random(60);
+            $user->save();
+
+            event(new PasswordReset($user));
+        }
+    );
+
+    return $status == Password::PASSWORD_RESET
+        ? redirect()->route('login')->with('status', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
+})->middleware('guest')->name('password.update');

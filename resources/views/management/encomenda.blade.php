@@ -6,7 +6,7 @@
 <meta name="description" content="" />
 <meta name="author" content="" />
 <title>MagicShirts</title>
-<link rel="icon" type="image/x-icon" href="/img/favicon.ico"/>
+<link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
 <!-- Font Awesome icons (free version)-->
 <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
 <!-- Google fonts-->
@@ -70,8 +70,14 @@ $encomenda = $encomendas[0];
         <td>{{$encomenda->tipo_pagamento}}</td>
         <td>{{$encomenda->ref_pagamento}}</td>
         <td>
-            <button type="button" class="btn btn-light">Deliver</button>
-            <button type="button" class="btn btn-dark">Cancel</button>
+            <form action="{{ route('encomenda.prepare',['orderID' => $encomenda->id]) }}" method="post">
+                @csrf
+                <button type="submit" class="btn btn-light">Deliver</button>
+            </form>
+            <form action="{{ route('encomenda.cancel',['orderID' => $encomenda->id]) }}" method="post">
+                @csrf
+                <button type="submit" class="btn btn-dark">Cancel</button>
+            </form>
         </td>
     </tr>
 </table>

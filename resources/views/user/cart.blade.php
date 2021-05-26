@@ -19,13 +19,6 @@
 </div>
 @endif
 
-@if(Session::get('success'))
-<div class="alert alert-success" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <strong>{{session::get('success')}}</strong>
-</div>
-@endif
-
 <section class="page-section" id="services" style="margin-bottom:-5%;">
     <div class="container">
         <div class="row">
@@ -152,6 +145,7 @@
                             </form>
                             <form id="confirm-order-form" action="#" method="POST" style="display: none;">
                                 @csrf
+
                             </form>
                             <button class="btn btn-light" data-dismiss="modal" type="button">
                                 Cancel

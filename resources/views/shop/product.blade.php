@@ -66,9 +66,20 @@ $prod = $products[0];
             @endif
             <li><strong>Price: </strong>{{ $prod->preco }}€</li>
         </ul>
-        <form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
-            <button class="dropbtn">Add to cart</button>
+        <!--<form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">-->
+        <form>
+            <input type="button" class="dropbtn" name="teste" value="Add to cart" onClick="addToCart()"></input>
         </form>
+
+        <script>
+            function addToCart() {
+                $.ajax({
+                    type: "get",
+                    url: "/cart/add/{{ $prod->id }}",
+                });
+                alert('Product added to cart!')
+            }
+        </script>
     </div>
 </div>
 
