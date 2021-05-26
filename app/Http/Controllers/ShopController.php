@@ -15,6 +15,8 @@ use App\Models\Categoria;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Session;
 use App\Models\Preco;
+use DateTime;
+use Illuminate\Support\Facades\Date;
 
 class ShopController extends Controller
 {
@@ -131,9 +133,43 @@ class ShopController extends Controller
         return view('shop.custom', ['categorias' => $categorias]);
     }
 
-    public function createStamp()
+    public function createStamp(Request $request)
     {
-        dd(request());
+
+        try {
+            DB::beginTransaction();
+            $estampa = new Estampa();
+
+            if (Auth::user()->tipo == 'C') {
+                $estampa->cliente_id = Auth::user()->id;
+            } else {
+                $estampa->cliente_id = null;
+            }
+
+            $estampa->categoria_id = null;
+            $estampa->nome = $request->stamp_name;
+            $estampa->descricao = $request->stamp_description;
+
+
+            $bigPath = $request->stamp_image->store('estampas_privadas');
+            $path = substr($bigPath, 18);
+            $estampa->imagem_url = $path;
+
+
+            $estampa->informacao_extra = null;
+            $estampa->created_at = new DateTime();
+            $estampa->updated_at = new DateTime();
+            $estampa->deleted_at = null;
+
+            $estampa->save();
+
+            DB::commit();
+
+            return redirect('/shop/' . $estampa->nome . '/' . $estampa->id);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
         return view('shop.custom');
     }
 

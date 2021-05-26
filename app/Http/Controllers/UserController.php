@@ -179,11 +179,11 @@ class UserController extends Controller
                 $this->update($request);
                 return redirect()->back()->with('success', 'User updated succesfully!');
             } else {
-                return redirect()->back()->with('error', 'Wrong password or missing confirmation!');
+                return redirect()->back()->with('error', 'Invalid password or missing confirmation! Please press the "Apply" button');
             }
         } catch (\Exception $e) {
             //dd($e);
-            return redirect()->back()->with('error', 'Error, missing confirmation!');
+            return redirect()->back()->with('error', 'Error, missing confirmation! Please press the "Apply" button');
         }
     }
 }

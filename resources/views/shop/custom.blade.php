@@ -13,23 +13,16 @@
 
             <h2>Custom T-Shirt</h2>
 
+            <input type="hidden" name="author" value="{{Auth::user()->id}}">
+
             <label for="image">Stamp Name:</label>
-            <input type="text" name="stamp_name" size="50%">
+            <input type="text" name="stamp_name" size="50%" required>
 
             <label for="image">Stamp Description:</label>
             <textarea type="text" name="stamp_description" size="50%"></textarea>
 
-            <label for="stamp_category">Category:</label>
-            <select id="stamp_category" name="stamp_category" size="1" data-dropup-auto="false">
-                <datalist id="stamp_category">
-                    @foreach($categorias as $categoria)
-                    <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
-                    @endforeach
-                </datalist>
-            </select>
-
             <label for="image">Upload your stamp here:</label>
-            <input type="file" name="stamp" size="50%">
+            <input type="file" name="stamp_image" size="50%" required>
 
             <button class="dropbtn">Submit</button>
         </div>

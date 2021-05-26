@@ -91,7 +91,11 @@
                 <div class="portfolio-item">
                     <div class="portfolio-caption-subheading" style="color:gold;transform:translateX(220px) scale(1.25);position:absolute;background-color:black;width:auto;z-index:0;">⠀{{ $estampa->preco }}€⠀</div>
                     <a href="{{ route('shop.estampa',['nome' => $estampa->nome, 'id' => $estampa->id]) }}">
-                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" onerror="src='/estampas_privadas/{{$estampa->imagem_url}}'" alt="{{ $estampa->nome }}" style="margin:auto;max-width:300px;max-height:300px;" />
+                        @if($estampa->cliente_id)
+                        <img class="img-fluid" src="/estampas_privadas/{{$estampa->imagem_url}}" alt="{{ $estampa->nome }}" style="margin:auto;max-width:300px;max-height:300px;" />
+                        @else
+                        <img class="img-fluid" src="/storage/estampas/{{$estampa->imagem_url}}" alt="{{ $estampa->nome }}" style="margin:auto;max-width:300px;max-height:300px;" />
+                        @endif
                     </a>
                     <div class="portfolio-caption">
 

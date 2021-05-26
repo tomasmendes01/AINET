@@ -148,7 +148,7 @@ class CartController extends Controller
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
-                return redirect()->back()->with('error', 'An error occurred processing your order!');
+                return redirect()->back()->with('error', 'An error occurred processing your order! Missing parameters (ex: endereco) on your profile');
             }
 
             $this->clearCart();

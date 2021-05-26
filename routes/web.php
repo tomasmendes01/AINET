@@ -83,11 +83,11 @@ Route::get('/estampas_privadas/{file}', [function ($file) {
     $path = storage_path('app/estampas_privadas/' . $file);
 
     if (file_exists($path)) {
-        return response()->file($path, array('Content-Type' => 'image/png'));
+        return response()->file($path, array('Content-Type' => 'image'));
     }
 
     $path = storage_path('img\navbar-logo.png');
-    return response()->file($path, array('Content-Type' => 'image/png'));
+    return response()->file($path, array('Content-Type' => 'image'));
 }]);
 
 Route::get('/storage/estampas/{file}', [function ($file) {
