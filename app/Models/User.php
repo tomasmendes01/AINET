@@ -22,7 +22,7 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $url = 'https://example.com/reset-password?token=' . $token;
+
         //dd(request()->email);
         $user = User::where('email', request()->email)->first();
         if ($user == null) {

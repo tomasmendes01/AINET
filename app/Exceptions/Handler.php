@@ -9,6 +9,7 @@ use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -39,9 +40,10 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+        
     }
-/*
-    //Esta função é chamada quando o utilizador mete um link inválido tipo projetoainet.test/nigger
+    /*
+    //Esta função é chamada quando o utilizador mete um link inválido tipo projetoainet.test/dsadsad
     public function render($request, Throwable $exception)
     {
          return redirect('/');

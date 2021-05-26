@@ -121,12 +121,11 @@ Route::post('/forgot-password', function (Request $request) {
 })->middleware('guest')->name('password.email');
 
 
-Route::get('/reset-password/{token}', function ($email, $token) {
+Route::get('/reset-password/{email}/{token}', function ($email, $token) {
     return view('auth.new_password', ['email' => $email, 'token' => $token]);
 })->middleware('guest')->name('password.reset');
 
 Route::post('/reset-password', function (Request $request) {
-
     $request->validate([
         'token' => 'required',
         'email' => 'required|email',
