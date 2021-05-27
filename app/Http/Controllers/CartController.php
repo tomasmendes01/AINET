@@ -32,27 +32,38 @@ class CartController extends Controller
 
     public function add($item, $id)
     {
-        $storedItem = ['quantity' => 0, 'price' => $item->preco, 'item' => $item];
+        $storedItem = ['color' => request()->color, 'size' => request()->size_shirt, 'quantity' => 0, 'price' => $item->preco, 'item' => $item];
+        $shirt_pos = $id . request()->size_shirt . request()->color;
+        $id = $shirt_pos;
+
+        //dd($shirt_pos);
         if ($this->items) {
-            if (array_key_exists($id, $this->items)) {
+            if (array_key_exists($id, $this->items) && $item->size == $this->items[$id]['size'] && $item->color == $this->items[$id]['color']) {
                 $storedItem = $this->items[$id];
             }
         }
 
         $storedItem['quantity']++; // vai ao atributo "quantity" que está no array passado pra storage e incrementa o contador
         $storedItem['price'] = $item->preco * $storedItem['quantity'];
-        $this->items[$id] = $storedItem;
+        $this->items[$shirt_pos] = $storedItem;
         $this->totalQty++;
         $this->totalPrice += $item->preco;
         request()->session()->put('totalQuantity', $this->totalQty);
+        // dd($storedItem['item']->id); = 3
         return view('user.cart');
     }
 
-    public function remove($item, $id)
+    public function remove($item)
     {
+        if (request()->size_shirt && request()->color) {
+            $shirt_pos = $item->id . request()->size_shirt . request()->color;
+        } else {
+            $shirt_pos = $item->id . $item->size . $item->color;
+        }
+
         if ($this->items) {
-            if (array_key_exists($id, $this->items)) {
-                $storedItem = $this->items[$id];
+            if (array_key_exists($shirt_pos, $this->items)) {
+                $storedItem = $this->items[$shirt_pos];
             } else {
                 return view('error.pagenotfound');
             }
@@ -64,10 +75,10 @@ class CartController extends Controller
         $this->totalPrice -= $item->preco;
 
         if ($storedItem['quantity'] == 0) {
-            unset($this->items[$id]);
+            unset($this->items[$shirt_pos]);
         } else {
             $storedItem['price'] = $item->preco * $storedItem['quantity'];
-            $this->items[$id] = $storedItem;
+            $this->items[$shirt_pos] = $storedItem;
         }
         $this->totalQty--;
 
@@ -75,31 +86,48 @@ class CartController extends Controller
         return view('user.cart');
     }
 
-    public function removeFromCart(Request $request, $id)
+
+    public function removeFromCart($item)
     {
-        $product = Estampa::findOrFail($id);
-        if ($product->cliente_id == null) {
-            $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
-            $product->setAttribute('preco', $preco);
+        $id = $item;
+
+        if (request()->size_shirt && request()->color) {
+            $shirt_pos = $id . request()->size_shirt . request()->color;
+            $product = Estampa::findOrFail($id);
         } else {
-            $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
-            $product->setAttribute('preco', $preco);
+            $product = Estampa::findOrFail($id['item']->id);
+            $shirt_pos = $id['item']->id . $item['size'] . $item['color'];
         }
 
-        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        if ($product->cliente_id == null) {
+            $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+        } else {
+            $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+        }
+        $product->setAttribute('preco', $preco);
+        if (request()->size_shirt && request()->color) {
+            $product->setAttribute('size', request()->size_shirt);
+            $product->setAttribute('color', request()->color);
+        } else {
+            $product->setAttribute('size', $item['size']);
+            $product->setAttribute('color', $item['color']);
+        }
 
+
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
         if ($oldCart) {
-            $oldCart->remove($product, $product->id);
-            $request->session()->put('cart', $oldCart);
+            $oldCart->remove($product, $shirt_pos);
+            request()->session()->put('cart', $oldCart);
         } else {
             $cart = new CartController($oldCart);
-            $cart->remove($product, $product->id);
-            $request->session()->put('cart', $cart);
+            $cart->remove($product, $shirt_pos);
+            request()->session()->put('cart', $cart);
         }
 
         //dd($request->session()->get('cart'));
         return redirect()->back()->with('success', 'Product removed from cart!');
     }
+
 
     public function clearCart()
     {
@@ -109,7 +137,7 @@ class CartController extends Controller
         }
         while ($cart->totalQty > 0) {
             foreach ($cart->items as $item) {
-                $this->removeFromCart(request(), $item['item']->id);
+                $this->removeFromCart($item);
             }
         }
         return redirect()->back()->with('success', 'Cart cleared!');

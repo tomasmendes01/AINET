@@ -39,20 +39,33 @@
                 <tr>
                     <th></th>
                     <th>Product</th>
+                    <th>Size</th>
+                    <th>Color</th>
                     <th>Quantity</th>
                     <th>Actions</th>
                     <th>Price</th>
                 </tr>
                 @foreach($cart->items as $product)
                 <tr>
-                    <td> <img class="img-fluid" src="/storage/estampas/{{ $product['item']->imagem_url }}" onerror="src=`/estampas_privadas/{{ $product['item']->imagem_url }}` " alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
+                    @if($product['item']->cliente_id)
+                    <td> <img class="img-fluid" src="/estampas_privadas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
+                    @else
+                    <td> <img class="img-fluid" src="/storage/estampas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
+                    @endif
+
                     <td>{{ $product['item']->nome }}</td>
+                    <td>{{ $product['item']->size }}</td>
+                    <td>{{ $product['item']->color }}</td>
                     <td>{{ $product['quantity'] }}</td>
                     <td>
                         <form action="{{ route('cart.add',['id' => $product['item']->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
+                            <input type="hidden" name="color" value="{{$product['item']->color}}">
+                            <input type="hidden" name="size_shirt" value="{{$product['item']->size}}">
                             <button class="btn btn-primary" style="width:50%">Add</button>
                         </form>
                         <form action="{{ route('cart.remove',['id' => $product['item']->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
+                            <input type="hidden" name="color" value="{{$product['item']->color}}">
+                            <input type="hidden" name="size_shirt" value="{{$product['item']->size}}">
                             <button class="btn btn-danger" style="width:50%">Remove</button>
                         </form>
                     </td>

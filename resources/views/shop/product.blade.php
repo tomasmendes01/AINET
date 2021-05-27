@@ -16,7 +16,7 @@ $prod = $products[0];
     <div class="column" style="width: auto;">
 
         <div class="dropdown">
-            <button class="dropbtn">⠀⠀⠀Color⠀⠀⠀</button>
+            <button class="dropbtn">Color Preview</button>
             <div class="dropdown-content">
                 @foreach($cores as $cor)
                 <a href="{{ route('shop.estampa',['id' => $prod->id ,'nome' => $prod->nome ,'cor' => $cor->nome]) }}">{{ $cor->nome }}</a>
@@ -54,9 +54,7 @@ $prod = $products[0];
             </div>
             @endif
         </div>
-
         <br>
-
 
         <h2>{{$prod->nome}}</h2>
         <ul>
@@ -67,8 +65,27 @@ $prod = $products[0];
             <li><strong>Price: </strong>{{ $prod->preco }}€</li>
         </ul>
         <!--<form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">-->
-        <form>
-            <input type="button" class="dropbtn" name="teste" value="Add to cart" onClick="addToCart()"></input>
+        <form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
+            <!--<input type="button" class="dropbtn" name="teste" value="Add to cart" onClick="addToCart()"></input>-->
+
+            <label for="size_shirt">Size:</label>
+            <select id="size_shirt" name="size_shirt" size="1">
+                <datalist id="size">
+                    <option selected="selected" value="XS">Extra Small - XS</option>
+                    <option value="S">Small - S</option>
+                    <option value="M">Medium - M</option>
+                    <option value="L">Large - L</option>
+                    <option value="XL">Extra Large - XL</option>
+                </datalist>
+            </select>
+
+            @if(request()->cor)
+            <input type="hidden" name="color" value="{{ request()->cor }}"></input>
+            @else
+            <input type="hidden" name="color" value="Preto"></input>
+            @endif
+
+            <input type="submit" class="dropbtn" value="Add to cart"></input>
         </form>
 
         <script>

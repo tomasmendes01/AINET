@@ -179,9 +179,13 @@ class ShopController extends Controller
         if ($product->cliente_id == null) {
             $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
             $product->setAttribute('preco', $preco);
+            $product->setAttribute('color', $request->color);
+            $product->setAttribute('size', $request->size_shirt);
         } else {
             $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
             $product->setAttribute('preco', $preco);
+            $product->setAttribute('color', $request->color);
+            $product->setAttribute('size', $request->size_shirt);
         }
 
         $oldCart = Session::has('cart') ? Session::get('cart') : null;

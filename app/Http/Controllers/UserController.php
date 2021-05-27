@@ -121,7 +121,6 @@ class UserController extends Controller
                     if ($request->ref_pagamento != null) {
                         $cliente->ref_pagamento = request('ref_pagamento');
                     }
-
                     $cliente->save();
                 }
             } else {
@@ -131,7 +130,6 @@ class UserController extends Controller
                     $user->bloqueado = 1;
                 }
             }
-
             $user->save();
 
             DB::commit();

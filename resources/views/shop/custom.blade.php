@@ -9,7 +9,7 @@
 <form method="POST" action="{{ route('shop.createStamp') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="row" style="margin-top:-6%;padding:50px;">
-        <div class="column" style="margin:auto;margin-top:10%">
+        <div class="column" >
 
             <h2>Custom T-Shirt</h2>
 
@@ -22,10 +22,26 @@
             <textarea type="text" name="stamp_description" size="50%"></textarea>
 
             <label for="image">Upload your stamp here:</label>
-            <input type="file" name="stamp_image" size="50%" required>
+            <input accept="image/*" type="file" id="stamp_image" name="stamp_image" size="50%" required>
+
+
+            <script>
+                stamp_image.onchange = evt => {
+                    const [file] = stamp_image.files
+                    if (file) {
+                        stamp.src = URL.createObjectURL(file)
+                    }
+                }
+            </script>
 
             <button class="dropbtn">Submit</button>
+
         </div>
+        <div class="column">
+        <h2>Preview</h2>
+            <img id="stamp" src="#" style="width:auto;max-height:500px" />
+        </div>
+
     </div>
 </form>
 

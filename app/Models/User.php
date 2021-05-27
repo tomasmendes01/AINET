@@ -85,14 +85,14 @@ class User extends Authenticatable
         return $this->attributes['tipo'];
     }
 
-    public function encomendas()
-    {
-        return $this->hasMany(Encomenda::class);
-    }
-
     public function admin()
     {
         return $this->attributes['tipo'] == 'A';
+    }
+
+    public function encomendas()
+    {
+        return $this->hasMany(Encomenda::class);
     }
 
     public function cliente()
