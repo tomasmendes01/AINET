@@ -12,6 +12,7 @@ use App\Models\Estampa;
 use App\Models\User;
 use App\Models\Encomenda;
 use App\Models\Cliente;
+use App\Models\TShirt;
 
 class CartController extends Controller
 {
@@ -157,6 +158,7 @@ class CartController extends Controller
                 }
                 DB::beginTransaction();
 
+                /* ENCOMENDA */
                 $encomenda = new Encomenda();
                 $encomenda->estado = "pendente";
                 $encomenda->cliente_id = $id;
@@ -173,9 +175,25 @@ class CartController extends Controller
 
                 $encomenda->save();
 
+                /* TSHIRTS */
+                foreach (Session::get('cart')->items as $item) {
+                    $colorCode = DB::table('cores')->where('nome', $item['color'])->first();
+                    $tshirt = new TShirt();
+                    $tshirt->encomenda_id = $encomenda->id;
+                    $tshirt->estampa_id = $item['item']->id;
+                    $tshirt->cor_codigo = $colorCode->codigo;
+                    $tshirt->tamanho = $item['size'];
+                    $tshirt->quantidade = $item['quantity'];
+                    $tshirt->preco_un = $item['price'] / $item['quantity'];
+                    $tshirt->subtotal = $item['price'];
+
+                    $tshirt->save();
+                }
+
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
+                dd($e->getMessage());
                 return redirect()->back()->with('error', 'An error occurred processing your order! Missing parameters (ex: endereco) on your profile');
             }
 

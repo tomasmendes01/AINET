@@ -10,6 +10,7 @@ class TShirt extends Model
     use HasFactory;
 
     protected $table = 'tshirts';
+    public $timestamps = false;
 
     public function estampa()
     {

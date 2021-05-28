@@ -102,14 +102,18 @@
                             <table style="width:100%">
                                 <tr>
                                     <th>Product</th>
-                                    <th>Price</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
                                     <th>Quantity</th>
+                                    <th>Price</th>
                                 </tr>
                                 @foreach($cart->items as $product)
                                 <tr>
                                     <td>{{ $product['item']->nome }}</td>
-                                    <td>{{ $product['price'] }}€</td>
+                                    <td>{{ $product['color'] }}</td>
+                                    <td>{{ $product['size'] }}</td>
                                     <td>{{ $product['quantity'] }}</td>
+                                    <td>{{ $product['price'] }}€</td>
                                 </tr>
                                 @endforeach
                             </table>
