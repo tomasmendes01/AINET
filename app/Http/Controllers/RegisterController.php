@@ -72,7 +72,7 @@ class RegisterController extends Controller
 
                 $user->email = $request->input('email');
                 $user->name = $request->input('name');
-                $user->email_verified_at = new DateTime();
+                $user->email_verified_at = null;
                 $user->password = $request->input('password');
                 $user->remember_token = null;
                 $user->created_at = new DateTime();
@@ -103,7 +103,7 @@ class RegisterController extends Controller
 
                 DB::commit();
 
-                return redirect('login')->withSuccess('User registered successfully!');
+                return redirect('login')->withSuccess('Registered successfully! Check your email to activate your account.');
             } catch (\Exception $e) {
                 DB::rollBack();
                 return back()->with('error', $e->getMessage());

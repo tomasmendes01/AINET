@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\EncomendasController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
@@ -24,6 +25,11 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 
+/* TESTE VERIFY EMAIL */
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\Verified;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,6 +40,8 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Auth::routes(['verify' => true]);
 
 Route::get('/', function () {
     return redirect('shop');
@@ -53,12 +61,18 @@ Route::get('/signup',                       [RegisterController::class, 'index']
 Route::post('/store',                       [RegisterController::class, 'store']);
 
 Route::get('/users',                        [UsersController::class, 'index'])->name('users.list')->middleware('auth');
-Route::get('/users/profile/{id}',           [UsersController::class, 'profile'])->name('user.profile');
-Route::get('/users/search',                 [UsersController::class, 'search'])->name('users.search');
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/users/profile/{id}',           [UsersController::class, 'profile'])->name('user.profile');
+});
+
+Route::group(['middleware' => ['admin']], function () {
+    Route::get('/users/search',                 [UsersController::class, 'search'])->name('users.search');
+    Route::post('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
+});
+
 Route::get('/users/{id}/edit',              [UserController::class, 'edit'])->name('user.edit.profile');
 Route::post('/users/{id}/edit',             [UserController::class, 'update'])->name('user.update');
 Route::post('/users/{id}/edit/checkUpdate', [UserController::class, 'checkUpdate'])->name('user.checkUpdate');
-Route::post('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
 
 Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{nome}/{id}',             [ShopController::class, 'product'])->name('shop.estampa');
@@ -69,14 +83,16 @@ Route::post('/shop/custom/new',             [ShopController::class, 'createStamp
 Route::get('/cart',                         [CartController::class, 'index']);
 Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart/remove/{id}',             [CartController::class, 'removeFromCart'])->name('cart.remove');
-Route::get('/cart/clear',                   [CartController::class, 'clearCart'])->name('cart.clear');
+
 Route::get('/cart/checkout/{customerID}',   [CartController::class, 'checkout'])->name('cart.checkout');
 
-Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
+Route::get('/cart/clear',                   [CartController::class, 'clearCart'])->name('cart.clear');
 
 Route::get('/encomendas',                   [EncomendasController::class, 'index'])->name('encomendas');
 Route::post('/encomendas/prepare/{orderID}', [EncomendasController::class, 'prepareOrder'])->name('encomenda.prepare');
 Route::post('/encomendas/cancel/{orderID}', [EncomendasController::class, 'cancelOrder'])->name('encomenda.cancel');
+
+Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
 
 Route::get('/estampas_privadas/{file}', [function ($file) {
 
@@ -139,7 +155,6 @@ Route::post('/reset-password', function (Request $request) {
             $user->password = $request->password;
             $user->remember_token = Str::random(60);
             $user->save();
-
             event(new PasswordReset($user));
         }
     );
@@ -148,3 +163,28 @@ Route::post('/reset-password', function (Request $request) {
         ? redirect()->route('login')->with('status', __($status))
         : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
+
+/* EMAIL VERIFICATION ROUTES */
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    $id = $request->route('id');
+    $user = User::find($id);
+    if ($id != $user->getKey()) {
+        throw new AuthorizationException;
+    }
+    if ($user->markEmailAsVerified()) {
+        event(new Verified($user));
+        return redirect('/users/profile/' . $id)->with('verified', true);
+    }
+})->middleware(['auth'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $user = $request->user() ?? auth()->guard('web')->user();
+    $user->sendEmailVerificationNotification();
+
+    return back()->with('success', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');

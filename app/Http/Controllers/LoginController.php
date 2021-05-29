@@ -56,6 +56,8 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($user_data)) {
+            //$user = User::where('email', request()->email)->first();
+            //$user->createToken($user->id, 'authToken')->accessToken;
             return redirect('/shop');
         } else {
             return back()->with('error', 'Wrong email or password!');

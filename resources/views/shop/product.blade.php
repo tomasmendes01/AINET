@@ -64,10 +64,7 @@ $prod = $products[0];
             @endif
             <li><strong>Price: </strong>{{ $prod->preco }}€</li>
         </ul>
-        <!--<form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">-->
         <form action="{{ route('cart.add',['id' => $prod->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
-            <!--<input type="button" class="dropbtn" name="teste" value="Add to cart" onClick="addToCart()"></input>-->
-
             <label for="size_shirt">Size:</label>
             <select id="size_shirt" name="size_shirt" size="1">
                 <datalist id="size">
@@ -87,16 +84,6 @@ $prod = $products[0];
 
             <input type="submit" class="dropbtn" value="Add to cart"></input>
         </form>
-
-        <script>
-            function addToCart() {
-                $.ajax({
-                    type: "get",
-                    url: "/cart/add/{{ $prod->id }}",
-                });
-                alert('Product added to cart!')
-            }
-        </script>
     </div>
 </div>
 

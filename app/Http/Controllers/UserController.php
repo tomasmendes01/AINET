@@ -30,7 +30,6 @@ class UserController extends Controller
 
         try {
             $user = User::with('cliente')->where('id', $id)->first(); // Se não encontrar o perfil da pessoa, vai para o pagenotfound
-            //dd($user);
         } catch (\Exception $th) {
             return view('error.pagenotfound');
         }

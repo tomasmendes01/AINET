@@ -23,7 +23,6 @@ class CartController extends Controller
 
     public function index()
     {
-        //dd(request()->session()->get('cart'));
         if (request()->session()->get('cart') == null) {
             $cart = new CartController();
             request()->session()->put('cart', $cart);

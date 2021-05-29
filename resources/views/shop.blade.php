@@ -88,7 +88,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#contact"><i class="fas fa-question-circle"></i> Support</a>
+                        <a class="nav-link js-scroll-trigger" href="/#contact"><i class="fas fa-question-circle"></i> Support</a>
                     </li>
 
                     <li class="nav-item">
