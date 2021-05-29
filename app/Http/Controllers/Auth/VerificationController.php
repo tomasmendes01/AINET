@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Response;
 
 class VerificationController extends Controller
 {
@@ -46,8 +47,10 @@ class VerificationController extends Controller
 
     public function verify(Request $request)
     {
-        $user = User::find($request->id);
-        //dd($user->getKey());
+        //$user = User::find($request->id);
+        $user = User::find($request->get('id'));
+        dd($user);
+
         if ($request->route('id') != $user->getKey()) {
             throw new AuthorizationException;
         }
@@ -56,6 +59,23 @@ class VerificationController extends Controller
             event(new Verified($user));
         }
 
-        return redirect($this->redirectPath())->with('verified', true);
+        if (!hash_equals((string) $request->get('id'), (string) $user->getKey())) {
+            throw new AuthorizationException;
+        }
+
+        if (!hash_equals((string) $request->get('hash'), sha1($user->getEmailForVerification()))) {
+            throw new AuthorizationException;
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return new Response('', 204);
+        }
+
+        if ($response = $this->verified($request)) {
+            return $response;
+        }
+
+        //return redirect($this->redirectPath())->with('verified', true);
+        return new Response('', 204);
     }
 }

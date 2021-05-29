@@ -60,12 +60,17 @@ Route::post('/reset_password/{email}',      [LoginController::class, 'saveNewPas
 Route::get('/signup',                       [RegisterController::class, 'index']);
 Route::post('/store',                       [RegisterController::class, 'store']);
 
-Route::get('/users',                        [UsersController::class, 'index'])->name('users.list')->middleware('auth');
 Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/users',                        [UsersController::class, 'index'])->name('users.list');
     Route::get('/users/profile/{id}',           [UsersController::class, 'profile'])->name('user.profile');
+
+    Route::get('/cart/checkout/{customerID}',   [CartController::class, 'checkout'])->name('cart.checkout');
+    
+    Route::get('/shop/custom',                  [ShopController::class, 'indexCustomStamp'])->name('shop.customstamp');
+    Route::post('/shop/custom/new',             [ShopController::class, 'createStamp'])->name('shop.createStamp');
 });
 
-Route::group(['middleware' => ['admin']], function () {
+Route::group(['middleware' => ['verified', 'admin']], function () {
     Route::get('/users/search',                 [UsersController::class, 'search'])->name('users.search');
     Route::post('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
 });
@@ -77,15 +82,10 @@ Route::post('/users/{id}/edit/checkUpdate', [UserController::class, 'checkUpdate
 Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{nome}/{id}',             [ShopController::class, 'product'])->name('shop.estampa');
 Route::get('/shop/search',                  [ShopController::class, 'search'])->name('shop.search');
-Route::get('/shop/custom',                  [ShopController::class, 'indexCustomStamp'])->name('shop.customstamp');
-Route::post('/shop/custom/new',             [ShopController::class, 'createStamp'])->name('shop.createStamp');
 
 Route::get('/cart',                         [CartController::class, 'index']);
 Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart/remove/{id}',             [CartController::class, 'removeFromCart'])->name('cart.remove');
-
-Route::get('/cart/checkout/{customerID}',   [CartController::class, 'checkout'])->name('cart.checkout');
-
 Route::get('/cart/clear',                   [CartController::class, 'clearCart'])->name('cart.clear');
 
 Route::get('/encomendas',                   [EncomendasController::class, 'index'])->name('encomendas');
