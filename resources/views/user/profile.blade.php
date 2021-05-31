@@ -67,7 +67,7 @@
                     @if($user->tipo == 'C')
                     <li class="user-post active">Statistics</li>
                     @endif
-                    <li onclick="location.href = '{{ route('user.edit.profile',['id' => $user->id]) }}'" class="user-setting">Settings</li>
+                    <li onclick="location.href = `{{ route('user.edit.profile',['id' => $user->id]) }}`" class="user-setting">Settings</li>
                 </ul>
             </div>
 
