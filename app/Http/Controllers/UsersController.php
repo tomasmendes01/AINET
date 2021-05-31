@@ -10,6 +10,9 @@ use Illuminate\Validation\Validator;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Support\Facades\DB;
+use App\Models\Encomenda;
+use App\Models\TShirt;
+use App\Models\Estampa;
 
 class UsersController extends Controller
 {
@@ -40,11 +43,14 @@ class UsersController extends Controller
 
         try {
             $user = User::findOrFail($id); // Se não encontrar o perfil da pessoa, vai para o pagenotfound
-        } catch (\Exception $th) {
+            $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->get();
+            //dd($encomendas[0]->tshirt[0]->estampa);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
             return view('error.pagenotfound');
         }
 
-        return view('user.profile')->with('user', $user);
+        return view('user.profile')->with(['user' => $user, 'encomendas' => $encomendas]);
     }
 
     public function search()

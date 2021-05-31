@@ -14,6 +14,11 @@ class TShirt extends Model
 
     public function estampa()
     {
-        return $this->belongsToMany(Estampa::class);
+        return $this->hasOne(Estampa::class,'id','estampa_id');
+    }
+
+    public function encomenda()
+    {
+        return $this->belongsTo(Encomenda::class);
     }
 }

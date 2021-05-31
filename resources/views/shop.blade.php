@@ -88,8 +88,13 @@
                     </li>
 
                     <li class="nav-item">
+                        @if(url()->current() == "http://ainet.test/shop")
+                        <a class="nav-link js-scroll-trigger" href="#contact"><i class="fas fa-question-circle"></i> Support</a>
+                        @else
                         <a class="nav-link js-scroll-trigger" href="/#contact"><i class="fas fa-question-circle"></i> Support</a>
+                        @endif
                     </li>
+
 
                     <li class="nav-item">
                         <div data-toggle="modal" href="#logoutModal">

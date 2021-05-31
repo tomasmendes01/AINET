@@ -1,72 +1,169 @@
 @extends('shop')
 
 @section('css')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" rel="stylesheet" type="text/css" />
 <link href="/css/profile.css" rel="stylesheet" />
 @stop
 
 @section('content')
-
-<div class="row" style="margin-top:-4%">
-    <div class="column">
-        @if($user->foto_url)
-        <img src="/storage/fotos/{{ $user->foto_url }}" onerror="src='/img/default-pfp.png'" alt="profile_picture" style="height: 100%; width: 100%; object-fit: contain">
-        @else
-        <img src="/img/default-pfp.png" alt="profile_picture" style="height: 100%; width: 100%; object-fit: contain">
-        @endif
-    </div>
-    <div class="column">
-        <h2>{{ $user->name }}
-            <a class="btn btn-light" href="{{ route('user.edit.profile',['id' => $user->id]) }}">Edit Profile</a>
-        </h2>
-        <ul>
-            <li><strong>Email: </strong>{{ $user->email }}</li>
-
-            @if($user->tipo == 'A')
-            <li><strong>Tipo: </strong>Administrador</li>
-            @elseif($user->tipo == 'F')
-            <li><strong>Tipo: </strong>Funcionário</li>
+<div class="container">
+    <div class="profile-header">
+        <div class="profile-img">
+            @if($user->foto_url)
+            <img src="/storage/fotos/{{ $user->foto_url }}" onerror="src='/img/default-pfp.png'" alt="profile_picture" width="200">
             @else
-            <li><strong>Tipo: </strong>Cliente</li>
+            <img src="/img/default-pfp.png" alt="profile_picture" width="200">
             @endif
 
-            @if(Auth::user()->tipo == 'A')
-            @if($user->bloqueado == 1)
-            <li><strong>Bloqueado: </strong>Sim</li>
-            @else
-            <li><strong>Bloqueado: </strong>Não</li>
-            @endif
-            @endif
-
-        </ul>
-    </div>
-</div>
-
-<footer class="footer py-4">
-    <div class="container" style="position:absolute; bottom: 0; left: 0; right: 0; margin-bottom:1%;">
-        <div class="row align-items-center">
-            <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
-            <div class="col-lg-4 my-3 my-lg-0">
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <div class="col-lg-4 text-lg-right">
-                <a class="mr-3" href="#!">Privacy Policy</a>
-                <a href="#!">Terms of Use</a>
+        </div>
+        <div class="profile-nav-info">
+            <h3 class="user-name">{{ $user->name }}</h3>
+            <div class="address">
+                @if($user->tipo == 'A')
+                <p id="state" class="state">Administrador</p>
+                @elseif($user->tipo == 'F')
+                <p id="state" class="state">Funcionário</p>
+                @else
+                <p id="state" class="state">Cliente</p>
+                @endif
             </div>
         </div>
     </div>
-</footer>
 
-<!-- Bootstrap core JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Third party plugin JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-<!-- Contact form JS-->
-<script src="mail/jqBootstrapValidation.js"></script>
-<script src="mail/contact_me.js"></script>
-<!-- Core theme JS-->
-<script src="/js/scripts.js"></script>
+    <div class="main-bd">
+        <div class="left-side">
+            <div class="profile-side">
+                <div class="user-bio">
+                    <h3>User Info</h3>
+                    <p class="user-mail"><i class="fa fa-envelope"></i> {{ $user->email }}</p>
 
+                    @if($user->tipo == 'C')
+                    <p style="display:inline"><strong>NIF:</strong> </p>
+                    <p style="display:inline">{{ $user->cliente->nif }}</p><br>
+
+                    <p style="display:inline"><strong>Endereço:</strong> </p>
+                    <p style="display:inline">{{ $user->cliente->endereco }}</p><br>
+
+                    <p style="display:inline"><strong>Tipo de pagamento:</strong> </p>
+                    <p style="display:inline">{{ $user->cliente->tipo_pagamento }}</p><br>
+
+                    <p style="display:inline"><strong>Referência de pagamento:</strong> </p>
+                    <p style="display:inline">{{ $user->cliente->ref_pagamento }}</p>
+                    @endif
+                </div>
+
+                <div class="profile-btn">
+                    <button class="chatbtn" id="chatBtn" onclick="location.href = '/shop'"><i class="fa fa-comment"></i> Go back to Shop</button>
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="right-side">
+
+            <div class="nav">
+                <ul>
+                    @if($user->tipo == 'C')
+                    <li class="user-post active">Statistics</li>
+                    @endif
+                    <li onclick="location.href = '{{ route('user.edit.profile',['id' => $user->id]) }}'" class="user-setting">Settings</li>
+                </ul>
+            </div>
+
+            <!-- Portfolio Grid-->
+            <section class="page-section bg-light" id="portfolio" style="margin-left:15px">
+                <div class="container" style="margin-top: -80px">
+                    <h3>Orders</h3>
+                    <div class="row">
+                        @foreach($encomendas as $encomenda)
+                        <div class="col-lg-4 col-sm-6 mb-4">
+                            <!-- Portfolio item 1-->
+                            <div class="portfolio-item">
+                                <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal{{$encomenda->id}}">
+                                    <div class="portfolio-hover">
+                                        <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                    </div>
+                                    <img class="img-fluid" src="/img/plain_white.png" alt="..." />
+                                </a>
+                                <div class="portfolio-caption">
+                                    <div class="portfolio-caption-heading">{{$encomenda->data}}</div>
+                                    <div class="portfolio-caption-subheading text-muted">{{$encomenda->preco_total}}€</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio item 1 modal popup-->
+                        <div class="portfolio-modal modal fade" id="portfolioModal{{$encomenda->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <div class="col-lg-8">
+                                                <div class="modal-body">
+                                                    <!-- Project details-->
+                                                    <h2 class="text-uppercase">{{$encomenda->data}}</h2>
+                                                    <table style="transform:translateX(-40px)">
+                                                        <tr>
+                                                            <th>Estampa⠀</th>
+                                                            <th>⠀Tamanho⠀</th>
+                                                            <th>⠀Quantidade⠀</th>
+                                                            <th>⠀Subtotal</th>
+                                                        </tr>
+                                                        @foreach($encomenda->tshirt as $tshirt)
+                                                        <tr>
+                                                            @if($tshirt->estampa->cliente_id)
+                                                            <td><img class="img-fluid" src="/estampas_privadas/{{$tshirt->estampa->imagem_url}}" alt="{{ $tshirt->estampa->nome }}" /></td>
+                                                            @else
+                                                            <td><img class="img-fluid" src="/storage/estampas/{{$tshirt->estampa->imagem_url}}" alt="{{ $tshirt->estampa->nome }}" /></td>
+                                                            @endif
+                                                            <td>{{$tshirt->tamanho}}</td>
+                                                            <td>{{$tshirt->quantidade}}</td>
+                                                            <td>{{$tshirt->subtotal}}€</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </table>
+                                                    <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                                        <i class="fas fa-times me-1"></i>
+                                                        Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bootstrap core JS-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
+            <script>
+                $(".clickable-row").click(function() {
+                    //window.location = $(this).data("href");
+                    alert('row click');
+                });
+
+                $('.doDropdown').click(function(event) {
+                    alert('dropdown click');
+                    $('.dropdown-menu').toggle();
+                    event.preventDefault();
+                    event.stopPropagation();
+                    //$(this).dropdown();
+                });
+            </script>
+
+            <div class="profile-body" style="margin-left:20px">
+
+            </div>
+
+        </div>
+    </div>
+</div>
 @stop

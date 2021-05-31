@@ -15,4 +15,20 @@ class Encomenda extends Model
     {
         return $this->hasOne(User::class, 'id', 'cliente_id');
     }
+
+    public function cliente()
+    {
+        return $this->hasOne(Cliente::class, 'id', 'cliente_id');
+    }
+
+    public function tshirt()
+    {
+        return $this->hasMany(TShirt::class,'encomenda_id','id');
+    }
+
+    /*
+    public function estampa(){
+        return $this->hasManyThrough(Estampa::class,TShirt::class,'estampa_id','id');
+    }
+    */
 }
