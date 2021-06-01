@@ -157,42 +157,43 @@ class CartController extends Controller
                 }
                 DB::beginTransaction();
 
-                /* ENCOMENDA */
-                $encomenda = new Encomenda();
-                $encomenda->estado = "pendente";
-                $encomenda->cliente_id = $id;
-                $encomenda->data = new DateTime();
-                $encomenda->preco_total = $cart->totalPrice;
-                $encomenda->notas = request()->notes;
-                $encomenda->nif = $cliente->nif;
-                $encomenda->endereco = $cliente->endereco;
-                $encomenda->tipo_pagamento = $cliente->tipo_pagamento;
-                $encomenda->ref_pagamento = $cliente->ref_pagamento;
-                $encomenda->recibo_url = null;
-                $encomenda->created_at = new DateTime();
-                $encomenda->updated_at = new DateTime();
+                /* ENCOMENDAS */
+                $encomenda = Encomenda::create([
+                    'estado' => "pendente",
+                    'cliente_id' => $id,
+                    'data' => new DateTime(),
+                    'preco_total' => $cart->totalPrice,
+                    'notas' => request()->notes,
+                    'nif' => $cliente->nif,
+                    'endereco' => $cliente->endereco,
+                    'tipo_pagamento' => $cliente->tipo_pagamento,
+                    'ref_pagamento' => $cliente->ref_pagamento,
+                    'recibo_url' => null,
+                    'created_at' => new DateTime(),
+                    'updated_at' => new DateTime()
+                ]);
 
                 $encomenda->save();
 
                 /* TSHIRTS */
                 foreach (Session::get('cart')->items as $item) {
                     $colorCode = DB::table('cores')->where('nome', $item['color'])->first();
-                    $tshirt = new TShirt();
-                    $tshirt->encomenda_id = $encomenda->id;
-                    $tshirt->estampa_id = $item['item']->id;
-                    $tshirt->cor_codigo = $colorCode->codigo;
-                    $tshirt->tamanho = $item['size'];
-                    $tshirt->quantidade = $item['quantity'];
-                    $tshirt->preco_un = $item['price'] / $item['quantity'];
-                    $tshirt->subtotal = $item['price'];
-
+                    $tshirt = TShirt::create([
+                        'encomenda_id' => $encomenda->id,
+                        'estampa_id' => $item['item']->id,
+                        'cor_codigo' => $colorCode->codigo,
+                        'tamanho' => $item['size'],
+                        'quantidade' => $item['quantity'],
+                        'preco_un' => $item['price'] / $item['quantity'],
+                        'subtotal' => $item['price']
+                    ]);
                     $tshirt->save();
                 }
 
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
-                dd($e->getMessage());
+                //dd($e->getMessage());
                 return redirect()->back()->with('error', 'An error occurred processing your order! Missing parameters (ex: endereco) on your profile');
             }
 

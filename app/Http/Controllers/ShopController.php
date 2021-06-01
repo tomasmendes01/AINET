@@ -150,11 +150,9 @@ class ShopController extends Controller
             $estampa->nome = $request->stamp_name;
             $estampa->descricao = $request->stamp_description;
 
-
             $bigPath = $request->stamp_image->store('estampas_privadas');
             $path = substr($bigPath, 18);
             $estampa->imagem_url = $path;
-
 
             $estampa->informacao_extra = null;
             $estampa->created_at = new DateTime();

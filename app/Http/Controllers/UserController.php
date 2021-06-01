@@ -13,9 +13,12 @@ use App\Models\User;
 use App\Models\Cliente;
 use DateTime;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserController extends Controller
 {
+
+    use SoftDeletes;
 
     public function __construct()
     {

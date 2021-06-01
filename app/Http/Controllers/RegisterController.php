@@ -68,37 +68,35 @@ class RegisterController extends Controller
                 DB::beginTransaction();
 
                 /* User */
-                $user = new User();
-
-                $user->email = $request->input('email');
-                $user->name = $request->input('name');
-                $user->email_verified_at = null;
-                $user->password = $request->input('password');
-                $user->remember_token = null;
-                $user->created_at = new DateTime();
-                $user->updated_at = new DateTime();
-                $user->tipo = "C";
-                $user->bloqueado = 0;
-                $user->foto_url = null;
-                $user->deleted_at = null;
-
+                $user = User::create([
+                    'email' => $request->input('email'),
+                    'name' => $request->input('name'),
+                    'email_verified_at' => null,
+                    'password' => $request->input('password'),
+                    'remember_token' => null,
+                    'created_at' => new DateTime(),
+                    'updated_at' => new DateTime(),
+                    'tipo' => 'C',
+                    'bloqueado' => 0,
+                    'foto_url' => null,
+                    'deleted_at' => null
+                ]);
                 $this->setRememberToken($user);
-
                 $user->save();
 
                 /* Cliente */
 
                 $cliente = new Cliente();
-
-                $cliente->id = $user->id;
-                $cliente->nif = null;
-                $cliente->endereco = null;
-                $cliente->tipo_pagamento = null;
-                $cliente->ref_pagamento = null;
-                $cliente->created_at = new DateTime();
-                $cliente->updated_at = new DateTime();
-                $cliente->deleted_at = null;
-
+                $cliente = Cliente::create([
+                    'id' => $user->id,
+                    'nif' => null,
+                    'endereco' => null,
+                    'tipo_pagamento' => null,
+                    'ref_pagamento' => null,
+                    'created_at' => new DateTime(),
+                    'updated_at' => new DateTime(),
+                    'deleted_at' => null,
+                ]);
                 $cliente->save();
 
                 DB::commit();

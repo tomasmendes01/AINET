@@ -14,7 +14,6 @@
             @else
             <img src="/img/default-pfp.png" alt="profile_picture" width="200">
             @endif
-
         </div>
         <div class="profile-nav-info">
             <h3 class="user-name">{{ $user->name }}</h3>
@@ -55,10 +54,7 @@
                 <div class="profile-btn">
                     <button class="chatbtn" id="chatBtn" onclick="location.href = '/shop'"><i class="fa fa-comment"></i> Go back to Shop</button>
                 </div>
-
             </div>
-
-
         </div>
         <div class="right-side">
 
