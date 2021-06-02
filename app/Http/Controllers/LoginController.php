@@ -43,7 +43,7 @@ class LoginController extends Controller
         );
 
         // Se der problemas no blocked, limpar a cache:
-        // php artisan optimize:clear - limpa tudo memo
+        // php artisan optimize:clear - limpa tudo
         // php artisan cache:clear
         // php artisan view:clear
         $deleted = User::where('email', $request->input('email'))->value('deleted_at');

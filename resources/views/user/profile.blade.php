@@ -1,11 +1,11 @@
 @extends('shop')
 
 @section('css')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" rel="stylesheet" type="text/css" />
 <link href="/css/profile.css" rel="stylesheet" />
 @stop
 
 @section('content')
+
 <div class="container">
     <div class="profile-header">
         <div class="profile-img">
@@ -57,7 +57,6 @@
             </div>
         </div>
         <div class="right-side">
-
             <div class="nav">
                 <ul>
                     @if($user->tipo == 'C')
@@ -99,10 +98,11 @@
                                                 <div class="modal-body">
                                                     <!-- Project details-->
                                                     <h2 class="text-uppercase">{{$encomenda->data}}</h2>
-                                                    <table style="transform:translateX(-40px)">
+                                                    <table style="transform:translateX(-80px)">
                                                         <tr>
                                                             <th>Estampa⠀</th>
                                                             <th>⠀Tamanho⠀</th>
+                                                            <th>⠀Cor⠀</th>
                                                             <th>⠀Quantidade⠀</th>
                                                             <th>⠀Subtotal</th>
                                                         </tr>
@@ -114,6 +114,11 @@
                                                             <td><img class="img-fluid" src="/storage/estampas/{{$tshirt->estampa->imagem_url}}" alt="{{ $tshirt->estampa->nome }}" /></td>
                                                             @endif
                                                             <td>{{$tshirt->tamanho}}</td>
+                                                            <td>
+                                                                <svg width="40" height="40">
+                                                                    <rect width="40" height="40" alt="{{$tshirt->cor_codigo}}" style="fill:#{{$tshirt->cor_codigo}}" />
+                                                                </svg>
+                                                            </td>
                                                             <td>{{$tshirt->quantidade}}</td>
                                                             <td>{{$tshirt->subtotal}}€</td>
                                                         </tr>
@@ -130,36 +135,12 @@
                                 </div>
                             </div>
                         </div>
-
-
                         @endforeach
                     </div>
                 </div>
             </section>
-
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-
-            <script>
-                $(".clickable-row").click(function() {
-                    //window.location = $(this).data("href");
-                    alert('row click');
-                });
-
-                $('.doDropdown').click(function(event) {
-                    alert('dropdown click');
-                    $('.dropdown-menu').toggle();
-                    event.preventDefault();
-                    event.stopPropagation();
-                    //$(this).dropdown();
-                });
-            </script>
-
-            <div class="profile-body" style="margin-left:20px">
-
-            </div>
-
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     </div>
 </div>
 @stop

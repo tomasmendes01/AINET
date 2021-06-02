@@ -52,8 +52,8 @@ Route::post('/checklogin',                  [LoginController::class, 'checklogin
 Route::post('/logout',                      [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['notSoftDeleted']], function () {
-    //Route::get('/forgot_password',              [LoginController::class, 'forgotPassword']);
-    //Route::post('/forgot_password',             [LoginController::class, 'sendPasswordResetEmail']);
+    Route::get('/forgot_password',              [LoginController::class, 'forgotPassword']);
+    Route::post('/forgot_password',             [LoginController::class, 'sendPasswordResetEmail']);
 
     Route::get('/users/{id}/edit',              [UserController::class, 'edit'])->name('user.edit.profile');
     Route::post('/users/{id}/edit',             [UserController::class, 'update'])->name('user.update');

@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "barryvdh/laravel-debugbar": "^3.5",
+        "beyondcode/laravel-websockets": "^1.12",
         "cartalyst/sentinel": "^5.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -15,7 +16,8 @@
         "laravel/framework": "^8.12",
         "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.3"
+        "laravel/ui": "^3.3",
+        "pusher/pusher-php-server": "~3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

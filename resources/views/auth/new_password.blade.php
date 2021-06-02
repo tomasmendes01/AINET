@@ -39,8 +39,6 @@
 </div>
 </body>
 
-</html>
-
 <script>
     function togglePassword() {
         var x = document.getElementById("pass");

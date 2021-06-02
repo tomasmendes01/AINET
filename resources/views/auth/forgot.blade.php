@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-<br />
+<br>
 <div class="container box" style="margin-top:20%;">
     <h1 style="text-align:center;">Password reset</h1><br />
 
