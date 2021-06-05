@@ -11,6 +11,16 @@ class Encomenda extends Model
 
     protected $table = 'encomendas';
 
+    protected $fillable = [
+        'estado',
+        'cliente_id',
+        'data',
+        'preco_total',
+        'nif',
+        'endereco',
+        'ref_pagamento'
+    ];
+
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'cliente_id');
@@ -23,7 +33,7 @@ class Encomenda extends Model
 
     public function tshirt()
     {
-        return $this->hasMany(TShirt::class,'encomenda_id','id');
+        return $this->hasMany(TShirt::class, 'encomenda_id', 'id');
     }
 
     /*

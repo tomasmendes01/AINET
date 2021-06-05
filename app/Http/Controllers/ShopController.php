@@ -37,7 +37,6 @@ class ShopController extends Controller
                 ->whereNull('estampas.deleted_at')
                 ->paginate(12);
         }
-
         $preco_un_catalogo = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
         $preco_un_proprio = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
 
@@ -57,30 +56,32 @@ class ShopController extends Controller
 
     public function product()
     {
-
         // vai buscar o produto com o nome que vem no request
-        $products = Estampa::where('nome', request()->nome)
-            ->where('id', request()->id)
-            ->get();
+        $product = Estampa::where('nome', request()->nome)
+            ->findOrFail(request()->id);
 
         // se no request não for pedida nenhuma cor, a $cor fica definida como 'Preto'
         if (request()->cor != null) {
-            $cor = DB::table('cores')->where('nome', request()->cor)->get();
+            $cor = DB::table('cores')->where('nome', request()->cor)->first();
         } else {
-            $cor = DB::table('cores')->where('nome', 'Preto')->get();
+            $cor = DB::table('cores')->where('nome', 'Preto')->first();
         }
-
         // procura pela estampa na pasta /storage/estampas e se nao existir, vai à pasta app/estampas_privadas
-        if (file_exists(public_path('/storage/estampas/' . $products[0]->imagem_url))) {
-            $img = public_path('/storage/estampas/' . $products[0]->imagem_url);
+        if (file_exists(public_path('/storage/estampas/' . $product->imagem_url))) {
+            $img = public_path('/storage/estampas/' . $product->imagem_url);
         } else {
-            $img = storage_path('app/estampas_privadas/' . $products[0]->imagem_url);
+            $img = storage_path('app/estampas_privadas/' . $product->imagem_url);
         }
 
         // código pra processar a estampa e juntar com a t-shirt base
-        $logo = Image::make($img)->fit(250, 450);
-        $base = Image::make(public_path('/storage/tshirt_base/' . $cor[0]->codigo . '.jpg'));
-        $preview = Image::make($base)->insert($logo, 'bottom-right', 135, 35);
+        $logo = Image::make($img);
+        $logo->resize(200, 200, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        $base = Image::make(public_path('/storage/tshirt_base/' . $cor->codigo . '.jpg'));
+        $preview = Image::make($base)->insert($logo, 'bottom-right', 160, 260);
 
         $preview->encode('png');
         $type = 'png';
@@ -89,25 +90,46 @@ class ShopController extends Controller
         $preco_un_catalogo = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
         $preco_un_proprio = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
 
-        foreach ($products as $estampa) {
-            if ($estampa->cliente_id == null) {
-                $estampa->setAttribute('preco', $preco_un_catalogo);
-            } else {
-                $estampa->setAttribute('preco', $preco_un_proprio);
-            }
+        if ($product->cliente_id == null) {
+            $product->setAttribute('preco', $preco_un_catalogo);
+        } else {
+            $product->setAttribute('preco', $preco_un_proprio);
         }
 
         // query pra ter todas as cores pro dropdown
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
 
-        return view('shop.product', ['products' => $products, 'image' => $base64, 'cores' => $cores]);
+        return view('shop.product', ['prod' => $product, 'image' => $base64, 'cores' => $cores]);
+    }
+
+    public function editEstampa($id)
+    {
+        $estampa = Estampa::findOrFail($id);
+        //dd($estampa);
+        return view('shop.edit')->with('estampa', $estampa);
+    }
+
+    public function deleteEstampa($id)
+    {
+        $estampa = Estampa::findOrFail($id);
+        try {
+            DB::beginTransaction();
+            $estampa->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            //throw $th;
+            dd($e->getMessage());
+            DB::rollBack();
+        }
+
+        return redirect('/shop');
     }
 
     public function search()
     {
         $estampas = Estampa::where(function ($query) {
-            $query->where('nome', 'LIKE', '%' . $_GET['query'] . '%')
-                ->orWhere('descricao', 'LIKE', '%' . $_GET['query'] . '%');
+            $query->where('nome', 'LIKE', '%' . request()['query'] . '%')
+                ->orWhere('descricao', 'LIKE', '%' . request()['query'] . '%');
         })->paginate(12);
 
         $categorias = Categoria::whereNull('deleted_at')->get();
@@ -203,5 +225,37 @@ class ShopController extends Controller
         }
 
         return back()->with('success', 'Product added to cart!');
+    }
+
+    public function saveEstampa($id)
+    {
+        $estampa = Estampa::findOrFail($id);
+        request()->validate([
+            'nome' => 'required|max:255',
+            'descricao' => 'nullable|max:255',
+            'stamp_image' => 'nullable|image|max:1024'
+        ]);
+        try {
+            DB::beginTransaction();
+            $estampa->nome = request()->nome;
+            $estampa->descricao = request()->descricao;
+
+            if (request()->stamp_image) {
+                if ($estampa->cliente_id) {
+                    $bigPath = request()->stamp_image->store('estampas_privadas');
+                } else {
+                    $bigPath = request()->stamp_image->store('estampas', 'public');
+                }
+                $path = substr($bigPath, 9);
+                $estampa->imagem_url = $path;
+            }
+            $estampa->save();
+            DB::commit();
+            return back()->with('success', 'Stamp updated successfully!');
+        } catch (\Exception $e) {
+            //throw $th;
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

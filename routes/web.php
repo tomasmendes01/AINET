@@ -52,9 +52,6 @@ Route::post('/checklogin',                  [LoginController::class, 'checklogin
 Route::post('/logout',                      [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['notSoftDeleted']], function () {
-    Route::get('/forgot_password',              [LoginController::class, 'forgotPassword']);
-    Route::post('/forgot_password',             [LoginController::class, 'sendPasswordResetEmail']);
-
     Route::get('/users/{id}/edit',              [UserController::class, 'edit'])->name('user.edit.profile');
     Route::post('/users/{id}/edit',             [UserController::class, 'update'])->name('user.update');
     Route::post('/users/{id}/edit/checkUpdate', [UserController::class, 'checkUpdate'])->name('user.checkUpdate');
@@ -63,6 +60,9 @@ Route::group(['middleware' => ['notSoftDeleted']], function () {
     Route::post('/encomendas/prepare/{orderID}', [EncomendasController::class, 'prepareOrder'])->name('encomenda.prepare');
     Route::post('/encomendas/cancel/{orderID}', [EncomendasController::class, 'cancelOrder'])->name('encomenda.cancel');
 });
+
+Route::get('/forgot_password',              [LoginController::class, 'forgotPassword']);
+Route::post('/forgot_password',             [LoginController::class, 'sendPasswordResetEmail']);
 Route::get('/reset_password',               [LoginController::class, 'resetPassword'])->name('reset_password');
 Route::post('/reset_password/{email}',      [LoginController::class, 'saveNewPassword']);
 
@@ -82,6 +82,10 @@ Route::group(['middleware' => ['auth', 'verified', 'notSoftDeleted']], function 
 Route::group(['middleware' => ['verified', 'admin', 'notSoftDeleted']], function () {
     Route::get('/users/search',                 [UsersController::class, 'search'])->name('users.search');
     Route::post('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
+
+    Route::get('/shop/{id}/edit',               [ShopController::class, 'editEstampa'])->name('estampa.edit');
+    Route::post('/shop/{id}/save',              [ShopController::class, 'saveEstampa'])->name('shop.checkUpdate');
+    Route::post('/shop/{id}/delete',            [ShopController::class, 'deleteEstampa'])->name('estampa.delete');
 });
 
 Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
@@ -123,7 +127,7 @@ Route::get('/storage/estampas/{file}', [function ($file) {
 
 Route::get('/forgot-password', function () {
     return view('auth.forgot');
-})->middleware(['guest', 'notSoftDeleted'])->name('password.request');
+})->middleware(['guest'])->name('password.request');
 
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
@@ -135,12 +139,12 @@ Route::post('/forgot-password', function (Request $request) {
     return $status === Password::RESET_LINK_SENT
         ? back()->with(['status' => __($status)])
         : back()->withErrors(['email' => __($status)]);
-})->middleware(['guest', 'notSoftDeleted'])->name('password.email');
+})->middleware(['guest'])->name('password.email');
 
 
 Route::get('/reset-password/{email}/{token}', function ($email, $token) {
     return view('auth.new_password', ['email' => $email, 'token' => $token]);
-})->middleware(['guest', 'notSoftDeleted'])->name('password.reset');
+})->middleware(['guest'])->name('password.reset');
 
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
@@ -163,12 +167,12 @@ Route::post('/reset-password', function (Request $request) {
     return $status == Password::PASSWORD_RESET
         ? redirect()->route('login')->with('status', __($status))
         : back()->withErrors(['email' => [__($status)]]);
-})->middleware(['guest', 'notSoftDeleted'])->name('password.update');
+})->middleware(['guest'])->name('password.update');
 
 /* EMAIL VERIFICATION ROUTES */
 Route::get('/email/verify', function () {
     return view('auth.verify');
-})->middleware(['auth', 'notSoftDeleted'])->name('verification.notice');
+})->middleware(['auth'])->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
@@ -181,11 +185,11 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
         event(new Verified($user));
         return redirect('/users/profile/' . $id)->with('verified', true);
     }
-})->middleware(['auth', 'notSoftDeleted'])->name('verification.verify');
+})->middleware(['auth'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $user = $request->user() ?? auth()->guard('web')->user();
     $user->sendEmailVerificationNotification();
 
     return back()->with('success', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1', 'notSoftDeleted'])->name('verification.resend');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');

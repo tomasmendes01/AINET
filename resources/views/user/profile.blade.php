@@ -108,10 +108,10 @@
                                                         </tr>
                                                         @foreach($encomenda->tshirt as $tshirt)
                                                         <tr>
-                                                            @if($tshirt->estampa->cliente_id)
-                                                            <td><img class="img-fluid" src="/estampas_privadas/{{$tshirt->estampa->imagem_url}}" alt="{{ $tshirt->estampa->nome }}" /></td>
+                                                            @if($tshirt->estampa['cliente_id'])
+                                                            <td><img class="img-fluid" src="/estampas_privadas/{{$tshirt->estampa['imagem_url']}}" alt="{{ $tshirt->estampa['nome'] }}" /></td>
                                                             @else
-                                                            <td><img class="img-fluid" src="/storage/estampas/{{$tshirt->estampa->imagem_url}}" alt="{{ $tshirt->estampa->nome }}" /></td>
+                                                            <td><img class="img-fluid" src="/storage/estampas/{{$tshirt->estampa['imagem_url']}}" alt="{{ $tshirt->estampa['nome'] }}" /></td>
                                                             @endif
                                                             <td>{{$tshirt->tamanho}}</td>
                                                             <td>

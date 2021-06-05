@@ -4,6 +4,20 @@
 
 /* Create two equal columns that floats next to each other */
 
+rect{
+    cursor:pointer;
+}
+
+.cor {
+    background-color: #000;
+    display: inline-block;
+    height: 150px;
+    vertical-align: top;
+    width: 150px;
+    *display: inline;
+    zoom: 1;
+}
+
 .column {
     margin-top: 14%;
     float: left;

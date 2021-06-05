@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\ResetPasswordNotification;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Mail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, CanResetPassword;
+    use HasFactory, Notifiable, CanResetPassword, SoftDeletes;
 
     /**
      * Send a password reset notification to the user.
@@ -73,21 +74,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);
-    }
-
-    public function checkIfBlocked()
-    {
-        return $this->attributes['bloqueado'];
-    }
-
-    public function getRole()
-    {
-        return $this->attributes['tipo'];
-    }
-
-    public function admin()
-    {
-        return $this->attributes['tipo'] == 'A';
     }
 
     public function encomendas()
