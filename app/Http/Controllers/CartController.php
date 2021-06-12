@@ -27,6 +27,7 @@ class CartController extends Controller
             $cart = new CartController();
             request()->session()->put('cart', $cart);
         }
+
         return view('user.cart')->with(['cart' => request()->session()->get('cart')]);
     }
 
@@ -35,8 +36,6 @@ class CartController extends Controller
         $storedItem = ['color' => request()->color, 'size' => request()->size_shirt, 'quantity' => 0, 'price' => 0, 'item' => $item];
         $shirt_pos = $id . request()->size_shirt . request()->color;
         $id = $shirt_pos;
-
-        //dd($shirt_pos);
         if ($this->items) {
             if (array_key_exists($id, $this->items) && $item->size == $this->items[$id]['size'] && $item->color == $this->items[$id]['color']) {
                 $storedItem = $this->items[$id];
@@ -47,10 +46,12 @@ class CartController extends Controller
         $quantidade_desconto = DB::table('precos')->value('quantidade_desconto');
 
         if ($storedItem['quantity'] >= $quantidade_desconto) {
+
             $preco_un_catalogo = DB::table('precos')->value('preco_un_catalogo');
             $preco_un_proprio = DB::table('precos')->value('preco_un_proprio');
             $preco_un_catalogo_desconto = DB::table('precos')->value('preco_un_catalogo_desconto');
             $preco_un_proprio_desconto = DB::table('precos')->value('preco_un_proprio_desconto');
+
             if ($item->preco == $preco_un_catalogo) {
                 $item->preco = $preco_un_catalogo_desconto;
             } elseif ($item->preco == $preco_un_proprio) {

@@ -45,6 +45,12 @@
     <div class="container">
         <div class="row">
             <!-- --------------------------------------------- -->
+            @if(count($encomendas) == 0)
+            <div style="display:inline-block;text-align:center;margin:auto">
+                <h2>Something went wrong :(</h2>
+                <p>No deliveries were found</p>
+            </div>
+            @endif
             @foreach($encomendas as $encomenda)
             <div class="col-lg-3 col-sm-6 mb-4">
                 <div class="portfolio-item">

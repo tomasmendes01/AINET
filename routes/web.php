@@ -86,16 +86,20 @@ Route::group(['middleware' => ['verified', 'admin', 'notSoftDeleted']], function
     Route::get('/shop/{id}/edit',               [ShopController::class, 'editEstampa'])->name('estampa.edit');
     Route::post('/shop/{id}/save',              [ShopController::class, 'saveEstampa'])->name('shop.checkUpdate');
     Route::post('/shop/{id}/delete',            [ShopController::class, 'deleteEstampa'])->name('estampa.delete');
+
+    Route::get('/shop/statistics',              [ShopController::class, 'getStatistics'])->name('shop.statistics');
 });
 
 Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{nome}/{id}',             [ShopController::class, 'product'])->name('shop.estampa');
 Route::get('/shop/search',                  [ShopController::class, 'search'])->name('shop.search');
 
-Route::get('/cart',                         [CartController::class, 'index']);
-Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
-Route::get('/cart/remove/{id}',             [CartController::class, 'removeFromCart'])->name('cart.remove');
-Route::get('/cart/clear',                   [CartController::class, 'clearCart'])->name('cart.clear');
+Route::group(['middleware' => ['client']], function () {
+    Route::get('/cart',                         [CartController::class, 'index']);
+    Route::get('/cart/add/{id}',                [ShopController::class, 'addToCart'])->name('cart.add');
+    Route::get('/cart/remove/{id}',             [CartController::class, 'removeFromCart'])->name('cart.remove');
+    Route::get('/cart/clear',                   [CartController::class, 'clearCart'])->name('cart.clear');
+});
 
 Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->name('pagenotfound');
 

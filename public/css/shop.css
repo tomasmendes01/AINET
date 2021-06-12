@@ -43,6 +43,18 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+body::-webkit-scrollbar {
+  width: 0.35rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: #111;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #e6b301;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -448,7 +460,7 @@ mark, .mark {
 }
 
 .img-fluid {
-  max-width: 100%;
+  width: 75%;
   height: auto;
 }
 
@@ -9680,7 +9692,8 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 .sidenav a:hover {
-  color: #f1f1f1;
+  color: #cacaca;
+  transform: scale(1.03);
 }
 
 .sidenav .closebtn {

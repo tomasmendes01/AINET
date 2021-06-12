@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Encomenda;
 use App\Models\TShirt;
 use App\Models\Estampa;
+use Illuminate\Support\Facades\Redirect;
 
 class UsersController extends Controller
 {
@@ -43,6 +44,11 @@ class UsersController extends Controller
 
         try {
             $user = User::findOrFail($id); // Se não encontrar o perfil da pessoa, vai para o pagenotfound
+
+            if ($user->tipo == 'A' || $user->tipo == 'F') { // Se o user for administrador, passa logo pra pagina de edit
+                return Redirect::route('user.edit.profile', ['id' => $id]);
+            }
+
             $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->get();
             //dd($encomendas[0]->tshirt[0]->estampa);
         } catch (\Exception $e) {

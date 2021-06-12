@@ -40,22 +40,24 @@
                     <th></th>
                     <th>Product</th>
                     <th>Size</th>
-                    <th>Color</th>
                     <th>Quantity</th>
                     <th>Actions</th>
                     <th>Price</th>
                 </tr>
-                @foreach($cart->items as $product)
-                <tr>
-                    @if($product['item']->cliente_id)
-                    <td> <img class="img-fluid" src="/estampas_privadas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
-                    @else
-                    <td> <img class="img-fluid" src="/storage/estampas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="max-width:250px;max-height:250px;" /></td>
-                    @endif
 
+                @foreach($cart->items as $product)
+
+                <tr>
+                    <td>
+                        <img style="position:absolute;z-index:-1;max-width:250px;max-height:250px;" src="/storage/tshirt_base/{{ $product['item']->color }}.jpg">
+                        @if($product['item']->cliente_id)
+                        <img src="/estampas_privadas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="z-index:1; max-width:120px;max-height:auto;" />
+                        @else
+                        <img src="/storage/estampas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="margin-bottom:200px;transform:translateX(75px) translateY(50px);z-index:1;max-width:80px;max-height:auto;" />
+                        @endif
+                    </td>
                     <td>{{ $product['item']->nome }}</td>
                     <td>{{ $product['item']->size }}</td>
-                    <td>{{ $product['item']->color }}</td>
                     <td>{{ $product['quantity'] }}</td>
                     <td>
                         <form action="{{ route('cart.add',['id' => $product['item']->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
@@ -77,13 +79,13 @@
             <!-- --------------------------------------------- -->
         </div>
     </div>
-    <h1 style="text-align:right">Total price: {{ $cart->totalPrice }}€</h1>
+    <h1 style="text-align:right;margin-bottom:-220px">Total price: {{ $cart->totalPrice }}€</h1>
 
-    <div data-toggle="modal" href="#confirmCheckoutModal">
+    <div style="margin-top:220px;margin-bottom:-420px" data-toggle="modal" href="#confirmCheckoutModal">
         <button type="submit" class="btn btn-dark" style="float:right">Checkout
     </div>
 
-    <div data-toggle="modal" href="#confirmClearCartModal">
+    <div style="margin-top:220px;margin-bottom:-420px" data-toggle="modal" href="#confirmClearCartModal">
         <button type="submit" class="btn btn-light" style="float:right">Clear Cart
     </div>
 
@@ -110,7 +112,11 @@
                                 @foreach($cart->items as $product)
                                 <tr>
                                     <td>{{ $product['item']->nome }}</td>
-                                    <td>{{ $product['color'] }}</td>
+                                    <td>
+                                        <svg width=" 40" height="40">
+                                            <rect width="40" height="40" style="fill:#{{ $product['color'] }}" />
+                                        </svg>
+                                    </td>
                                     <td>{{ $product['size'] }}</td>
                                     <td>{{ $product['quantity'] }}</td>
                                     <td>{{ $product['price'] }}€</td>

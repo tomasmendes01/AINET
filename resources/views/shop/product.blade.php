@@ -5,10 +5,15 @@
 
 @section('content')
 
-<div class="row" style="margin:auto;margin-left:300px">
+<div class="row" style="margin:auto;margin-left:300px;margin-top:50px">
 
-    <div class="column">
-        <img src="{{ $image }}" alt="tshirt" style="height: 100%; width: 100%; object-fit: contain">
+    <div class="column" style="margin-right:100px">
+        <img style="position:absolute;z-index:-1;max-width:400px;max-height:400px;" src="/storage/tshirt_base/{{ $prod->cor->codigo }}.jpg">
+        @if($prod->cliente_id)
+        <img src="/estampas_privadas/{{ $prod->imagem_url }}" alt="{{ $prod->imagem_url }}" style="transform:translateX(126px) translateY(-30px);z-index:1;max-width:120px;max-height:auto;" />
+        @else
+        <img src="/storage/estampas/{{ $prod->imagem_url }}" alt="{{ $prod->imagem_url }}" style="transform:translateX(126px) translateY(-30px);z-index:1;max-width:120px;max-height:auto;" />
+        @endif
     </div>
 
     <div class="column">
@@ -56,7 +61,7 @@
         <div>
             @foreach($cores as $cor)
             <svg width=" 40" height="40">
-                <rect onClick="location.href= '{{ route('shop.estampa',['id' => $prod->id ,'nome' => $prod->nome ,'cor' => $cor->nome]) }}';" width="40" height="40" style="fill:#{{$cor->codigo}}" />
+                <rect onClick="location.href= '{{ route('shop.estampa',['id' => $prod->id ,'nome' => $prod->nome ,'cor' => $cor->codigo]) }}';" width="40" height="40" style="fill:#{{$cor->codigo}}" />
             </svg>
             @endforeach
         </div>
@@ -77,7 +82,7 @@
             @if(request()->cor)
             <input type="hidden" name="color" value="{{ request()->cor }}"></input>
             @else
-            <input type="hidden" name="color" value="Preto"></input>
+            <input type="hidden" name="color" value="1e1e21"></input>
             @endif
 
             <input type="submit" class="dropbtn" value="Add to cart"></input>

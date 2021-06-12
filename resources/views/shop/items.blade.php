@@ -73,6 +73,12 @@
     <div class="container">
         <div class="row">
             <!-- --------------------------------------------- -->
+            @if(count($estampas) == 0)
+            <div style="display:inline-block;text-align:center;margin:auto">
+                <h2>Something went wrong :(</h2>
+                <p>No products were found</p>
+            </div>
+            @endif
             @foreach($estampas as $estampa)
             <div class="col-lg-3">
                 <div class="portfolio-item">

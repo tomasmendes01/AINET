@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Preco;
 use DateTime;
 use Illuminate\Support\Facades\Date;
+use App\Models\Encomenda;
+use Illuminate\Support\Carbon;
 
 class ShopController extends Controller
 {
@@ -62,10 +64,13 @@ class ShopController extends Controller
 
         // se no request não for pedida nenhuma cor, a $cor fica definida como 'Preto'
         if (request()->cor != null) {
-            $cor = DB::table('cores')->where('nome', request()->cor)->first();
+            $cor = DB::table('cores')->where('codigo', request()->cor)->first();
+            //$cor = DB::table('cores')->where('nome', request()->cor)->first();
         } else {
             $cor = DB::table('cores')->where('nome', 'Preto')->first();
         }
+
+        /*
         // procura pela estampa na pasta /storage/estampas e se nao existir, vai à pasta app/estampas_privadas
         if (file_exists(public_path('/storage/estampas/' . $product->imagem_url))) {
             $img = public_path('/storage/estampas/' . $product->imagem_url);
@@ -74,6 +79,7 @@ class ShopController extends Controller
         }
 
         // código pra processar a estampa e juntar com a t-shirt base
+        
         $logo = Image::make($img);
         $logo->resize(200, 200, function ($constraint) {
             $constraint->aspectRatio();
@@ -86,6 +92,7 @@ class ShopController extends Controller
         $preview->encode('png');
         $type = 'png';
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($preview);
+        */
 
         $preco_un_catalogo = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
         $preco_un_proprio = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
@@ -95,11 +102,11 @@ class ShopController extends Controller
         } else {
             $product->setAttribute('preco', $preco_un_proprio);
         }
-
+        $product->setAttribute('cor', $cor);
         // query pra ter todas as cores pro dropdown
         $cores = DB::table('cores')->whereNull('deleted_at')->get();
-
-        return view('shop.product', ['prod' => $product, 'image' => $base64, 'cores' => $cores]);
+        //dd($product);
+        return view('shop.product', ['prod' => $product, 'cores' => $cores]);
     }
 
     public function editEstampa($id)
@@ -257,5 +264,11 @@ class ShopController extends Controller
             DB::rollBack();
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function getStatistics()
+    {
+        $encomendas = Encomenda::whereYear('created_at', Carbon::now()->year)->whereMonth('created_at', Carbon::now()->month)->orderBy('data', 'desc')->get();
+        return view('admin.statistics')->with('encomendas', $encomendas);
     }
 }

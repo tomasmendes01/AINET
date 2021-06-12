@@ -34,9 +34,11 @@
             @if(Auth::user() && Auth::user()->tipo == 'A')
             <div id="mySidenav" class="sidenav" style="z-index:auto;">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="{{ url('/users') }}"><i class="far fa-address-book"></i> Manage Users</a>
-                <a href="#">Manage Products</a>
-                <a href="#">Manage Deliveries</a>
+                <a href="{{ url('/users') }}"><i class="far fa-address-book"></i> Users</a>
+                <a href="#"><i class="fas fa-tshirt"></i> Products</a>
+                <a href="#"><i class="far fa-clipboard"></i> Deliveries</a>
+                <a href="#"><i class="fas fa-dollar-sign"></i> Prices</a>
+                <a href="{{ route('shop.statistics') }}"><i class="fas fa-chart-line"></i> Statistics</a>
             </div>
 
             <span style="font-size:30px;cursor:pointer;color:white;" onclick="openNav()">&#9776;⠀</span>
@@ -56,8 +58,13 @@
                 Menu
                 <i class="fas fa-bars ml-1"></i>
             </button>
+            <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url('/shop/search') }}" style="margin:auto;">
+                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search products">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+            </form>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
+
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="{{ url('/shop') }}"><i class="fa fa-heart"></i> Products
                         </a>
