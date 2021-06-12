@@ -217,12 +217,19 @@ class ShopController extends Controller
 
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
 
+        if (request()->quantityToAdd == null) {
+            request()->quantityToAdd = 1;
+        }
         if ($oldCart) {
-            $oldCart->add($product, $product->id);
+            for ($i = 0; $i < request()->quantityToAdd; $i++) {
+                $oldCart->add($product, $product->id);
+            }
             $request->session()->put('cart', $oldCart);
         } else {
             $cart = new CartController($oldCart);
-            $cart->add($product, $product->id);
+            for ($i = 0; $i < request()->quantityToAdd; $i++) {
+                $cart->add($product, $product->id);
+            }
             $request->session()->put('cart', $cart);
         }
 

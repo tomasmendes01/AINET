@@ -33,6 +33,7 @@ class CartController extends Controller
 
     public function add($item, $id)
     {
+
         $storedItem = ['color' => request()->color, 'size' => request()->size_shirt, 'quantity' => 0, 'price' => 0, 'item' => $item];
         $shirt_pos = $id . request()->size_shirt . request()->color;
         $id = $shirt_pos;
@@ -67,6 +68,7 @@ class CartController extends Controller
 
         request()->session()->put('totalQuantity', $this->totalQty);
         // dd($storedItem['item']->id); = 3
+
         return view('user.cart');
     }
 
@@ -128,41 +130,46 @@ class CartController extends Controller
 
     public function removeFromCart($item)
     {
-        $id = $item;
-
-        if (request()->size_shirt && request()->color) {
-            $shirt_pos = $id . request()->size_shirt . request()->color;
-            $product = Estampa::findOrFail($id);
-        } else {
-            $product = Estampa::findOrFail($id['item']->id);
-            $shirt_pos = $id['item']->id . $item['size'] . $item['color'];
+        if (request()->quantityToRemove == null) {
+            request()->quantityToRemove = 1;
         }
+        for ($i = 0; $i < request()->quantityToRemove; $i++) {
+            $id = $item;
 
-        if ($product->cliente_id == null) {
-            $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
-        } else {
-            $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+            if (request()->size_shirt && request()->color) {
+                $shirt_pos = $id . request()->size_shirt . request()->color;
+                $product = Estampa::findOrFail($id);
+            } else {
+                $product = Estampa::findOrFail($id['item']->id);
+                $shirt_pos = $id['item']->id . $item['size'] . $item['color'];
+            }
+
+            if ($product->cliente_id == null) {
+                $preco = DB::table('precos')->select('preco_un_catalogo')->first()->preco_un_catalogo;
+            } else {
+                $preco = DB::table('precos')->select('preco_un_proprio')->first()->preco_un_proprio;
+            }
+            $product->setAttribute('preco', $preco);
+            if (request()->size_shirt && request()->color) {
+                $product->setAttribute('size', request()->size_shirt);
+                $product->setAttribute('color', request()->color);
+            } else {
+                $product->setAttribute('size', $item['size']);
+                $product->setAttribute('color', $item['color']);
+            }
+
+            $oldCart = Session::has('cart') ? Session::get('cart') : null;
+
+            if ($oldCart) {
+                $oldCart->remove($product, $shirt_pos);
+                request()->session()->put('cart', $oldCart);
+            } else {
+                //$cart = new CartController($oldCart);
+                //$cart->remove($product, $shirt_pos);
+                //request()->session()->put('cart', $cart);
+                return redirect()->back()->with('error', 'Error fetching cart!');
+            }
         }
-        $product->setAttribute('preco', $preco);
-        if (request()->size_shirt && request()->color) {
-            $product->setAttribute('size', request()->size_shirt);
-            $product->setAttribute('color', request()->color);
-        } else {
-            $product->setAttribute('size', $item['size']);
-            $product->setAttribute('color', $item['color']);
-        }
-
-
-        $oldCart = Session::has('cart') ? Session::get('cart') : null;
-        if ($oldCart) {
-            $oldCart->remove($product, $shirt_pos);
-            request()->session()->put('cart', $oldCart);
-        } else {
-            $cart = new CartController($oldCart);
-            $cart->remove($product, $shirt_pos);
-            request()->session()->put('cart', $cart);
-        }
-
         //dd($request->session()->get('cart'));
         return redirect()->back()->with('success', 'Product removed from cart!');
     }
@@ -174,11 +181,13 @@ class CartController extends Controller
         if ($cart == null) {
             return redirect()->back()->with('error', 'Error fetching cart!');
         }
+        /*
         while ($cart->totalQty > 0) {
             foreach ($cart->items as $item) {
                 $this->removeFromCart($item);
             }
         }
+        */
         Session::remove('cart');
         return redirect()->back()->with('success', 'Cart cleared!');
     }

@@ -60,12 +60,14 @@
                     <td>{{ $product['item']->size }}</td>
                     <td>{{ $product['quantity'] }}</td>
                     <td>
-                        <form action="{{ route('cart.add',['id' => $product['item']->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
+                        <form action="{{ route('cart.add',['id' => $product['item']->id]) }}" method="get" enctype="multipart/form-data">
+                            <input type="number" name="quantityToAdd" placeholder="1" min="0" max="100">
                             <input type="hidden" name="color" value="{{$product['item']->color}}">
                             <input type="hidden" name="size_shirt" value="{{$product['item']->size}}">
                             <button class="btn btn-primary" style="width:50%">Add</button>
                         </form>
                         <form action="{{ route('cart.remove',['id' => $product['item']->id]) }}" method="get" enctype="multipart/form-data" class="product-form">
+                            <input type="number" name="quantityToRemove" placeholder="1" min="1" max="100">
                             <input type="hidden" name="color" value="{{$product['item']->color}}">
                             <input type="hidden" name="size_shirt" value="{{$product['item']->size}}">
                             <button class="btn btn-danger" style="width:50%">Remove</button>
