@@ -5,7 +5,7 @@
 <!-- Portfolio Grid-->
 <section class="page-section" id="services" style="margin-top:-6%;">
     <div class="container">
-        <div class="text-center" style="margin-top:10%;margin-bottom:-7%;">
+        <div class="text-center" style="margin-top:10rem;margin-bottom:-7rem;">
             <h2 class="section-heading text-uppercase">List of Deliveries</h2>
             @if ($message = Session::get('error'))
             <div class="alert alert-danger alert-block" style="text-align:center">
@@ -35,9 +35,6 @@
                 {{ $encomendas->appends(request()->query())->links("pagination::bootstrap-4") }}
             </ul>
             <!-- --------------------------------------------- -->
-
-
-
         </div>
     </div>
 </section>
@@ -52,10 +49,11 @@
             </div>
             @endif
             @foreach($encomendas as $encomenda)
+            @if($encomenda->user != null)
             <div class="col-lg-3 col-sm-6 mb-4">
                 <div class="portfolio-item">
                     <a href="{{ route('encomendas',['id' => $encomenda->id ,'client_id' => $encomenda->cliente_id]) }}">
-                        <img class="img-fluid" src="" onerror="src='img/navbar-logo.png'" alt="" />
+                        <img class="img-fluid" style="margin:auto" src="" onerror="src='img/navbar-logo.png'" alt="" />
                     </a>
                     <div class="portfolio-caption">
                         <div class="portfolio-caption-subheading text-muted">{{ $encomenda->id }}</div>
@@ -65,6 +63,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             @endforeach
             <!-- --------------------------------------------- -->
         </div>

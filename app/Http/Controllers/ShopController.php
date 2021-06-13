@@ -164,24 +164,24 @@ class ShopController extends Controller
 
     public function createStamp(Request $request)
     {
-
         try {
             DB::beginTransaction();
             $estampa = new Estampa();
 
             if (Auth::user()->tipo == 'C') {
                 $estampa->cliente_id = Auth::user()->id;
+                $bigPath = $request->stamp_image->store('estampas_privadas');
             } else {
                 $estampa->cliente_id = null;
+                $bigPath = $request->stamp_image->store('public/estampas');
             }
 
             $estampa->categoria_id = null;
             $estampa->nome = $request->stamp_name;
             $estampa->descricao = $request->stamp_description;
 
-            $bigPath = $request->stamp_image->store('estampas_privadas');
             $path = substr($bigPath, 18);
-            $estampa->imagem_url = $path;
+            $estampa->imagem_url = $request->stamp_image->hashName();
 
             $estampa->informacao_extra = null;
             $estampa->created_at = new DateTime();

@@ -53,7 +53,7 @@ Route::post('/logout',                      [LoginController::class, 'logout'])-
 
 Route::group(['middleware' => ['notSoftDeleted']], function () {
     Route::get('/users/{id}/edit',              [UserController::class, 'edit'])->name('user.edit.profile');
-    Route::post('/users/{id}/edit',             [UserController::class, 'update'])->name('user.update');
+    Route::put('/users/{id}/edit',              [UserController::class, 'update'])->name('user.update');
     Route::post('/users/{id}/edit/checkUpdate', [UserController::class, 'checkUpdate'])->name('user.checkUpdate');
 
     Route::get('/encomendas',                   [EncomendasController::class, 'index'])->name('encomendas');
@@ -80,14 +80,14 @@ Route::group(['middleware' => ['auth', 'verified', 'notSoftDeleted']], function 
 });
 
 Route::group(['middleware' => ['verified', 'admin', 'notSoftDeleted']], function () {
-    Route::get('/users/search',                 [UsersController::class, 'search'])->name('users.search');
-    Route::post('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
+    Route::get('/users/search',                [UsersController::class, 'search'])->name('users.search');
+    Route::delete('/users/{id}/delete',           [UserController::class, 'delete'])->name('user.delete');
 
-    Route::get('/shop/{id}/edit',               [ShopController::class, 'editEstampa'])->name('estampa.edit');
-    Route::post('/shop/{id}/save',              [ShopController::class, 'saveEstampa'])->name('shop.checkUpdate');
-    Route::post('/shop/{id}/delete',            [ShopController::class, 'deleteEstampa'])->name('estampa.delete');
+    Route::get('/shop/{id}/edit',              [ShopController::class, 'editEstampa'])->name('estampa.edit');
+    Route::put('/shop/{id}/save',              [ShopController::class, 'saveEstampa'])->name('shop.checkUpdate');
+    Route::delete('/shop/{id}/delete',            [ShopController::class, 'deleteEstampa'])->name('estampa.delete');
 
-    Route::get('/shop/statistics',              [ShopController::class, 'getStatistics'])->name('shop.statistics');
+    Route::get('/shop/statistics',             [ShopController::class, 'getStatistics'])->name('shop.statistics');
 });
 
 Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
@@ -161,6 +161,9 @@ Route::post('/reset-password', function (Request $request) {
         $request->only('email', 'password', 'password_confirmation', 'token'),
         function ($user, $password) use ($request) {
             $user = User::where('email', $request->email)->first();
+            if ($user == null) {
+                return back()->withErrors(['email' => [__(Password::PASSWORD_RESET)]]);
+            }
             $user->password = $request->password;
             $user->remember_token = Str::random(60);
             $user->save();
@@ -181,7 +184,7 @@ Route::get('/email/verify', function () {
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     $id = $request->route('id');
-    $user = User::find($id);
+    $user = User::findOrFail($id);
     if ($id != $user->getKey()) {
         throw new AuthorizationException;
     }

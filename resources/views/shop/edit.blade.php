@@ -41,7 +41,7 @@
             @endif
         </div>
         <br>
-        <form method="POST" action="{{ route('shop.checkUpdate' , ['id' => $estampa->id]) }}" enctype="multipart/form-data">
+        <form method="PUT" action="{{ route('shop.checkUpdate' , ['id' => $estampa->id]) }}" enctype="multipart/form-data">
             @csrf
 
             <label for="nome">Name</label>
@@ -72,8 +72,9 @@
                     <div class="col-lg-11">
                         <div class="modal-body">
                             <h2>Are you sure you want to delete '{{$estampa->nome}}'?</h2>
-                            <form id="logout-form" action="{{ route('estampa.delete' , ['id' => $estampa->id]) }}" method="POST">
+                            <form id="logout-form" method="POST" action="{{ route('estampa.delete' , ['id' => $estampa->id]) }}">
                                 @csrf
+                                @method('delete')
                                 <input type="submit" value="Delete" class="btn btn-danger">
                             </form>
                             <button class="btn btn-primary" data-dismiss="modal" type="button">

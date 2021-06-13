@@ -66,7 +66,7 @@
                     <button class="chatbtn" id="chatBtn" onclick="location.href = '/shop'"><i class="fa fa-comment"></i> Go back to Shop</button>
                 </div>
                 <div class="profile-btn">
-                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data">
+                    <form method="PUT" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data">
                         @csrf
                         <input class="btn btn-dark" name="delete_pfp" type="submit" value="Delete Profile Picture">
                     </form>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="profile-btn">
-                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
+                    <form method="PUT" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
                         @csrf
 
                         @if($user->bloqueado == 1)
@@ -134,7 +134,7 @@
             @endif
             <div class="profile-body">
 
-                <form method="POST" action="{{ route('user.checkUpdate' , ['id' => $user->id]) }}" enctype="multipart/form-data" style="margin-top:10px;margin-left:50px">
+                <form method="PUT" action="{{ route('user.checkUpdate' , ['id' => $user->id]) }}" enctype="multipart/form-data" style="margin-top:10px;margin-left:50px">
                     @csrf
                     <label for="name">Nome:</label>
                     <input type="text" id="name" value="{{ $user->name }}" name="name" size="50%">
@@ -270,6 +270,7 @@
                                         <p class="item">Are you sure you want to delete the user <strong>{{ $user->name }}</strong>?</p>
                                         <form method="POST" action="{{ route('user.delete' , ['id' => $user->id]) }}">
                                             @csrf
+                                            @method('delete')
                                             <input class="btn btn-danger" name="delete" type="submit" style="width:69%;margin:auto;" value="Delete">
                                         </form>
                                         <button class="btn btn-primary" data-dismiss="modal" type="button" style="width:69%;margin:auto;">

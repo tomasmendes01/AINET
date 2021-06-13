@@ -79,7 +79,7 @@
                                     <div class="portfolio-hover">
                                         <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                     </div>
-                                    <img class="img-fluid" src="/img/plain_white.png" alt="..." />
+                                    <img class="img-fluid" src="/img/plain_white.png" style="margin:auto" />
                                 </a>
                                 <div class="portfolio-caption">
                                     <div class="portfolio-caption-heading">{{$encomenda->data}}</div>

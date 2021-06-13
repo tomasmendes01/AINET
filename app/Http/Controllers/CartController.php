@@ -226,7 +226,7 @@ class CartController extends Controller
 
                 /* TSHIRTS */
                 foreach (Session::get('cart')->items as $item) {
-                    $colorCode = DB::table('cores')->where('nome', $item['color'])->first();
+                    $colorCode = DB::table('cores')->where('codigo', $item['color'])->first();
                     $tshirt = TShirt::create([
                         'encomenda_id' => $encomenda->id,
                         'estampa_id' => $item['item']->id,

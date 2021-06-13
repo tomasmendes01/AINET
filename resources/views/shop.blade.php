@@ -6,8 +6,6 @@
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -27,7 +25,7 @@
     </style>
 </head>
 
-<body id="page-top">
+<body>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
@@ -80,18 +78,6 @@
                         </a>
                         @endif
                         @endif
-
-                    </li>
-                    @if(isset(Auth::user()->email))
-
-                    @if(Auth::user()->tipo == 'F')
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url('/encomendas') }}"><i class="far fa-address-book"></i> Encomendas</a>
-                    </li>
-                    @endif
-
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ route('user.profile',['id' => Auth::user()->id]) }}"><i class="fas fa-user"></i> Profile</a>
                     </li>
 
                     <li class="nav-item">
@@ -102,6 +88,16 @@
                         @endif
                     </li>
 
+                    @if(isset(Auth::user()->email))
+                    @if(Auth::user()->tipo == 'F')
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ url('/encomendas') }}"><i class="far fa-address-book"></i> Encomendas</a>
+                    </li>
+                    @endif
+
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="{{ route('user.profile',['id' => Auth::user()->id]) }}"><i class="fas fa-user"></i> Profile</a>
+                    </li>
 
                     <li class="nav-item">
                         <div data-toggle="modal" href="#logoutModal">
@@ -191,5 +187,11 @@
 <script src="/mail/contact_me.js"></script>
 <!-- Core theme JS-->
 <script src="/js/scripts.js"></script>
+
+<script>
+    $(window).on("load", function() {
+        //$(".loader-wrapper").fadeOut("slow");
+    });
+</script>
 
 </html>

@@ -8,9 +8,8 @@
 
 <form method="POST" action="{{ route('shop.createStamp') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
-    <div class="row" style="margin-top:-6%;padding:50px;">
-        <div class="column" >
-
+    <div class="row" style="margin-left:20rem;margin-top:-3rem;padding:50px;">
+        <div class="column">
             <h2>Custom T-Shirt</h2>
 
             <input type="hidden" name="author" value="{{Auth::user()->id}}">
@@ -38,8 +37,8 @@
 
         </div>
         <div class="column">
-        <h2>Preview</h2>
-            <img id="stamp" src="#" style="width:auto;max-height:500px" />
+            <img style="position:absolute;z-index:-1;max-width:400px;max-height:400px;" src="/storage/tshirt_base/1e1e21.jpg">
+            <img id="stamp" style="transform:translateX(126px) translateY(-30px);z-index:1;max-width:120px;max-height:auto;" />
         </div>
 
     </div>
@@ -51,8 +50,8 @@
 <!-- Third party plugin JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 <!-- Contact form JS-->
-<script src="mail/jqBootstrapValidation.js"></script>
-<script src="mail/contact_me.js"></script>
+<script src="/mail/jqBootstrapValidation.js"></script>
+<script src="/mail/contact_me.js"></script>
 <!-- Core theme JS-->
 <script src="/js/scripts.js"></script>
 

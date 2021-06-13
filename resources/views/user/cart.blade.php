@@ -3,14 +3,14 @@
 @section('cart')
 
 @if ($message = Session::get('error'))
-<div class="alert alert-danger alert-block" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+<div class="alert alert-danger alert-block" style="text-align:center;margin-top:8rem;margin-bottom:-8rem">
     <button type="button" class="close" data-dismiss="alert">×</button>
     <strong>{{ $message }}</strong>
 </div>
 @endif
 
 @if (count($errors) > 0)
-<div class="alert alert-danger" style="text-align:center;margin-top:25%;margin-bottom:-20%;">
+<div class="alert alert-danger" style="text-align:center;margin-top:8rem;margin-bottom:-8rem">
     <ul>
         @foreach($errors->all() as $error)
         <li>{{ $error }}</li>
@@ -51,7 +51,7 @@
                     <td>
                         <img style="position:absolute;z-index:-1;max-width:250px;max-height:250px;" src="/storage/tshirt_base/{{ $product['item']->color }}.jpg">
                         @if($product['item']->cliente_id)
-                        <img src="/estampas_privadas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="z-index:1; max-width:120px;max-height:auto;" />
+                        <img src="/estampas_privadas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="margin-bottom:200px;transform:translateX(75px) translateY(50px);z-index:1;max-width:80px;max-height:auto;" />
                         @else
                         <img src="/storage/estampas/{{ $product['item']->imagem_url }}" alt="{{ $product['item']->imagem_url }}" style="margin-bottom:200px;transform:translateX(75px) translateY(50px);z-index:1;max-width:80px;max-height:auto;" />
                         @endif
