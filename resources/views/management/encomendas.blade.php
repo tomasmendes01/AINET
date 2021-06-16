@@ -34,10 +34,42 @@
             <ul class="pagination" style="display: inline-block;">
                 {{ $encomendas->appends(request()->query())->links("pagination::bootstrap-4") }}
             </ul>
+            <br>
+            <div style="margin-left:5px;display: inline-block;">
+                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Order by Price
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{{ route('encomendas',['orderBy' => 'price_low_high']) }}">Low - High</a>
+                    <a class="dropdown-item" href="{{ route('encomendas',['orderBy' => 'price_high_low']) }}">High - Low</a>
+                </div>
+            </div>
+
+            <div style="margin-left:5px;display: inline-block;">
+                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Order by Id
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{{ route('encomendas',['orderBy' => 'id_ascendente']) }}">Ascendent</a>
+                    <a class="dropdown-item" href="{{ route('encomendas',['orderBy' => 'id_descendente']) }}">Descendent</a>
+                </div>
+            </div>
+
+            <div style="margin-left:5px;display: inline-block;">
+                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Order by Date
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{{ route('encomendas',['orderBy' => 'data_ascendente']) }}">Ascendent</a>
+                    <a class="dropdown-item" href="{{ route('encomendas',['orderBy' => 'data_descendente']) }}">Descendent</a>
+                </div>
+            </div>
             <!-- --------------------------------------------- -->
         </div>
     </div>
+
 </section>
+
 <section class="page-section bg-light" id="portfolio">
     <div class="container">
         <div class="row">
@@ -56,7 +88,8 @@
                         <img class="img-fluid" style="margin:auto" src="" onerror="src='img/navbar-logo.png'" alt="" />
                     </a>
                     <div class="portfolio-caption">
-                        <div class="portfolio-caption-subheading text-muted">{{ $encomenda->id }}</div>
+                        <div class="portfolio-caption-subheading text-muted"><strong>{{ $encomenda->id }}</strong></div>
+                        <div class="portfolio-caption-subheading text-muted">{{ $encomenda->data }}</div>
                         <div class="portfolio-caption-heading">{{ $encomenda->user->name }}</div>
                         <div class="portfolio-caption-subheading text-muted">{{ $encomenda->preco_total }}€</div>
                         <div class="portfolio-caption-subheading text-muted">{{ $encomenda->notas }}</div>
@@ -81,16 +114,6 @@
     </div>
 </section>
 
-<!-- Bootstrap core JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Third party plugin JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-<!-- Contact form JS-->
-<script src="mail/jqBootstrapValidation.js"></script>
-<script src="mail/contact_me.js"></script>
-<!-- Core theme JS-->
-<script src="/js/scripts.js"></script>
 
 @stop
 

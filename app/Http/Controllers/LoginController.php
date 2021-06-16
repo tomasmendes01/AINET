@@ -48,6 +48,7 @@ class LoginController extends Controller
         // php artisan view:clear
         $deleted = User::where('email', $request->input('email'))->value('deleted_at');
         $blocked = User::where('email', $request->input('email'))->value('bloqueado');
+
         if ($deleted != null) {
             return back()->with('error', "Your account has been disabled!");
         }
@@ -83,7 +84,7 @@ class LoginController extends Controller
             return back()->with('error', 'User does not exists!');
         }
 
-        Mail::send('email.forgot', ['user' => $user], function ($m) use ($user) {
+        Mail::send('emails.forgot', ['user' => $user], function ($m) use ($user) {
             $m->from('hello@app.com', 'MagicShirts');
 
             $m->to($user->email, $user->name)->subject('Reset Password');

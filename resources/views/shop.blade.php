@@ -33,8 +33,8 @@
             <div id="mySidenav" class="sidenav" style="z-index:auto;">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                 <a href="{{ url('/users') }}"><i class="far fa-address-book"></i> Users</a>
-                <a href="#"><i class="fas fa-tshirt"></i> Products</a>
-                <a href="#"><i class="far fa-clipboard"></i> Deliveries</a>
+                <a href="/shop"><i class="fas fa-tshirt"></i> Products</a>
+                <a href="{{ route('encomendas') }}"><i class="far fa-clipboard"></i> Deliveries</a>
                 <a href="#"><i class="fas fa-dollar-sign"></i> Prices</a>
                 <a href="{{ route('shop.statistics') }}"><i class="fas fa-chart-line"></i> Statistics</a>
             </div>
@@ -68,13 +68,19 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        @if(Session::get('cart'))
-                        @if(Session::get('cart')->totalQty)
+                        @if(!Auth::user() && !Session::get('cart'))
+                        <a class="nav-link js-scroll-trigger" href="{{ url('/cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a>
+                        @elseif(!Auth::user() && Session::get('cart'))
                         <a class="nav-link js-scroll-trigger" href="{{ url('/cart') }}"><i class="fas fa-shopping-cart"></i> Cart
                             ({{ Session::get('cart')->totalQty }})
                         </a>
-                        @else
+                        @elseif(Auth::user())
+                        @if(Auth::user()->tipo == 'C' && !Session::get('cart'))
+                        <a class="nav-link js-scroll-trigger" href="{{ url('/cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a>
+
+                        @elseif(Auth::user() && Auth::user()->tipo == 'C' && Session::get('cart'))
                         <a class="nav-link js-scroll-trigger" href="{{ url('/cart') }}"><i class="fas fa-shopping-cart"></i> Cart
+                            ({{ Session::get('cart')->totalQty }})
                         </a>
                         @endif
                         @endif
@@ -91,7 +97,7 @@
                     @if(isset(Auth::user()->email))
                     @if(Auth::user()->tipo == 'F')
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ url('/encomendas') }}"><i class="far fa-address-book"></i> Encomendas</a>
+                        <a class="nav-link js-scroll-trigger" href="{{ route('encomendas') }}"><i class="far fa-address-book"></i> Encomendas</a>
                     </li>
                     @endif
 
@@ -158,25 +164,6 @@
 
 </body>
 
-<footer class="footer py-4">
-    <div class="container" style="bottom: 0; left: 0; right: 0; margin-top:200px;">
-        <div class="row align-items-center">
-            <div class="col-lg-4 text-lg-left">MagicShirts © AINet - Politécnico de Leiria</div>
-            <div class="col-lg-4 my-3 my-lg-0">
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
-                <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <div class="col-lg-4 text-lg-right">
-                <a class="mr-3" href="#!">Privacy Policy</a>
-                <a href="#!">Terms of Use</a>
-            </div>
-        </div>
-    </div>
-</footer>
-
-
-
 <!-- Bootstrap core JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -187,11 +174,5 @@
 <script src="/mail/contact_me.js"></script>
 <!-- Core theme JS-->
 <script src="/js/scripts.js"></script>
-
-<script>
-    $(window).on("load", function() {
-        //$(".loader-wrapper").fadeOut("slow");
-    });
-</script>
 
 </html>

@@ -85,7 +85,6 @@ class RegisterController extends Controller
                 $user->save();
 
                 /* Cliente */
-
                 $cliente = new Cliente();
                 $cliente = Cliente::create([
                     'id' => $user->id,
@@ -101,7 +100,18 @@ class RegisterController extends Controller
 
                 DB::commit();
 
-                return redirect('login')->withSuccess('Registered successfully! Check your email to activate your account.');
+                $user->sendEmailVerificationNotification();
+
+                $user_data = array(
+                    'email'      => $request->get('email'),
+                    'password'   => $request->get('password')
+                );
+
+                if (Auth::attempt($user_data)) {
+                    return redirect('login')->withSuccess('Registered successfully! Check your email to activate your account.');
+                } else {
+                    return back()->with('error', 'Error creating account!');
+                }
             } catch (\Exception $e) {
                 DB::rollBack();
                 return back()->with('error', $e->getMessage());

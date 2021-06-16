@@ -35,10 +35,4 @@ class Encomenda extends Model
     {
         return $this->hasMany(TShirt::class, 'encomenda_id', 'id');
     }
-
-    /*
-    public function estampa(){
-        return $this->hasManyThrough(Estampa::class,TShirt::class,'estampa_id','id');
-    }
-    */
 }

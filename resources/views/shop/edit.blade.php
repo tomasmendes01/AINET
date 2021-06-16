@@ -41,9 +41,9 @@
             @endif
         </div>
         <br>
-        <form method="PUT" action="{{ route('shop.checkUpdate' , ['id' => $estampa->id]) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('shop.checkUpdate' , ['id' => $estampa->id]) }}" enctype="multipart/form-data">
             @csrf
-
+            @method("PUT")
             <label for="nome">Name</label>
             <input type="text" id="nome" name="nome" size="50%" value="{{$estampa->nome}}"><br><br>
 
@@ -53,11 +53,11 @@
             <label for="stamp_image">Stamp</label>
             <input type="file" name="stamp_image" size="50%"><br><br>
 
-            <input class="btn btn-primary" type="submit" value="Save" size="100%">
+            <input class="btn btn-primary" type="submit" value="Save" style="width:50%">
         </form>
 
         <div data-toggle="modal" href="#logoutModal">
-            <a class="btn btn-danger">Delete</a>
+            <a class="btn btn-danger" style="width:50%">Delete</a>
         </div>
         <br>
     </div>
@@ -75,9 +75,9 @@
                             <form id="logout-form" method="POST" action="{{ route('estampa.delete' , ['id' => $estampa->id]) }}">
                                 @csrf
                                 @method('delete')
-                                <input type="submit" value="Delete" class="btn btn-danger">
+                                <input type="submit" value="Delete" style="width:50%" class="btn btn-primary">
                             </form>
-                            <button class="btn btn-primary" data-dismiss="modal" type="button">
+                            <button class="btn btn-danger" data-dismiss="modal" type="button" style="width:50%">
                                 Cancel
                             </button>
                         </div>

@@ -49,7 +49,34 @@ class UsersController extends Controller
                 return Redirect::route('user.edit.profile', ['id' => $id]);
             }
 
-            $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->get();
+            /* Ordenar por data */
+
+            if (request()->orderBy == "data_ascendente") {
+                $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->orderBy('data', 'ASC')->paginate(6);
+            } elseif (request()->orderBy == "data_descendente") {
+                $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->orderBy('data', 'DESC')->paginate(6);
+            } else {
+                $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->paginate(6);
+            }
+
+            /* Atribuir preço total da encomenda a partir das tshirts */
+            foreach ($encomendas as $encomenda) {
+                $preco_total_encomenda = 0;
+                foreach ($encomenda->tshirt as $tshirt) {
+                    $preco_total_encomenda += $tshirt->subtotal;
+                }
+                $encomenda->setAttribute('preco_total', $preco_total_encomenda);
+            }
+
+            /* Ordenar por preço */
+            if (request()->orderBy == "low_high") {
+                $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->orderBy('preco_total', 'ASC')->paginate(6);
+            } elseif (request()->orderBy == "high_low") {
+                $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->orderBy('preco_total', 'DESC')->paginate(6);
+            } else {
+                $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->paginate(6);
+            }
+
             //dd($encomendas[0]->tshirt[0]->estampa);
         } catch (\Exception $e) {
             dd($e->getMessage());

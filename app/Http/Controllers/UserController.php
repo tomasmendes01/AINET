@@ -49,7 +49,7 @@ class UserController extends Controller
             return back()->with('success', 'Profile picture deleted succesfully!');
         } elseif (request('profile_picture')) {
             $this->validate($request, [
-                'profile_picture' => 'nullable|image|max:1024'
+                'profile_picture' => 'nullable|image|mimes:png,jpg|max:1024'
             ]);
             //dd($request->file('profile_picture')->getClientOriginalName());
             $bigPath = $request->profile_picture->store('fotos', 'public');
@@ -84,7 +84,6 @@ class UserController extends Controller
         }
 
         try {
-
             DB::beginTransaction();
 
             /* User */

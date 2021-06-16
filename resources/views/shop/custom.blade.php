@@ -6,6 +6,30 @@
 
 @section('content')
 
+@if ($message = Session::get('error'))
+<div class="alert alert-danger alert-block" style="text-align:center;margin-left:50px;margin-top:8rem;margin-bottom:-10rem">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>{{ $message }}</strong>
+</div>
+@endif
+
+@if (count($errors) > 0)
+<div class="alert alert-danger" style="text-align:center;margin-left:50px;margin-top:8rem;margin-bottom:-10rem">
+    <ul>
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if(Session::get('success'))
+<div class="alert alert-success" style="text-align:center;margin-left:50px;margin-top:8rem;margin-bottom:-10rem">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>{{session::get('success')}}</strong>
+</div>
+@endif
+
 <form method="POST" action="{{ route('shop.createStamp') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     <div class="row" style="margin-left:20rem;margin-top:-3rem;padding:50px;">
@@ -22,7 +46,6 @@
 
             <label for="image">Upload your stamp here:</label>
             <input accept="image/*" type="file" id="stamp_image" name="stamp_image" size="50%" required>
-
 
             <script>
                 stamp_image.onchange = evt => {

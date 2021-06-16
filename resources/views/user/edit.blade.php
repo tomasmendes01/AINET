@@ -66,8 +66,9 @@
                     <button class="chatbtn" id="chatBtn" onclick="location.href = '/shop'"><i class="fa fa-comment"></i> Go back to Shop</button>
                 </div>
                 <div class="profile-btn">
-                    <form method="PUT" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data">
                         @csrf
+                        @method("PUT")
                         <input class="btn btn-dark" name="delete_pfp" type="submit" value="Delete Profile Picture">
                     </form>
                 </div>
@@ -80,9 +81,9 @@
                     </div>
                 </div>
                 <div class="profile-btn">
-                    <form method="PUT" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
+                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
                         @csrf
-
+                        @method("PUT")
                         @if($user->bloqueado == 1)
                         <input type="hidden" id="block" value="Unblock" hidden>
                         <div class="btn-holder">
@@ -134,8 +135,9 @@
             @endif
             <div class="profile-body">
 
-                <form method="PUT" action="{{ route('user.checkUpdate' , ['id' => $user->id]) }}" enctype="multipart/form-data" style="margin-top:10px;margin-left:50px">
+                <form method="POST" action="{{ route('user.checkUpdate' , ['id' => $user->id]) }}" enctype="multipart/form-data" style="margin-top:10px;margin-left:50px">
                     @csrf
+                    @method("PUT")
                     <label for="name">Nome:</label>
                     <input type="text" id="name" value="{{ $user->name }}" name="name" size="50%">
                     <br>

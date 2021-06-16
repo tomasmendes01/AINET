@@ -19,22 +19,26 @@
 </div>
 @endif
 
-<section class="page-section" id="services" style="margin-bottom:-5%;">
-    <div class="container">
-        <div class="row">
-            @if($cart->totalPrice == 0 || $cart->items == null )
-            <h1 style="margin:auto;margin-top:20%;">Looks like your cart is empty.</h1>
-            @else
-        </div>
+@if(Session::get('success'))
+<div class="alert alert-success" style="text-align:center;margin-left:50px;margin-top:8rem;margin-bottom:-8rem">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>{{session::get('success')}}</strong>
+</div>
+@endif
+
+<section>
+    <div class="row">
+        @if($cart->totalPrice == 0 || $cart->items == null )
+        <h1 style="margin:auto;margin-top:10rem;">Looks like your cart is empty.</h1>
+        @else
     </div>
 </section>
 
 <!-- Portfolio Grid-->
-<section class="page-section" id="services" style="margin-bottom:-5%;margin-top:-17%;">
+<section class="page-section" id="services" style="margin-top:-17rem;">
     <div class="container">
         <div class="row">
             <!-- --------------------------------------------- -->
-
             <table style="width:100%;margin:auto;margin-top:50px;text-align:center">
                 <tr>
                     <th></th>
@@ -84,13 +88,12 @@
     <h1 style="text-align:right;margin-bottom:-220px">Total price: {{ $cart->totalPrice }}€</h1>
 
     <div style="margin-top:220px;margin-bottom:-420px" data-toggle="modal" href="#confirmCheckoutModal">
-        <button type="submit" class="btn btn-dark" style="float:right">Checkout
+        <button type="submit" class="btn btn-dark" style="float:right;margin-bottom:5rem">Checkout
     </div>
 
     <div style="margin-top:220px;margin-bottom:-420px" data-toggle="modal" href="#confirmClearCartModal">
         <button type="submit" class="btn btn-light" style="float:right">Clear Cart
     </div>
-
 
 </section>
 
@@ -184,18 +187,6 @@
 </div>
 
 @endif
-
-<!-- Bootstrap core JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Third party plugin JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-<!-- Contact form JS-->
-<script src="mail/jqBootstrapValidation.js"></script>
-<script src="mail/contact_me.js"></script>
-<!-- Core theme JS-->
-<script src="/js/scripts.js"></script>
-
 @stop
 
 @section('yellowbutton')

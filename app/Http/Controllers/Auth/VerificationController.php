@@ -12,6 +12,8 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
 class VerificationController extends Controller
 {
     /*
@@ -77,5 +79,32 @@ class VerificationController extends Controller
 
         //return redirect($this->redirectPath())->with('verified', true);
         return new Response('', 204);
+    }
+
+    public function verifyIndex()
+    {
+        return view('auth.verify');
+    }
+
+    public function verifyUser(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        $id = $request->route('id');
+        $user = User::findOrFail($id);
+        if ($id != $user->getKey()) {
+            throw new AuthorizationException;
+        }
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+            return redirect('/users/profile/' . $id)->with(['verified' => true, 'success' => "Account activated successfully!"]);
+        }
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $user = $request->user() ?? auth()->guard('web')->user();
+        $user->sendEmailVerificationNotification();
+
+        return back()->with('success', 'Verification link sent!');
     }
 }

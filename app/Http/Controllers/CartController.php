@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\FaturaMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -13,6 +14,12 @@ use App\Models\User;
 use App\Models\Encomenda;
 use App\Models\Cliente;
 use App\Models\TShirt;
+
+use Illuminate\Support\Facades\Date;
+
+use Barryvdh\DomPDF\Facade as PDF;
+
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -212,7 +219,6 @@ class CartController extends Controller
                     'cliente_id' => $id,
                     'data' => new DateTime(),
                     'preco_total' => $cart->totalPrice,
-                    'notas' => request()->notes,
                     'nif' => $cliente->nif,
                     'endereco' => $cliente->endereco,
                     'tipo_pagamento' => $cliente->tipo_pagamento,
@@ -221,7 +227,7 @@ class CartController extends Controller
                     'created_at' => new DateTime(),
                     'updated_at' => new DateTime()
                 ]);
-
+                $encomenda->notas = request()->notes;
                 $encomenda->save();
 
                 /* TSHIRTS */
@@ -245,11 +251,30 @@ class CartController extends Controller
                 dd($e->getMessage());
                 return redirect()->back()->with('error', 'An error occurred processing your order! Missing parameters (ex: endereco) on your profile');
             }
-
+            /*
+            foreach (Session::get('cart')->items as $product) {
+                dd($product['color']);
+            }
+            */
+            $this->sendFatura();
             $this->clearCart();
+
             return redirect()->back()->with('success', 'Your order is being processed...');
         } else {
             return view('error.pagenotfound');
         }
+    }
+
+    public function sendFatura()
+    {
+        $cart = Session::get('cart');
+        $user = User::with('cliente')->findOrFail(Auth::user()->id);
+        $date = new DateTime();
+        $resultDate = $date->format('Y-m-d H:i:s');
+
+        Mail::send('emails.fatura', ['user' => $user, 'cart' => $cart, 'date' => $resultDate], function ($m) use ($user) {
+            $m->from('hello@app.com', 'MagicShirts');
+            $m->to($user->email, $user->name)->subject('Order Receipt');
+        });
     }
 }

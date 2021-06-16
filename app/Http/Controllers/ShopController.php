@@ -164,6 +164,14 @@ class ShopController extends Controller
 
     public function createStamp(Request $request)
     {
+        $request->validate([
+            'stamp_name' => 'required|max:255',
+            'descricao' => 'nullable|max:255',
+            'stamp_image' => 'nullable|image|mimes:png,jpg|max:1024'
+        ]);
+        if ($request->validator->fails()) {
+            return back()->with('error', $request->validator->messages());
+        }
         try {
             DB::beginTransaction();
             $estampa = new Estampa();
@@ -238,7 +246,7 @@ class ShopController extends Controller
             return back()->renderSections()['content'];
         }
 
-        return back()->with('success', 'Product added to cart!');
+        return back();
     }
 
     public function saveEstampa($id)
@@ -247,7 +255,7 @@ class ShopController extends Controller
         request()->validate([
             'nome' => 'required|max:255',
             'descricao' => 'nullable|max:255',
-            'stamp_image' => 'nullable|image|max:1024'
+            'stamp_image' => 'nullable|image|mimes:png,jpg|max:1024'
         ]);
         try {
             DB::beginTransaction();
@@ -277,5 +285,28 @@ class ShopController extends Controller
     {
         $encomendas = Encomenda::whereYear('created_at', Carbon::now()->year)->whereMonth('created_at', Carbon::now()->month)->orderBy('data', 'desc')->get();
         return view('admin.statistics')->with('encomendas', $encomendas);
+    }
+
+    public function getEstampaPrivada($file)
+    {
+        $path = storage_path('app/estampas_privadas/' . $file);
+
+        if (file_exists($path)) {
+            return response()->file($path, array('Content-Type' => 'image'));
+        }
+
+        $path = storage_path('img\navbar-logo.png');
+        return response()->file($path, array('Content-Type' => 'image'));
+    }
+
+    public function getEstampaPublica($file)
+    {
+        $path = storage_path('/storage/estampas/' . $file);
+
+        if (file_exists($path)) {
+            return response()->file($path, array('Content-Type' => 'image/png'));
+        }
+        $path = storage_path('img\navbar-logo.png');
+        return response()->file($path, array('Content-Type' => 'image/png'));
     }
 }

@@ -16,6 +16,12 @@
             @endif
         </div>
         <div class="profile-nav-info">
+            @if(Session::get('success'))
+            <div class="alert alert-success" style="text-align:center;">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{session::get('success')}}</strong>
+            </div>
+            @endif
             <h3 class="user-name">{{ $user->name }}</h3>
             <div class="address">
                 @if($user->tipo == 'A')
@@ -67,9 +73,36 @@
             </div>
 
             <!-- Portfolio Grid-->
-            <section class="page-section bg-light" id="portfolio" style="margin-left:15px">
+            <section class="page-section bg-light" id="portfolio" style="margin-left:15px;width:100%;height:auto">
                 <div class="container" style="margin-top: -80px">
+
+                    @if(count($encomendas) > 0)
+                    <ul class="pagination">
+                        {{ $encomendas->appends(request()->query())->links("pagination::bootstrap-4") }}
+                        <div style="margin-left:20px;">
+                            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Order by Date
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{{ route('user.profile',['id' => $user->id, 'orderBy' => 'data_ascendente']) }}">Ascendent</a>
+                                <a class="dropdown-item" href="{{ route('user.profile',['id' => $user->id, 'orderBy' => 'data_descendente']) }}">Descendent</a>
+                            </div>
+                        </div>
+                        <div style="margin-left:5px;">
+                            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Order by Price
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{{ route('user.profile',['id' => $user->id, 'orderBy' => 'low_high']) }}">Low - High</a>
+                                <a class="dropdown-item" href="{{ route('user.profile',['id' => $user->id, 'orderBy' => 'high_low']) }}">High - Low</a>
+                            </div>
+                        </div>
+                    </ul>
+                    @endif
                     <h3>Orders</h3>
+                    @if(count($encomendas) == 0)
+                    <p>No orders found.</p>
+                    @else
                     <div class="row">
                         @foreach($encomendas as $encomenda)
                         <div class="col-lg-4 col-sm-6 mb-4">
@@ -113,6 +146,7 @@
                                                             @else
                                                             <td><img class="img-fluid" src="/storage/estampas/{{$tshirt->estampa['imagem_url']}}" alt="{{ $tshirt->estampa['nome'] }}" /></td>
                                                             @endif
+
                                                             <td>{{$tshirt->tamanho}}</td>
                                                             <td>
                                                                 <svg width="40" height="40">
@@ -137,6 +171,7 @@
                         </div>
                         @endforeach
                     </div>
+                    @endif
                 </div>
             </section>
         </div>

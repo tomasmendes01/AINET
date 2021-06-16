@@ -1,12 +1,8 @@
 @extends('shop')
 
-@section('css')
-<link href="/css/login.css" rel="stylesheet" />
-@stop
-
 @section('content')
 <br>
-<div class="container box" style="margin-top:20%;">
+<div style="margin-top:10rem;">
     <h1 style="text-align:center;">Password reset</h1><br />
 
     @if (Session::has('error'))
@@ -33,12 +29,13 @@
     </div>
     @endif
 
-    <form method="post" action="{{ url('/forgot-password') }}">
-        {{ csrf_field() }}
-
-        <input type="email" name="email" id="email" style="background-color:white;color:black;" placeholder="Input your email here">
-        <button class="btn btn-dark" type="submit" style="margin:auto;right:0;left:0;position:absolute;transform:translateY(60px)">Submit</button>
-    </form>
+    <div style="position:relative;display:flex;flex-flow:column wrap;align-items:center">
+        <form method="post" action="{{ url('/forgot-password') }}">
+            {{ csrf_field() }}
+            <input type="email" name="email" id="email" placeholder="Input your email here">
+            <button class="btn btn-dark" type="submit" >Submit</button>
+        </form>
+    </div>
 </div>
 
 <script>
