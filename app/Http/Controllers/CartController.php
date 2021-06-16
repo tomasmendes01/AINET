@@ -251,6 +251,15 @@ class CartController extends Controller
             }
             */
             $this->sendFatura();
+
+            /* Enviar email a avisar que a encomenda está a ser preparada */
+            $user = User::findOrFail($encomenda->cliente_id);
+
+            Mail::send('emails.new_order', ['user' => $user], function ($m) use ($user) {
+                $m->from('hello@app.com', 'MagicShirts');
+                $m->to($user->email, $user->name)->subject('Order Prepared');
+            });
+
             $this->clearCart();
 
             return redirect()->back()->with('success', 'Your order is being processed...');

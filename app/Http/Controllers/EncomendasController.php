@@ -134,6 +134,14 @@ class EncomendasController extends Controller
             return redirect('/encomendas')->with(['encomendas' => $encomendas, 'error' => $e->getMessage()]);
         }
 
+        /* Enviar email a avisar que a encomenda foi cancelada */
+        $user = User::findOrFail($encomenda->cliente_id);
+
+        Mail::send('emails.order_sent', ['user' => $user], function ($m) use ($user) {
+            $m->from('hello@app.com', 'MagicShirts');
+            $m->to($user->email, $user->name)->subject('Order Delivered');
+        });
+
         return redirect('/encomendas')->with(['encomendas' => $encomendas, 'success' => 'Order delivered!']);
     }
 }
