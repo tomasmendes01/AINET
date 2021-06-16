@@ -25,13 +25,11 @@ class UsersController extends Controller
 
     function index()
     {
-
         if (Auth::user()->tipo != 'A') {
             return redirect('/');
         }
-
         $users = User::whereNull('deleted_at')->paginate(12);
-        //dd($users);
+
         return view('management.users')->with('users', $users); //envia todos os users para a view users.blade.php como 'users'
     }
 
@@ -55,6 +53,7 @@ class UsersController extends Controller
                 $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->orderBy('data', 'ASC')->paginate(6);
             } elseif (request()->orderBy == "data_descendente") {
                 $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->orderBy('data', 'DESC')->paginate(6);
+                return view('user.profile')->with(['user' => $user, 'encomendas' => $encomendas]);
             } else {
                 $encomendas = Encomenda::with('cliente', 'tshirt')->where('cliente_id', $user->id)->paginate(6);
             }

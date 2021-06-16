@@ -2,6 +2,20 @@
 
 @section('css')
 <link href="/css/profile.css" rel="stylesheet" />
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    tr {
+        border-bottom: 1px solid #ccc;
+    }
+
+    th {
+        text-align: left;
+    }
+</style>
 @stop
 
 @section('content')
@@ -65,39 +79,7 @@
                 <div class="profile-btn">
                     <button class="chatbtn" id="chatBtn" onclick="location.href = '/shop'"><i class="fa fa-comment"></i> Go back to Shop</button>
                 </div>
-                <div class="profile-btn">
-                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data">
-                        @csrf
-                        @method("PUT")
-                        <input class="btn btn-dark" name="delete_pfp" type="submit" value="Delete Profile Picture">
-                    </form>
-                </div>
-                @if(Auth::user()->tipo == 'A')
-                <div class="profile-btn">
-                    <div data-toggle="modal" href="#portfolioModal1">
-                        <div class="btn-holder">
-                            <input class="btn btn-dark" name="delete" type="submit" value="Delete User">
-                        </div>
-                    </div>
-                </div>
-                <div class="profile-btn">
-                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
-                        @csrf
-                        @method("PUT")
-                        @if($user->bloqueado == 1)
-                        <input type="hidden" id="block" value="Unblock" hidden>
-                        <div class="btn-holder">
-                            <input class="btn btn-success" name="block" type="submit" value="Unblock">
-                        </div>
-                        @else
-                        <input type="hidden" id="block" value="Block" hidden>
-                        <div class="btn-holder">
-                            <input class="btn btn-dark" name="block" type="submit" value="Block">
-                        </div>
-                        @endif
-                    </form>
-                </div>
-                @endif
+
             </div>
         </div>
         <div class="right-side">
@@ -134,6 +116,41 @@
             </div>
             @endif
             <div class="profile-body">
+                @if(Auth::user()->id != $user->id)
+                <div class="profile-btn">
+                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data">
+                        @csrf
+                        @method("PUT")
+                        <input class="btn btn-dark" name="delete_pfp" type="submit" style="width:300px;left:0;right:50%;position:relative;margin-bottom:5px" value="Delete Profile Picture">
+                    </form>
+                </div>
+                @if(Auth::user()->tipo == 'A')
+                <div class="profile-btn">
+                    <div data-toggle="modal" href="#portfolioModal1">
+                        <div class="btn-holder">
+                            <input class="btn btn-dark" name="delete" style="width:300px;left:0;right:50%;position:relative;margin-bottom:5px" type="submit" value="Delete User">
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-btn">
+                    <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" style="text-align:center;">
+                        @csrf
+                        @method("PUT")
+                        @if($user->bloqueado == 1)
+                        <input type="hidden" id="block" value="Unblock" hidden>
+                        <div class="btn-holder">
+                            <input class="btn btn-success" name="block" style="width:300px;left:0;right:50%;position:relative;margin-bottom:5px" type="submit" value="Unblock">
+                        </div>
+                        @else
+                        <input type="hidden" id="block" value="Block" hidden>
+                        <div class="btn-holder">
+                            <input class="btn btn-dark" name="block" style="width:300px;left:0;right:50%;position:relative" type="submit" value="Block">
+                        </div>
+                        @endif
+                    </form>
+                </div>
+                @endif
+                @else
 
                 <form method="POST" action="{{ route('user.checkUpdate' , ['id' => $user->id]) }}" enctype="multipart/form-data" style="margin-top:10px;margin-left:50px">
                     @csrf
@@ -256,8 +273,7 @@
                         </div>
                     </div>
                 </form>
-
-
+                @endif
             </div>
 
             <!-- Delete confirmation -->

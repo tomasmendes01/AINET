@@ -188,13 +188,7 @@ class CartController extends Controller
         if ($cart == null) {
             return redirect()->back()->with('error', 'Error fetching cart!');
         }
-        /*
-        while ($cart->totalQty > 0) {
-            foreach ($cart->items as $item) {
-                $this->removeFromCart($item);
-            }
-        }
-        */
+
         Session::remove('cart');
         return redirect()->back()->with('success', 'Cart cleared!');
     }

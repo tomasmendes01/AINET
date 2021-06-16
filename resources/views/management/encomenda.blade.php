@@ -68,10 +68,12 @@
                     <td>{{$encomenda->tipo_pagamento}}</td>
                     <td>{{$encomenda->ref_pagamento}}</td>
                     <td>
+                        @if(Auth::user()->tipo == 'F')
                         <form action="{{ route('encomenda.prepare',['orderID' => $encomenda->id]) }}" method="post">
                             @csrf
                             <button type="submit" class="btn btn-light" style="width:100%;margin:auto;margin-bottom:5px;margin-top:-4%">Deliver</button>
                         </form>
+                        @endif
                         <div class="portfolio-link" data-toggle="modal" href="#cancelOrderModal">
                             <div class="btn-holder">
                                 <input class="btn btn-danger" type="button" style="width:100%;margin:auto;margin-bottom:1%;margin-top:-4%" value="Cancel">

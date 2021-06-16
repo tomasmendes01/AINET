@@ -13,6 +13,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
 use SebastianBergmann\Environment\Console;
 
@@ -89,7 +90,10 @@ Route::group(['middleware' => ['verified', 'admin', 'notSoftDeleted']], function
     Route::put('/shop/{id}/save',              [ShopController::class, 'saveEstampa'])->name('shop.checkUpdate');
     Route::delete('/shop/{id}/delete',         [ShopController::class, 'deleteEstampa'])->name('estampa.delete');
 
-    Route::get('/shop/statistics',             [ShopController::class, 'getStatistics'])->name('shop.statistics');
+    Route::get('/shop/statistics',             [StatisticsController::class, 'getStatistics'])->name('shop.statistics');
+
+    Route::get('/shop/prices',                 [ShopController::class, 'getPrices'])->name('shop.prices');
+    Route::post('/shop/prices/update',         [ShopController::class, 'updatePrices'])->name('shop.prices.update');
 });
 
 Route::get('/shop',                         [ShopController::class, 'index'])->name('shop.index');
@@ -107,7 +111,6 @@ Route::get('/pagenotfound',                 [PageNotFound::class, 'error'])->nam
 
 Route::get('/estampas_privadas/{file}', [ShopController::class, 'getEstampaPrivada']);
 Route::get('/storage/estampas/{file}',  [ShopController::class, 'getEstampaPublica']);
-
 
 /* PASSWORD RESET */
 Route::get('/forgot-password',                      [ForgotPasswordController::class, 'index'])->name('password.request');

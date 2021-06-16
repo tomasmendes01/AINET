@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PriceRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -281,12 +282,6 @@ class ShopController extends Controller
         }
     }
 
-    public function getStatistics()
-    {
-        $encomendas = Encomenda::whereYear('created_at', Carbon::now()->year)->whereMonth('created_at', Carbon::now()->month)->orderBy('data', 'desc')->get();
-        return view('admin.statistics')->with('encomendas', $encomendas);
-    }
-
     public function getEstampaPrivada($file)
     {
         $path = storage_path('app/estampas_privadas/' . $file);
@@ -308,5 +303,43 @@ class ShopController extends Controller
         }
         $path = storage_path('img\navbar-logo.png');
         return response()->file($path, array('Content-Type' => 'image/png'));
+    }
+
+    public function getPrices()
+    {
+        $prices = DB::table('precos')->first();
+        return view('management.prices')->with('prices', $prices);
+    }
+
+    public function updatePrices(PriceRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $prices = Preco::where('id', 1)->first();
+
+            if (request()->precouncatalogo != null) {
+                $prices->preco_un_catalogo = request()->precouncatalogo;
+            }
+            if (request()->precounproprio != null) {
+                $prices->preco_un_proprio = request()->precounproprio;
+            }
+            if (request()->precouncatalogodesconto != null) {
+                $prices->preco_un_catalogo_desconto = request()->precouncatalogodesconto;
+            }
+            if (request()->precounpropriodesconto != null) {
+                $prices->preco_un_proprio_desconto = request()->precounpropriodesconto;
+            }
+            if (request()->quantidadedesconto != null) {
+                $prices->quantidade_desconto = request()->quantidadedesconto;
+            }
+            $prices->save();
+
+            DB::commit();
+            return view('management.prices')->with('prices', $prices);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+        }
     }
 }

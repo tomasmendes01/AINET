@@ -85,7 +85,9 @@
             <input type="hidden" name="color" value="1e1e21"></input>
             @endif
 
+            @if(Auth::user()->tipo == 'C')
             <input type="submit" class="dropbtn" value="Add to cart"></input>
+            @endif
         </form>
 
         @if(isset(Auth::user()->email) && Auth::user()->tipo == 'A')

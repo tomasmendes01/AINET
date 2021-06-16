@@ -35,7 +35,7 @@
                 <a href="{{ url('/users') }}"><i class="far fa-address-book"></i> Users</a>
                 <a href="/shop"><i class="fas fa-tshirt"></i> Products</a>
                 <a href="{{ route('encomendas') }}"><i class="far fa-clipboard"></i> Deliveries</a>
-                <a href="#"><i class="fas fa-dollar-sign"></i> Prices</a>
+                <a href="{{ route('shop.prices') }}"><i class="fas fa-dollar-sign"></i> Prices</a>
                 <a href="{{ route('shop.statistics') }}"><i class="fas fa-chart-line"></i> Statistics</a>
             </div>
 
