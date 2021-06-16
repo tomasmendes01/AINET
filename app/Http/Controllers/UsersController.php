@@ -40,6 +40,10 @@ class UsersController extends Controller
             return view('error.pagenotfound');
         };
 
+        if (Auth::user()->tipo == 'F') {
+            return view('error.pagenotfound');
+        }
+
         try {
             $user = User::findOrFail($id); // Se não encontrar o perfil da pessoa, vai para o pagenotfound
 

@@ -101,9 +101,11 @@
                     </li>
                     @endif
 
+                    @if(Auth::user()->tipo != 'F')
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="{{ route('user.profile',['id' => Auth::user()->id]) }}"><i class="fas fa-user"></i> Profile</a>
                     </li>
+                    @endif
 
                     <li class="nav-item">
                         <div data-toggle="modal" href="#logoutModal">
