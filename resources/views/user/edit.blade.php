@@ -116,7 +116,6 @@
             </div>
             @endif
             <div class="profile-body">
-                @if(Auth::user()->id != $user->id)
                 <div class="profile-btn">
                     <form method="POST" action="{{ route('user.update' , ['id' => $user->id]) }}" enctype="multipart/form-data">
                         @csrf
@@ -124,6 +123,7 @@
                         <input class="btn btn-dark" name="delete_pfp" type="submit" style="width:300px;left:0;right:50%;position:relative;margin-bottom:5px" value="Delete Profile Picture">
                     </form>
                 </div>
+                @if(Auth::user()->id != $user->id)
                 @if(Auth::user()->tipo == 'A')
                 <div class="profile-btn">
                     <div data-toggle="modal" href="#portfolioModal1">
